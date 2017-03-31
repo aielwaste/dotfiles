@@ -1,0 +1,609 @@
+[
+	{"id": "side-bar-files-open-with",
+		"children":
+		[
+      // Byword
+      {
+        "caption": "Byword",
+        "id": "side-bar-files-open-with-byword",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": [],
+                  "application": "Byword.app", // OSX
+                  "extensions":"md|mdown|markdown|markd|mdtxt|mdtext|txt||",  //any file with these extensions
+                  "args":[]
+                },
+        "open_automatically" : false // will close the view/tab and launch the application
+      },
+
+      // Marked 2
+      {
+        "caption": "Marked 2",
+        "id": "side-bar-files-open-with-marked2",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": [],
+                  "application": "Marked 2.app", // OSX
+                  "extensions":"md|mdown|markdown|markd|mdtxt|mdtext|txt||",  //any file with these extensions
+                  "args":[]
+                },
+        "open_automatically" : false // will close the view/tab and launch the application
+      },
+
+			// Macdown
+			{
+				"caption": "Macdown",
+				"id": "side-bar-files-open-with-macdown",
+
+				"command": "side_bar_files_open_with",
+				"args": {
+									"paths": [],
+									"application": "Macdown.app", // OSX
+									"extensions":"md|mdown|markdown|markd|mdtxt|mdtext|txt||",  //any file with these extensions
+									"args":[]
+								},
+				"open_automatically" : false // will close the view/tab and launch the application
+			},
+
+      // Haroopad Windows
+      {
+        "caption": "Haroopad",
+        "id": "side-bar-files-open-with-haroopad",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": [],
+                  "application": "C:\\Users\\fr1v\\AppData\\Roaming\\Haroo Studio\\Haroopad\\haroopad.exe", // OSX
+                  "extensions":"md|mdown|markdown|markd|mdtxt|mdtext|txt||",  //any file with these extensions
+                  "args":[]
+                },
+        "open_automatically" : false // will close the view/tab and launch the application
+      },
+
+			{"caption":"-"},
+
+			// Firefox
+			{
+				"caption": "Firefox",
+				"id": "side-bar-files-open-with-firefox",
+
+				"command": "side_bar_files_open_with",
+				"args": {
+									"paths": [],
+									"application": "Firefox.app",
+									"extensions":"html|xhtml|php", //open all even folders
+									"args":[]
+								},
+				"open_automatically" : false // will close the view/tab and launch the application
+			},
+
+      // Pale Moon
+      // {
+      //   "caption": "Pale Moon",
+      //   "id": "side-bar-files-open-with-palemoon",
+
+      //   "command": "side_bar_files_open_with",
+      //   "args": {
+      //             "paths": [],
+      //             "application": "PaleMoon.app",
+      //             "extensions":"html|xhtml|php", //open all even folders
+      //             "args":[]
+      //           },
+      //   "open_automatically" : false // will close the view/tab and launch the application
+      // },
+
+      // Safari
+      {
+        "caption": "Safari",
+        "id": "side-bar-files-open-with-safari",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": [],
+                  "application": "Safari.app",
+                  "extensions":"html|xhtml|php", //open all even folders
+                  "args":[]
+                },
+        "open_automatically" : false // will close the view/tab and launch the application
+      },
+
+      // Safari Technology Preview
+      // {
+      //   "caption": "Safari Technology Preview",
+      //   "id": "side-bar-files-open-with-safari-technology-preview",
+
+      //   "command": "side_bar_files_open_with",
+      //   "args": {
+      //             "paths": [],
+      //             "application": "Safari Technology Preview.app",
+      //             "extensions":"html|xhtml|php", //open all even folders
+      //             "args":[]
+      //           },
+      //   "open_automatically" : false // will close the view/tab and launch the application
+      // },
+
+      // Google Chrome Canary
+      {
+        "caption": "Chrome Canary",
+        "id": "side-bar-files-open-with-canary",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": ["/applications/Google"],
+                  "application": "Google Chrome Canary.app",
+                  "extensions":"html|xhtml|php", //open all even folders
+                  "args":[]
+                },
+        "open_automatically" : false // will close the view/tab and launch the application
+      },
+
+      // Chromium
+      // {
+      //   "caption": "Chromium",
+      //   "id": "side-bar-files-open-with-chromium",
+
+      //   "command": "side_bar_files_open_with",
+      //   "args": {
+      //             "paths": ["/applications/Google"],
+      //             "application": "Chromium.app",
+      //             "extensions":"html|xhtml|php", //open all even folders
+      //             "args":[]
+      //           },
+      //   "open_automatically" : false // will close the view/tab and launch the application
+      // },
+
+			// Google Chrome
+			{
+				"caption": "Chrome",
+				"id": "side-bar-files-open-with-chrome",
+
+				"command": "side_bar_files_open_with",
+				"args": {
+									"paths": ["/applications/Google"],
+									"application": "Google Chrome.app",
+									"extensions":"html|xhtml|php", //any file with extension
+									"args":[]
+						},
+				"open_automatically" : false // will close the view/tab and launch the application
+			},
+
+      // Opera Beta
+      // {
+      //   "caption": "Opera Beta",
+      //   "id": "side-bar-files-open-with-opera-beta",
+
+      //   "command": "side_bar_files_open_with",
+      //   "args": {
+      //             "paths": ["/applications/Opera"],
+      //             "application": "Opera Beta.app",
+      //             "extensions":"html|xhtml|php", //any file with extension
+      //             "args":[]
+      //       },
+      //   "open_automatically" : false // will close the view/tab and launch the application
+      // },
+
+      // Opera Developer
+      // {
+      //   "caption": "Opera Developer",
+      //   "id": "side-bar-files-open-with-opera-dev",
+
+      //   "command": "side_bar_files_open_with",
+      //   "args": {
+      //             "paths": ["/applications/Opera"],
+      //             "application": "Opera Developer.app",
+      //             "extensions":"html|xhtml|php", //any file with extension
+      //             "args":[]
+      //       },
+      //   "open_automatically" : false // will close the view/tab and launch the application
+      // },
+
+      // OmniWeb
+      // {
+      //   "caption": "OmniWeb",
+      //   "id": "side-bar-files-open-with-omniweb",
+
+      //   "command": "side_bar_files_open_with",
+      //   "args": {
+      //             "paths": ["/applications/OmniGroup"],
+      //             "application": "OmniWeb.app",
+      //             "extensions":"html|xhtml|php", //any file with extension
+      //             "args":[]
+      //       },
+      //   "open_automatically" : false // will close the view/tab and launch the application
+      // },
+
+      // Vivaldi
+      {
+        "caption": "Vivaldi",
+        "id": "side-bar-files-open-with-vivaldi",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": [],
+                  "application": "Vivaldi.app",
+                  "extensions":"html|xhtml|php", //any file with extension
+                  "args":[]
+            },
+        "open_automatically" : false // will close the view/tab and launch the application
+      },
+
+			{"caption":"-"},
+
+      // Atom
+      // {
+      //   "caption": "Atom",
+      //   "id": "side-bar-files-open-with-atom",
+
+      //   "command": "side_bar_files_open_with",
+      //   "args": {
+      //             "paths": [],
+      //             "application": "Atom Beta.app",
+      //             "extensions":"", //any file with extension
+      //             "args":[]
+      //       },
+      //   "open_automatically" : false // will close the view/tab and launch the application
+      // },
+
+      // BBEdit
+      {
+        "caption": "BBEdit",
+        "id": "side-bar-files-open-with-bbedit",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": [],
+                  "application": "BBEdit.app",
+                  "extensions":"", //any file with extension
+                  "args":[]
+            },
+        "open_automatically" : false // will close the view/tab and launch the application
+      },
+
+      // Chocolat
+      // {
+      //   "caption": "Chocolat",
+      //   "id": "side-bar-files-open-with-chocolat",
+
+      //   "command": "side_bar_files_open_with",
+      //   "args": {
+      //             "paths": [],
+      //             "application": "Chocolat.app",
+      //             "extensions":"", //any file with extension
+      //             "args":[]
+      //       },
+      //   "open_automatically" : false // will close the view/tab and launch the application
+      // },
+
+      // Coda 2
+      // {
+      //   "caption": "Coda",
+      //   "id": "side-bar-files-open-with-coda",
+
+      //   "command": "side_bar_files_open_with",
+      //   "args": {
+      //             "paths": [],
+      //             "application": "Coda 2.app",
+      //             "extensions":"", //any file with extension
+      //             "args":[]
+      //       },
+      //   "open_automatically" : false // will close the view/tab and launch the application
+      // },
+
+      // MacVim
+      {
+        "caption": "MacVim",
+        "id": "side-bar-files-open-with-macvim",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": [],
+                  "application": "MacVim.app",
+                  "extensions":"", //any file with extension
+                  "args":[]
+            },
+        "open_automatically" : false // will close the view/tab and launch the application
+      },
+
+      // Smultron
+      // {
+      //   "caption": "Smultron",
+      //   "id": "side-bar-files-open-with-smultron",
+
+      //   "command": "side_bar_files_open_with",
+      //   "args": {
+      //             "paths": [],
+      //             "application": "Smultron 9.app",
+      //             "extensions":"", //any file with extension
+      //             "args":[]
+      //       },
+      //   "open_automatically" : false // will close the view/tab and launch the application
+      // },
+
+      // Sublime Text
+      {
+        "caption": "Sublime Text",
+        "id": "side-bar-files-open-with-sublime",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": [],
+                  "application": "Sublime Text.app",
+                  "extensions":"", //any file with extension
+                  "args":[]
+            },
+        "open_automatically" : false // will close the view/tab and launch the application
+      },
+
+      // TextEdit
+      // {
+      //   "caption": "TextEdit",
+      //   "id": "side-bar-files-open-with-textedit",
+
+      //   "command": "side_bar_files_open_with",
+      //   "args": {
+      //             "paths": [],
+      //             "application": "TextEdit.app",
+      //             "extensions":"", //any file with extension
+      //             "args":[]
+      //       },
+      //   "open_automatically" : false // will close the view/tab and launch the application
+      // },
+
+      // TextMate
+      {
+        "caption": "TextMate",
+        "id": "side-bar-files-open-with-textmate",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": [],
+                  "application": "TextMate.app",
+                  "extensions":"", //any file with extension
+                  "args":[]
+            },
+        "open_automatically" : false // will close the view/tab and launch the application
+      },
+
+      // VimR
+      {
+        "caption": "VimR",
+        "id": "side-bar-files-open-with-vimr",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": [],
+                  "application": "VimR.app",
+                  "extensions":"", //any file with extension
+                  "args":[]
+            },
+        "open_automatically" : false // will close the view/tab and launch the application
+      },
+
+      // Visual Studio
+      {
+        "caption": "Visual Studio",
+        "id": "side-bar-files-open-with-visualstudio",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": [],
+                  "application": "Visual Studio.app",
+                  "extensions":"", //any file with extension
+                  "args":[]
+            },
+        "open_automatically" : false // will close the view/tab and launch the application
+      },
+
+      // Visual Studio Code
+      {
+        "caption": "Visual Studio Code",
+        "id": "side-bar-files-open-with-code",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": [],
+                  "application": "Visual Studio Code.app",
+                  "extensions":"", //any file with extension
+                  "args":[]
+            },
+        "open_automatically" : false // will close the view/tab and launch the application
+      },
+
+      // Xcode
+      {
+        "caption": "Xcode",
+        "id": "side-bar-files-open-with-xcode",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": [],
+                  "application": "Xcode.app",
+                  "extensions":"", //any file with extension
+                  "args":[]
+            },
+        "open_automatically" : false // will close the view/tab and launch the application
+      },
+
+      {"caption":"-"},
+
+      // PlistEdit Pro
+      {
+        "caption": "PlistEdit Pro",
+        "id": "side-bar-files-open-with-plisteditpro",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": [],
+                  "application": "PlistEdit Pro.app",
+                  "extensions":"plist", //any file with extension
+                  "args":[]
+            },
+        "open_automatically" : false // will close the view/tab and launch the application
+      },
+
+      {"caption":"-"},
+
+      // VLC Media Player
+      {
+        "caption": "VLC Media Player",
+        "id": "side-bar-files-open-with-vlc",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": [],
+                  "application": "VLC.app",
+                  "extensions":"avi|mp4|mkv|wmv|3g2|3gp|3gp2|3gpp|amr|amv|asf|bdmv|bik|d2v|divx|drc|dsa|dsm|dss|csv|evo|f4v|flc|fli|flic|flv|hdmov|ifo|ivf|m1v|m2p|m2t|m2ts|m2v|m4b|m4p|m4v|mp2v|mp4v|mpe|mpeg|mpg|mpls|mpv2|mpv4|mov|mts|ogm|ogv|pss|pva|qt|ram|ratdvd|rm|rmm|rmvb|roq|rpm|smil|smk|swf|tp|tpr|ts|vob|vp6|webm|wm|wmp", //any file with extension
+                  "args":[]
+            },
+        "open_automatically" : false // will close the view/tab and launch the application
+      },
+
+      {"caption":"-"},
+
+      // Pixelmator
+      {
+        "caption": "Pixelmator",
+        "id": "side-bar-files-open-with-pixelmator",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": [],
+                  "application": "Pixelmator.app",
+                  "extensions":"jpg|png|svg|jpeg|bmp|ani|gif|ico|jpe|pcx|psd|tga|tif|tiff|wmf", //any file with extension
+                  "args":[]
+            },
+        "open_automatically" : false // will close the view/tab and launch the application
+      },
+
+      // Affinity Photo
+      {
+        "caption": "Affinity Photo",
+        "id": "side-bar-files-open-with-affinity-photo",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": [],
+                  "application": "Affinity Photo.app",
+                  "extensions":"jpg|png|svg|jpeg|bmp|ani|gif|ico|jpe|pcx|psd|tga|tif|tiff|wmf", //any file with extension
+                  "args":[]
+            },
+        "open_automatically" : false // will close the view/tab and launch the application
+      },
+
+      {"caption":"-"},
+
+      // LogTail
+      {
+        "caption": "LogTail",
+        "id": "side-bar-files-open-with-affinity-logtail",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": [],
+                  "application": "LogTail.app",
+                  "extensions":"log|txt", //any file with extension
+                  "args":[]
+            },
+        "open_automatically" : false // will close the view/tab and launch the application
+      },
+
+      {"caption":"-"},
+
+      // Script Editor
+      {
+        "caption": "Script Editor",
+        "id": "side-bar-files-open-with-scripteditor",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": [],
+                  "application": "Script Editor.app",
+                  "extensions":"scpt|applescript", //any file with extension
+                  "args":[]
+            },
+        "open_automatically" : false // will close the view/tab and launch the application
+      },
+
+      // Script Debugger
+      {
+        "caption": "Script Debugger",
+        "id": "side-bar-files-open-with-scriptdebugger",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": [],
+                  "application": "Script Debugger.app",
+                  "extensions":"scpt|applescript", //any file with extension
+                  "args":[]
+            },
+        "open_automatically" : false // will close the view/tab and launch the application
+      },
+
+      {"caption":"-"},
+
+      // Pages
+      {
+        "caption": "Pages",
+        "id": "side-bar-files-open-with-pages",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": [],
+                  "application": "Pages.app",
+                  "extensions":"pages|doc|docm|docx|docx|dot|dotm|dotx|html|htm|mht|mhtml|odt|pdf|rtf|txt|wps|xml|xps", //any file with extension
+                  "args":[]
+            },
+        "open_automatically" : false // will close the view/tab and launch the application
+      },
+
+      // Numbers
+      {
+        "caption": "Numbers",
+        "id": "side-bar-files-open-with-numbers",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": [],
+                  "application": "Numbers.app",
+                  "extensions":"numbers|xlsm|xlsx|xlsx|xlt|csv|dbf|dif|htm|html|mht|mhtml|ods|pdf|prn|slk|txt|xla|xlam|xls|xlsb|xlt|xltm|xltx|xlw|xml|xps", //any file with extension
+                  "args":[]
+            },
+        "open_automatically" : false // will close the view/tab and launch the application
+      },
+
+      // Keynote
+      {
+        "caption": "Keynote",
+        "id": "side-bar-files-open-with-keynote",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": [],
+                  "application": "Keynote.app",
+                  "extensions":"key|bmp|emf|gif|jpg|mp4|odp|pdf|png|pot|potm|potx|ppa|ppam|pps|ppsm|ppsx|ppt|pptm|pptx|rtf|thmx|tif|wmf|wmv|xml|xps", //any file with extension
+                  "args":[]
+            },
+        "open_automatically" : false // will close the view/tab and launch the application
+      },
+
+      {"caption":"-"},
+
+      // The Archive Browser
+      {
+        "caption": "The Archive Browser",
+        "id": "side-bar-files-open-with-tab",
+
+        "command": "side_bar_files_open_with",
+        "args": {
+                  "paths": [],
+                  "application": "The Archive Browser.app",
+                  "extensions":"7z|zip|ace|arj|bz2|cab|gz|gzip|jar|rar|tar|tgz|z", //any file with extension
+                  "args":[]
+            },
+        "open_automatically" : false // will close the view/tab and launch the application
+      }             
+		]
+	}
+]

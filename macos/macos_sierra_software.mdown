@@ -1,0 +1,18 @@
+
+# Homebrew software I install on MacOS
+
+Vim
+
+
+NeoVim
+
+
+MacVim
+
+
+Amethyst
+
+
+
+
+https://github.com/rhysd/NyaoVim.git

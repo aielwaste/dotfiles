@@ -1,0 +1,10 @@
+{
+	"RegKeyJumpCmd":
+	[
+		"{PACKAGE_PATH}\\REG\\regjump.exe"
+	],
+	"extensions":
+	[
+		"reg"
+	]
+}

@@ -1,0 +1,61 @@
+(N) 2017-02-17T09:46:39 - qBittorrent v3.3.10 started
+(I) 2017-02-17T09:47:39 - qBittorrent is trying to listen on any interface port: 8999
+(N) 2017-02-17T09:47:39 - Peer ID: -qB33A0-
+(N) 2017-02-17T09:47:39 - HTTP User-Agent is 'qBittorrent v3.3.10'
+(I) 2017-02-17T09:47:39 - DHT support [ON]
+(I) 2017-02-17T09:47:39 - Local Peer Discovery support [ON]
+(I) 2017-02-17T09:47:39 - PeX support [ON]
+(I) 2017-02-17T09:47:39 - Anonymous mode [OFF]
+(I) 2017-02-17T09:47:39 - Encryption support [ON]
+(I) 2017-02-17T09:47:39 - Embedded Tracker [OFF]
+(I) 2017-02-17T09:47:39 - UPnP / NAT-PMP support [ON]
+(W) 2017-02-17T09:47:39 - Couldn't load GeoIP database. Reason: No such file or directory
+(N) 2017-02-17T09:47:45 - Options were saved successfully.
+(I) 2017-02-17T09:47:46 - qBittorrent is successfully listening on interface 0.0.0.0 port: TCP/8999
+(I) 2017-02-17T09:47:46 - qBittorrent is successfully listening on interface 0.0.0.0 port: TCP_SSL/4434
+(I) 2017-02-17T09:47:46 - qBittorrent is successfully listening on interface :: port: TCP/8999
+(I) 2017-02-17T09:47:46 - qBittorrent is successfully listening on interface :: port: TCP_SSL/4434
+(I) 2017-02-17T09:47:46 - qBittorrent is successfully listening on interface 0.0.0.0 port: UDP/8999
+(I) 2017-02-17T09:47:46 - qBittorrent is successfully listening on interface 0.0.0.0 port: TCP/8999
+(I) 2017-02-17T09:47:46 - qBittorrent is successfully listening on interface :: port: TCP/8999
+(I) 2017-02-17T09:47:46 - qBittorrent is successfully listening on interface 0.0.0.0 port: UDP/8999
+(I) 2017-02-17T09:47:52 - GeoIP database loaded. Type: GeoLite2-Country. Build time: Tue Feb 7 20:48:37 2017.
+(I) 2017-02-17T09:47:52 - Successfully updated GeoIP database.
+(C) 2017-02-17T09:50:25 - UPnP/NAT-PMP: Port mapping failure, message: could not map port using UPnP: no router found
+(C) 2017-02-17T09:50:25 - UPnP/NAT-PMP: Port mapping failure, message: could not map port using UPnP: no router found
+(I) 2017-02-17T09:57:44 - External IP: 208.81.199.230
+(N) 2017-02-17T09:59:56 - Options were saved successfully.
+(N) 2017-02-17T10:24:58 - Options were saved successfully.
+(N) 2017-02-17T10:24:58 - Successfully parsed the provided IP filter: 0 rules were applied.
+(I) 2017-02-17T10:25:14 - UPnP / NAT-PMP support [OFF]
+(N) 2017-02-20T11:55:52 - qBittorrent v3.3.10 started
+(I) 2017-02-20T11:55:52 - qBittorrent is trying to listen on any interface port: 41490
+(N) 2017-02-20T11:55:52 - Peer ID: -qB33A0-
+(N) 2017-02-20T11:55:52 - HTTP User-Agent is 'qBittorrent v3.3.10'
+(I) 2017-02-20T11:55:52 - DHT support [ON]
+(I) 2017-02-20T11:55:52 - Local Peer Discovery support [ON]
+(I) 2017-02-20T11:55:52 - PeX support [ON]
+(I) 2017-02-20T11:55:52 - Anonymous mode [OFF]
+(I) 2017-02-20T11:55:52 - Encryption support [ON]
+(I) 2017-02-20T11:55:52 - Embedded Tracker [OFF]
+(I) 2017-02-20T11:55:52 - UPnP / NAT-PMP support [ON]
+(I) 2017-02-20T11:55:52 - GeoIP database loaded. Type: GeoLite2-Country. Build time: Tue Feb 7 20:48:37 2017.
+(N) 2017-02-20T11:55:54 - Options were saved successfully.
+(I) 2017-02-20T11:55:54 - qBittorrent is successfully listening on interface 0.0.0.0 port: TCP/41490
+(I) 2017-02-20T11:55:54 - qBittorrent is successfully listening on interface 0.0.0.0 port: TCP_SSL/4434
+(I) 2017-02-20T11:55:54 - qBittorrent is successfully listening on interface :: port: TCP/41490
+(I) 2017-02-20T11:55:54 - qBittorrent is successfully listening on interface :: port: TCP_SSL/4434
+(I) 2017-02-20T11:55:54 - qBittorrent is successfully listening on interface 0.0.0.0 port: UDP/41490
+(I) 2017-02-20T11:55:54 - qBittorrent is successfully listening on interface 0.0.0.0 port: TCP/41490
+(I) 2017-02-20T11:55:54 - qBittorrent is successfully listening on interface :: port: TCP/41490
+(I) 2017-02-20T11:55:54 - qBittorrent is successfully listening on interface 0.0.0.0 port: UDP/41490
+(N) 2017-02-20T11:55:54 - 'Gas Mask 0.8.5.zip' added to download list.
+(N) 2017-02-20T11:55:54 - 'iNet Network Scanner 2.3.6.zip' added to download list.
+(N) 2017-02-20T11:55:54 - 'SpamSieve 2.9.27' added to download list.
+(N) 2017-02-20T11:55:54 - 'SSH Config Editor 1.5.3 .zip' added to download list.
+(N) 2017-02-20T11:55:54 - Successfully parsed the provided IP filter: 0 rules were applied.
+(I) 2017-02-20T11:55:56 - External IP: 208.81.199.230
+(N) 2017-02-20T12:21:39 - 'SSH Copy 17.02.zip' added to download list.
+(N) 2017-02-20T12:35:52 - Successfully parsed the provided IP filter: 0 rules were applied.
+(N) 2017-02-20T12:35:57 - Successfully parsed the provided IP filter: 0 rules were applied.
+(N) 2017-02-20T13:01:42 - Successfully parsed the provided IP filter: 448701 rules were applied.

@@ -1,0 +1,59 @@
+{
+	"folders":
+	[
+		{
+      "name": "dotfiles",
+			"path": "~/.dotfiles",
+      "file_include_patterns": [],
+      "folder_include_patterns": [],
+      "file_exclude_patterns": [],
+      "folder_exclude_patterns": ["prezto","neovim","misc","config","scripts"],
+      "follow_symlinks": true
+		},
+    {
+      "name": "prezto",
+      "path": "~/.dotfiles/prezto",
+      "file_include_patterns": [],
+      "folder_include_patterns": [],
+      "file_exclude_patterns": [],
+      "folder_exclude_patterns": [],
+      "follow_symlinks": true
+    },
+    {
+      "name": "neovim",
+      "path": "~/.dotfiles/config/nvim",
+      "file_include_patterns": [],
+      "folder_include_patterns": [],
+      "file_exclude_patterns": [],
+      "folder_exclude_patterns": [],
+      "follow_symlinks": true
+    },
+    {
+      "name": "config",
+      "path": "~/.dotfiles/config",
+      "file_include_patterns": [],
+      "folder_include_patterns": [],
+      "file_exclude_patterns": [],
+      "folder_exclude_patterns": [],
+      "follow_symlinks": true
+    },
+    {
+      "name": "scripts",
+      "path": "~/.scripts",
+      "file_include_patterns": [],
+      "folder_include_patterns": [],
+      "file_exclude_patterns": [],
+      "folder_exclude_patterns": [],
+      "follow_symlinks": true
+    },
+    {
+      "name": "misc",
+      "path": "~/.dotfiles/misc",
+      "file_include_patterns": [],
+      "folder_include_patterns": [],
+      "file_exclude_patterns": [],
+      "folder_exclude_patterns": [],
+      "follow_symlinks": true
+    }    
+	]
+}

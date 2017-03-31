@@ -1,0 +1,20 @@
+[
+	// Advanced New File Package
+	{ "keys": ["super+alt+n"], "command": "advanced_new_file_new"},
+	{ "keys": ["shift+super+alt+n"], "command": "advanced_new_file_new", "args": {"is_python": true}},
+	{
+		"keys": ["tab"],
+		"command": "insert",
+		"args": {"characters": "\t"},
+		"context": [{
+			"key": "setting.anf_panel"
+		}]
+	},
+
+	// DashDoc Package
+	{ "keys": ["ctrl+alt+d"], "command": "dash_doc"},
+  { "keys": ["shift+ctrl+alt+d"], "command": "dash_doc", "args": { "flip_syntax_sensitive": true } },
+
+  // Replace with panel
+  { "keys": ["ctrl+h"], "command": "show_panel", "args": {"panel": "replace", "reverse": false} },
+]

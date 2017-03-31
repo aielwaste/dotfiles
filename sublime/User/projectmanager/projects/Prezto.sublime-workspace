@@ -1,0 +1,578 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"start",
+				"start_ssh_agent"
+			],
+			[
+				"and",
+				"andrewbell8@gmail.com\t(zpreztorc)"
+			],
+			[
+				"HOM",
+				"HOMEBREW_EDITOR"
+			],
+			[
+				"_",
+				"___ORGANIZATIONNAME___"
+			],
+			[
+				"___",
+				"___FULLUSERNAME___"
+			],
+			[
+				"HOME",
+				"HOMEBREW_GITHUB_API_TOKEN"
+			],
+			[
+				"XD",
+				"XDG_DATA_HOME"
+			],
+			[
+				"SUB",
+				"SUBL_PROJECTS"
+			],
+			[
+				"TM_H",
+				"TM_HG_EXT_DIFF"
+			],
+			[
+				"TM_SV",
+				"TM_SVN_DIFF_CMD"
+			],
+			[
+				"SUBL_",
+				"SUBL_PROJECTS"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "/Users/fr1v/.zprezto/runcoms/zprofile",
+			"settings":
+			{
+				"buffer_size": 4298,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 342.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"she",
+				"Set Syntax: ShellScript"
+			],
+			[
+				"vim",
+				"Set Syntax: Vim"
+			],
+			[
+				"ruby",
+				"Set Syntax: Ruby"
+			],
+			[
+				"shells",
+				"Set Syntax: ShellScript"
+			],
+			[
+				"shel",
+				"Set Syntax: Shell Script (Bash)"
+			],
+			[
+				"wra",
+				"Word Wrap: Toggle"
+			],
+			[
+				"wrap",
+				"Word Wrap: Toggle"
+			],
+			[
+				"shellsc",
+				"Set Syntax: ShellScript"
+			],
+			[
+				"ext",
+				"PackageResourceViewer: Extract Package"
+			],
+			[
+				"extrac",
+				"PackageResourceViewer: Extract Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"extra",
+				"PackageResourceViewer: Extract Package"
+			],
+			[
+				"yam",
+				"Cheatsheet: Yaml"
+			],
+			[
+				"coffee",
+				"Set Syntax: CoffeeScript"
+			],
+			[
+				"sort",
+				"Sort Lines"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"ex",
+				"PackageResourceViewer: Extract Package"
+			],
+			[
+				"shell co",
+				"ShellCommand"
+			],
+			[
+				"sublime sett",
+				"Set Syntax: Sublime Settings"
+			],
+			[
+				"shell",
+				"Set Syntax: Shell Script (Bash)"
+			],
+			[
+				"toggl",
+				"Toggle ScopeAlways"
+			],
+			[
+				"upload",
+				"Sync Settings: Upload"
+			],
+			[
+				"ini",
+				"Set Syntax: INI"
+			],
+			[
+				"sync",
+				"Sync Settings: Upload"
+			],
+			[
+				"ig",
+				"Set Syntax: Git Ignore"
+			],
+			[
+				"extract",
+				"PackageResourceViewer: Extract Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Local Dependency"
+			]
+		],
+		"width": 575.0
+	},
+	"console":
+	{
+		"height": 217.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": true,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/fr1v/.zprezto/modules/emacs"
+	],
+	"file_history":
+	[
+		"/Users/f0/Library/Application Support/Sublime Text 3/Packages/GitMode/GitMode.sublime-settings",
+		"/Users/f0/Library/Application Support/Sublime Text 3/Packages/GitMode/Default.sublime-commands",
+		"/Users/fr1v/.dotfiles/zsh/prezto/runcoms/.zshrc",
+		"/Users/f0/Library/Application Support/Sublime Text 3/Packages/User/ProjectManager/Projects/Prezto.sublime-project",
+		"/Users/fr1v/.dotfiles/zsh/prezto/runcoms/zshrc",
+		"/Users/fr1v/.zprezto/modules/tmux/init.zsh",
+		"/Users/fr1v/.zprezto/modules/terminal/init.zsh",
+		"/Users/fr1v/.zprezto/modules/osx/init.zsh",
+		"/Users/fr1v/.zprezto/modules/command-not-found/README.md",
+		"/Users/fr1v/.zprezto/modules/archive/archive[Module].md",
+		"/Users/fr1v/Dropbox/bin/readmes.sh",
+		"/Users/fr1v/.zprezto/runcoms/zshenv",
+		"/usr/local/Cellar/archey/1.6.0/bin/archey",
+		"/Users/fr1v/.zprezto/runcoms/zshrc",
+		"/Users/fr1v/.zprezto/init.zsh",
+		"/Users/fr1v/.zprezto/runcoms/zpreztorc",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/User/Projects/Prezto.sublime-project",
+		"/Users/fr1v/github/prezto/init.zsh",
+		"/Users/fr1v/github/prezto/modules/utility/functions/fn.zsh",
+		"/Users/fr1v/github/prezto/runcoms/zlogin",
+		"/Users/fr1v/github/prezto/modules/utility/functions/bc",
+		"/Users/fr1v/github/prezto/modules/utility/functions/_bc",
+		"/Users/fr1v/github/prezto/runcoms/zpreztorc",
+		"/Users/fr1v/github/prezto/runcoms/zprofile",
+		"/Users/fr1v/github/prezto/runcoms/zlogout",
+		"/Users/fr1v/github/prezto/runcoms/zshrc",
+		"/Users/fr1v/.dotfiles/zsh/.zprezto/runcoms/zshrc",
+		"/Users/fr1v/.zshrc",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/User/GitSavvy.sublime-settings",
+		"/Users/fr1v/.dotfiles/zsh/aliases/git.zsh",
+		"/Users/fr1v/.dotfiles/zsh/aliases/apg.zsh",
+		"/Users/fr1v/.dotfiles/zsh/aliases/ssh.zsh",
+		"/Users/fr1v/.dotfiles/zsh/functions/ssh-reload.zsh",
+		"/Users/fr1v/.dotfiles/zsh/aliases/global.aliases.zsh",
+		"/Users/fr1v/.dotfiles/zsh/.zhistory",
+		"/Users/fr1v/.dotfiles/ttytterrc",
+		"/Users/fr1v/.dotfiles/zsh/zaliases",
+		"/Users/fr1v/.dotfiles/zsh/settings/zexternals",
+		"/Users/fr1v/.dotfiles/zsh/zfunctions",
+		"/Users/fr1v/.dotfiles/zsh/functions/extract.zsh",
+		"/Users/fr1v/.dotfiles/zsh/after/path.zsh",
+		"/Users/fr1v/.dotfiles/zsh/functions/toggle_hidden.sh",
+		"/Users/fr1v/.dotfiles/zsh/README.md",
+		"/Users/fr1v/.dotfiles/zsh/zexports",
+		"/Users/fr1v/.dotfiles/zsh/functions/colored_man.zsh",
+		"/Users/fr1v/.dotfiles/zsh/settings/zsetopts",
+		"/Users/fr1v/.dotfiles/zsh/zsetopts",
+		"/Users/fr1v/.dotfiles/zsh/functions/cd",
+		"/Users/fr1v/.dotfiles/zsh/functions/envr",
+		"/Users/fr1v/.dotfiles/zsh/functions/cd.sh",
+		"/Users/fr1v/.dotfiles/zsh/functions/rename",
+		"/Users/fr1v/.dotfiles/zsh/functions/scpzshconf.sh",
+		"/Users/fr1v/.dotfiles/zsh/functions/hgrep.sh",
+		"/Users/fr1v/.dotfiles/zsh/functions/pzt_whatsnext",
+		"/Users/fr1v/.dotfiles/zsh/functions/pzt_extract_alias",
+		"/Users/fr1v/.dotfiles/zsh/functions/pzt_update_externals",
+		"/Users/fr1v/.dotfiles/zsh/functions/ostype",
+		"/Users/fr1v/.dotfiles/zsh/functions/prepend",
+		"/etc/zshenv",
+		"/Users/fr1v/.dotfiles/zsh/functions/zsmbpasswd",
+		"/Users/fr1v/Dropbox/bin/echos.sh",
+		"/Users/fr1v/.dotfiles/zsh/runcoms/zshrc",
+		"/Users/fr1v/.dotfiles/zsh/runcoms/zshenv",
+		"/Users/fr1v/.dotfiles/zsh/runcoms/zprofile",
+		"/Users/fr1v/.dotfiles/zsh/runcoms/zpreztorc",
+		"/Users/fr1v/.dotfiles/zsh/runcoms/zlogout",
+		"/Users/fr1v/.dotfiles/iterm/untitled file.txt",
+		"/Users/fr1v/.dotfiles/zsh/runcoms/zlogin",
+		"/Users/fr1v/.dotfiles/zsh/settings/rvm.zsh",
+		"/Users/fr1v/.dotfiles/haskeline",
+		"/Users/fr1v/.dotfiles/ghci",
+		"/Users/fr1v/.dotfiles/zsh/settings/zshsetopts",
+		"/Users/fr1v/.dotfiles/zsh/init.zsh",
+		"/Users/fr1v/.dotfiles/zsh/.zprezto/runcoms/README.md",
+		"/Users/fr1v/.dotfiles/zsh/.zprezto/runcoms/zlogin",
+		"/Users/fr1v/.dotfiles/zsh/.zprezto/runcoms/zlogout",
+		"/Users/fr1v/.dotfiles/zsh/.zprezto/runcoms/zprofile",
+		"/Users/fr1v/.dotfiles/zsh/.zprezto/runcoms/zshenv",
+		"/Users/fr1v/.z",
+		"/Users/fr1v/.dotfiles/other/aliases",
+		"/Users/fr1v/.dotfiles/zsh/.zshrc",
+		"/Users/fr1v/.dotfiles/zsh/.zexports",
+		"/Users/fr1v/.dotfiles/zsh/atom_packages",
+		"/Users/fr1v/.dotfiles/zsh/.zprezto/.gitmodules",
+		"/Users/fr1v/.dotfiles/.gitmodules",
+		"/Users/fr1v/.dotfiles/zsh/z.sh",
+		"/Users/fr1v/.dotfiles/zsh/colored_man.zsh",
+		"/Users/fr1v/.dotfiles/zsh/prompt.zsh",
+		"/Users/fr1v/.dux/dict",
+		"/Users/fr1v/.dotfiles/zsh/_bc",
+		"/Users/fr1v/.dotfiles/zsh/bc",
+		"/Users/fr1v/.dotfiles/sync.py",
+		"/Users/fr1v/.dotfiles/ctags",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/FTPSync/Default (OSX).sublime-keymap",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/STProjectMaker/STProjectMaker.sublime-settings",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/User/STProjectMaker.sublime-settings",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/User/project_manager.sublime-settings",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/ShellScriptImproved/miscellaneous/demo.sh",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/FileSystem Autocompletion/FilesystemAutocompletion.sublime-settings",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/User/Base File.sublime-settings",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/Alignment/Base File.sublime-settings",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/SublimeUserSettings.sublime-project",
+		"/Users/fr1v/.dotfiles/zsh/functions/g",
+		"/Users/fr1v/Desktop/dotfiles/config/git/config",
+		"/Users/fr1v/.zprofile",
+		"/Users/fr1v/Dropbox/bin/pbz.sh",
+		"/Users/fr1v/Dropbox/bin/convert-archive-to-7z.sh",
+		"/Users/fr1v/.zshenv",
+		"/Users/fr1v/.dotfiles/config/zsh/.zprezto/init.zsh",
+		"/Users/fr1v/.zcompdump",
+		"/Users/fr1v/.zcompdump-Frivbook-5.2",
+		"/Users/fr1v/.zsh-update",
+		"/Users/fr1v/.zsh_history",
+		"/Users/fr1v/Dropbox/bin/echo_rcfiles.sh",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/User/ApplySyntax.sublime-settings",
+		"/Users/fr1v/.dotfiles/config/zsh/.zprezto/runcoms/zshenv",
+		"/Users/fr1v/.dotfiles/config/zsh/.zprezto/runcoms/zprofile",
+		"/Users/fr1v/.dotfiles/config/zsh/.zshenv",
+		"/Users/fr1v/.dotfiles/pam_environment",
+		"/Users/fr1v/.dotfiles/bundle/config",
+		"/private/etc/aliases.db",
+		"/Users/fr1v/.config/zsh/.zpreztorc",
+		"/Users/fr1v/.config/zsh/.zlogout",
+		"/Volumes/EFI/EFI/refind/refind.conf",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
+		"/Users/fr1v/.dotfiles/config/git/ignore",
+		"/Users/fr1v/github/Sublime/.gitignore"
+	],
+	"find":
+	{
+		"height": 24.0
+	},
+	"find_in_files":
+	{
+		"height": 94.0,
+		"where_history":
+		[
+			"<project>"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"fr1v",
+			"# ",
+			"7za",
+			"ls --group-directories-first --color=auto",
+			"alias ls",
+			"HIST_REDUCE_BLANKS",
+			"setopt HIST_REDUCE_BLANKS",
+			"setopt HIST_REDUCE_BLANKS ",
+			"less",
+			" -p",
+			"-p ",
+			"chpwd",
+			"/usr/bin/lp",
+			"alias ls=",
+			"$pbz",
+			"$1",
+			"export ",
+			"://"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"f0",
+			"#=== ",
+			"#===== ",
+			"7za",
+			"$filename",
+			""
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "/Users/fr1v/.zprezto/runcoms/zprofile",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 4298,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								4298
+							]
+						],
+						"settings":
+						{
+							"apply_syntax_touched": true,
+							"c_time":
+							[
+								128,
+								3,
+								99,
+								100,
+								97,
+								116,
+								101,
+								116,
+								105,
+								109,
+								101,
+								10,
+								100,
+								97,
+								116,
+								101,
+								116,
+								105,
+								109,
+								101,
+								10,
+								113,
+								0,
+								67,
+								10,
+								7,
+								225,
+								3,
+								22,
+								1,
+								54,
+								11,
+								0,
+								0,
+								0,
+								113,
+								1,
+								133,
+								113,
+								2,
+								82,
+								113,
+								3,
+								46
+							],
+							"close_windows_when_empty": false,
+							"font_face": "FiraCode-Retina",
+							"git_savvy.file_path": "/Users/fr1v/.dotfiles/prezto/runcoms/zprofile",
+							"git_savvy.repo_path": "/Users/fr1v/.dotfiles/prezto",
+							"ignored_packages":
+							[
+								"JavaScript",
+								"Vintage"
+							],
+							"platform_settings_was_here": true,
+							"syntax": "Packages/ShellScriptImproved/Shell-Unix-Generic.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 928.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 24.0
+	},
+	"input":
+	{
+		"height": 22.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 98.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "Source",
+	"project": "Prezto.sublime-project",
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 148.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
