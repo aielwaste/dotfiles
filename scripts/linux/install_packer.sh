@@ -1,6 +1,6 @@
 #!/bin/sh
 set -e
-# 
+#
 # Author: Andrew Bell andrewbell8@gmail.com
 # Website: https://fr1v.github.io
 #
@@ -14,13 +14,10 @@ command="packer"
 
 #checking if application is already installed or else install with aur helpers
 if pacman -Qi $package &> /dev/null; then
-
 	echo
 	echo "$package is already installed"
 	echo
-
 else
-
 	sudo pacman -S --noconfirm --needed base-dvel wget fakeroot grep sed bash curl pacman jshon expac
 	[ -d /tmp/packer ] && rm -rf /tmp/packer
 	mkdir /tmp/packer
@@ -32,17 +29,13 @@ else
 
 	# Just checking if installation was successful
 	if pacman -Qi $package &> /dev/null; then
-	
-	echo
-	echo "$package has been installed"
-  echo
-
+    	echo
+    	echo "$package has been installed"
+        echo
 	else
-
-	echo
-	echo "$package has NOT been installed"
-	echo
-
+    	echo
+    	echo "$package has NOT been installed"
+    	echo
 	fi
 
 fi

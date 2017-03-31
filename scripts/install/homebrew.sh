@@ -16,6 +16,7 @@ function brew-essentials() {
     brew install mercurial
     brew install ncdu
     brew install node
+    brew install nvm
     brew install p7zip
     brew install pstree
     brew install pyenv
@@ -76,5 +77,7 @@ function gnu_macos_install() {
 function vim_install_macos() {
     brew install vim --with-lua --with-luajit --with-override-system-vi --with-python3 --with-tcl --HEAD
     brew install neovim/neovim/neovim --HEAD
-    brew install macvim-dev/macvim/macvim --with-properly-linked-python2-python3 --HEAD
+    brew cask install macvim
 }
+
+
