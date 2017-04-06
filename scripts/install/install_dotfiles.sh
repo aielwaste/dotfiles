@@ -32,7 +32,9 @@ echo ""
 
 # check git command
 type git || {
-    echo 'Please install git or update your path to include the git executable!'
+    echo 'Git not installed'
+    echo 'Installing git...'
+    sudo pacman -Sy git
     exit 1
 }
 echo ""
@@ -75,19 +77,23 @@ function link_root() {
         for rcfile in "$USER_HOME"/.hg/macos/^README.md(.N); do
             sudo ln -sf "$rcfile" "$ROOT_HOME/.${rcfile:t}"
         done
+        
+        cd "$ROOT_HOME/.zprezto/modules/prompt/external/powerlevel9k && sudo ln 
+        -sfr powerlevel9k.zsh-theme ../../functions/prompt_powerlevel9k_setup
 
         sudo ln -sf "$USER_HOME/.dotfiles/misc/macos/dircolors" "$ROOT_HOME/.dircolors"
         sudo rm -rf "$ROOT_HOME/Library/Application Support/Sublime Text 3/Packages/User" && sudo ln -sd "$USER_HOME/.dotfiles/config/sublime/Packages/User" "$ROOT_HOME/Library/Application Support/Sublime Text 3/Packages"
     elif [[ $OSTYPE == *linux* ]] ; then
         for rcfile in "$USER_HOME"/.git/linux/^README.md(.N); do
-            ln -sf "$rcfile" "$ROOT_HOME/.${rcfile:t}"
+            sudo ln -sf "$rcfile" "$ROOT_HOME/.${rcfile:t}"
         done
 
         for rcfile in "$USER_HOME"/.hg/linux/^README.md(.N); do
-            ln -sf "$rcfile" "$ROOT_HOME/.${rcfile:t}"
+            sudo ln -sf "$rcfile" "$ROOT_HOME/.${rcfile:t}"
         done
 
-        ln -sf "$USER_HOME/.dotfiles/misc/linux/dir_colors" "$ROOT_HOME/.dir_colors"
+        sudo ln -sf "$USER_HOME/.dotfiles/misc/linux/dircolors" 
+        "$ROOT_HOME/.dircolors"
         rm -rf "$USER_HOME/.config/sublime-text-3/Packages/User" && sudo ln -sd "$USER_HOME/.dotfiles/config/sublime/Packages/User" "$ROOT_HOME/.config/sublime-text-3/Packages"
     fi
 
@@ -181,6 +187,9 @@ function link_user() {
     for rcfile in "${ZDOTDIR:-$HOME}"/.xorg/^README.md(.N); do
         ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
     done
+    
+    cd ~/.zprezto/modules/prompt/external/powerlevel9k && ln -sfr 
+    powerlevel9k.zsh-theme ../../functions/prompt_powerlevel9k_setup
 }
 
 # Symlink config files
