@@ -1,0 +1,30 @@
+[
+	// Define your custom Sublime commands here
+	// Format is same as `key bindings` except replace `keys` with `caption`
+	// 
+	{"caption": "File: New", "command": "new_file", "args": {"key": "value"}},
+
+	// XML
+	{"caption": "XML: Format", "command": "format_xml"},
+	{"caption": "XML: Tidy XML Lint", "command": "tidy_xml_lint"},
+
+
+	{"caption": "Line: Reverse Characters", "command": "reverse_characters"},
+	{"caption": "Document: Prettify", "command": "reg_replace", "args": { "replacements": ["add_space_to_opening_brackets","add_space_to_closing_brackets","remove_space_between_brackets"] } },
+	{"caption": "Document: Convert Indentation", "command": "run_macro_file", "args": { "file": "res://Packages/User/identation_macro.sublime-macro" } },
+	
+	// Macdown
+	{"caption": "MacDown", "command": "macdown"},
+
+	// Terminal
+	{ "caption": "Preferences: Terminal Settings – Default", "command": "open_file", "args": { "file": "${packages}/Terminal/Terminal.sublime-settings" } },
+	{ "caption": "Preferences: Terminal Settings – User", "command": "open_file", "args": { "file": "${packages}/User/Terminal.sublime-settings" } },
+	{ "caption": "Preferences: Terminal Key Bindings – Default", "command": "open_file", "args": { "file": "${packages}/Terminal/Default (Windows).sublime-keymap", "platform": "Windows" } },
+	{ "caption": "Preferences: Terminal Key Bindings – Default", "command": "open_file", "args": { "file": "${packages}/Terminal/Default (OSX).sublime-keymap", "platform": "OSX" } },
+	{ "caption": "Preferences: Terminal Key Bindings – Default", "command": "open_file", "args": { "file": "${packages}/Terminal/Default (Linux).sublime-keymap", "platform": "Linux" } },
+	{ "caption": "Preferences: Terminal Key Bindings – User", "command": "open_file", "args": { "file": "${packages}/User/Default (Windows).sublime-keymap", "platform": "Windows" } },
+	{ "caption": "Preferences: Terminal Key Bindings – User", "command": "open_file", "args": { "file": "${packages}/User/Default (OSX).sublime-keymap", "platform": "OSX" } },
+	{ "caption": "Preferences: Terminal Key Bindings – User", "command": "open_file", "args": { "file": "${packages}/User/Default (Linux).sublime-keymap", "platform": "Linux" } },
+	{ "caption": "Terminal: Open", "command": "open_terminal" },
+	{ "caption": "Terminal: Open in project folder", "command": "open_terminal_project_folder" }
+]

@@ -3,6 +3,15 @@
 	[
 		"sh",
 		"zsh",
-		"bash"
+		"bash",
+    "zprofile",
+    "zshenv",
+    "zlogin",
+    "zlogout",
+    "Zpreztorc",
+    "bash_profile",
+    "bash_functions",
+    "bash_aliases",
+    "bash_prompt"
 	]
 }

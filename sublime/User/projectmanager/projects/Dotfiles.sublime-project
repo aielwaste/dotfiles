@@ -1,59 +1,66 @@
 {
-	"folders":
-	[
-		{
-      "name": "dotfiles",
-			"path": "~/.dotfiles",
-      "file_include_patterns": [],
-      "folder_include_patterns": [],
-      "file_exclude_patterns": [],
-      "folder_exclude_patterns": ["prezto","neovim","misc","config","scripts"],
-      "follow_symlinks": true
-		},
+    "folders":
+    [
+        {
+            "path": "~",
+            "name": "Dotfiles",
+            "file_include_patterns": [],
+            "folder_include_patterns": [],
+            "file_exclude_patterns": [],
+            "folder_exclude_patterns": [
+                "prezto",
+                ".android",
+                ".atom",
+                ".bundle",
+                ".cache",
+                ".cargo",
+                ".cocoapods",
+                ".codeintel",
+                ".colors",
+                ".cr3",
+                "Box",
+                "Box Sync",
+                "Desktop",
+                "Downloads",
+                "go",
+                "Icons",
+                "Installs",
+                "Library",
+                "Manjaro",
+                "Movies",
+                "perl5",
+                "Pictures",
+                "Public",
+                "Dropbox",
+                "Drive",
+                "Applications",
+                "Music",
+                "Snapshots",
+                "Sync",
+                "VirtualBox VMs"
+            ],
+            "follow_symlinks": true
+        },
+        {
+            "path": "~/.dotfiles/prezto",
+            "name": "Prezto",
+            "file_include_patterns": [],
+            "folder_include_patterns": [],
+            "file_exclude_patterns": [],
+            "folder_exclude_patterns": [],
+            "follow_symlinks": true
+        }
+    ],
+    "settings":
     {
-      "name": "prezto",
-      "path": "~/.dotfiles/prezto",
-      "file_include_patterns": [],
-      "folder_include_patterns": [],
-      "file_exclude_patterns": [],
-      "folder_exclude_patterns": [],
-      "follow_symlinks": true
+        "tab_size": 4,
+        "translate_tabs_to_spaces": true
     },
-    {
-      "name": "neovim",
-      "path": "~/.dotfiles/config/nvim",
-      "file_include_patterns": [],
-      "folder_include_patterns": [],
-      "file_exclude_patterns": [],
-      "folder_exclude_patterns": [],
-      "follow_symlinks": true
-    },
-    {
-      "name": "config",
-      "path": "~/.dotfiles/config",
-      "file_include_patterns": [],
-      "folder_include_patterns": [],
-      "file_exclude_patterns": [],
-      "folder_exclude_patterns": [],
-      "follow_symlinks": true
-    },
-    {
-      "name": "scripts",
-      "path": "~/.scripts",
-      "file_include_patterns": [],
-      "folder_include_patterns": [],
-      "file_exclude_patterns": [],
-      "folder_exclude_patterns": [],
-      "follow_symlinks": true
-    },
-    {
-      "name": "misc",
-      "path": "~/.dotfiles/misc",
-      "file_include_patterns": [],
-      "folder_include_patterns": [],
-      "file_exclude_patterns": [],
-      "folder_exclude_patterns": [],
-      "follow_symlinks": true
-    }    
-	]
+    "build_systems":
+    [
+        {
+            "name": "List",
+            "shell_cmd": "ls -l"
+        }
+    ]
 }

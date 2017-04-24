@@ -12,41 +12,6 @@ setopt LOCAL_OPTIONS EXTENDED_GLOB
 USER_HOME="/home/$USER"
 ROOT_HOME="/root"
 
-if [ $# -ne 1 ]; then
-    echo "You must specify the installation directory!"
-    exit 1
-fi
-
-# Convert the installation directory to absolute path
-case $1 in
-    /*) PLUGIN_DIR=$1;;
-    *) PLUGIN_DIR=$PWD/$1;;
-esac
-INSTALL_DIR="${PLUGIN_DIR}/.dotfiles"
-echo "Install to \"$INSTALL_DIR\"..."
-if [ -e "$INSTALL_DIR" ]; then
-    echo "\"$INSTALL_DIR\" already exists!"
-fi
-
-echo ""
-
-# check git command
-type git || {
-    echo 'Please install git or update your path to include the git executable!'
-    exit 1
-}
-echo ""
-
-# make plugin dir and fetch dein
-if ! [ -e "$INSTALL_DIR" ]; then
-    echo "Begin fetching dotfiles..."
-    mkdir -p "$PLUGIN_DIR"
-    git clone https://github.com/andrewbell8/dotfiles.git "$INSTALL_DIR"
-    echo "Done."
-    echo ""
-fi
-
-
 function link_root() {
 
     emulate -L zsh
@@ -87,7 +52,7 @@ function link_root() {
             ln -sf "$rcfile" "$ROOT_HOME/.${rcfile:t}"
         done
 
-        ln -sf "$USER_HOME/.dotfiles/misc/linux/dir_colors" "$ROOT_HOME/.dir_colors"
+        ln -sf "$USER_HOME/.dotfiles/misc/linux/dircolors" "$ROOT_HOME/.dircolors"
         rm -rf "$USER_HOME/.config/sublime-text-3/Packages/User" && sudo ln -sd "$USER_HOME/.dotfiles/config/sublime/Packages/User" "$ROOT_HOME/.config/sublime-text-3/Packages"
     fi
 
