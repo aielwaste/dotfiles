@@ -1,4 +1,4 @@
-#!/usr/bin/zsh
+#!/usr/local/bin/zsh
 #======================================================================================
 #
 # Author: Andrew Bell andrewbell8@gmail.com
@@ -12,46 +12,43 @@ setopt LOCAL_OPTIONS EXTENDED_GLOB
 USER_HOME="/home/$USER"
 ROOT_HOME="/root"
 
-<<<<<<< HEAD
-=======
-if [ $# -ne 1 ]; then
-    echo "You must specify the installation directory!"
-    exit 1
-fi
+# if [ $# -ne 1 ]; then
+#     echo "You must specify the installation directory!"
+#     exit 1
+# fi
 
-# Convert the installation directory to absolute path
-case $1 in
-    /*) PLUGIN_DIR=$1;;
-    *) PLUGIN_DIR=$PWD/$1;;
-esac
-INSTALL_DIR="${PLUGIN_DIR}/.dotfiles"
-echo "Install to \"$INSTALL_DIR\"..."
-if [ -e "$INSTALL_DIR" ]; then
-    echo "\"$INSTALL_DIR\" already exists!"
-fi
+# # Convert the installation directory to absolute path
+# case $1 in
+#     /*) PLUGIN_DIR=$1;;
+#     *) PLUGIN_DIR=$PWD/$1;;
+# esac
+# INSTALL_DIR="${PLUGIN_DIR}/.dotfiles"
+# echo "Install to \"$INSTALL_DIR\"..."
+# if [ -e "$INSTALL_DIR" ]; then
+#     echo "\"$INSTALL_DIR\" already exists!"
+# fi
 
-echo ""
+# echo ""
 
-# check git command
-type git || {
-    echo 'Git not installed'
-    echo 'Installing git...'
-    sudo pacman -Sy git
-    exit 1
-}
-echo ""
+# # check git command
+# type git || {
+#     echo 'Git not installed'
+#     echo 'Installing git...'
+#     sudo pacman -Sy git
+#     exit 1
+# }
+# echo ""
 
-# make plugin dir and fetch dein
-if ! [ -e "$INSTALL_DIR" ]; then
-    echo "Begin fetching dotfiles..."
-    mkdir -p "$PLUGIN_DIR"
-    git clone https://github.com/andrewbell8/dotfiles.git "$INSTALL_DIR"
-    echo "Done."
-    echo ""
-fi
+# # make plugin dir and fetch dein
+# if ! [ -e "$INSTALL_DIR" ]; then
+#     echo "Begin fetching dotfiles..."
+#     mkdir -p "$PLUGIN_DIR"
+#     git clone https://github.com/andrewbell8/dotfiles.git "$INSTALL_DIR"
+#     echo "Done."
+#     echo ""
+# fi
 
 
->>>>>>> 7a0d8744f260dbaa3589be6dd8a4f3072671f3e6
 function link_root() {
 
     emulate -L zsh
@@ -80,8 +77,8 @@ function link_root() {
         for rcfile in "$USER_HOME"/.hg/macos/^README.md(.N); do
             sudo ln -sf "$rcfile" "$ROOT_HOME/.${rcfile:t}"
         done
-        
-        cd "$ROOT_HOME/.zprezto/modules/prompt/external/powerlevel9k && sudo ln 
+
+        cd "$ROOT_HOME/.zprezto/modules/prompt/external/powerlevel9k && sudo ln
         -sfr powerlevel9k.zsh-theme ../../functions/prompt_powerlevel9k_setup
 
         sudo ln -sf "$USER_HOME/.dotfiles/misc/macos/dircolors" "$ROOT_HOME/.dircolors"
@@ -98,7 +95,7 @@ function link_root() {
 <<<<<<< HEAD
         ln -sf "$USER_HOME/.dotfiles/misc/linux/dircolors" "$ROOT_HOME/.dircolors"
 =======
-        sudo ln -sf "$USER_HOME/.dotfiles/misc/linux/dircolors" 
+        sudo ln -sf "$USER_HOME/.dotfiles/misc/linux/dircolors"
         "$ROOT_HOME/.dircolors"
 >>>>>>> 7a0d8744f260dbaa3589be6dd8a4f3072671f3e6
         rm -rf "$USER_HOME/.config/sublime-text-3/Packages/User" && sudo ln -sd "$USER_HOME/.dotfiles/config/sublime/Packages/User" "$ROOT_HOME/.config/sublime-text-3/Packages"
@@ -194,8 +191,8 @@ function link_user() {
     for rcfile in "${ZDOTDIR:-$HOME}"/.xorg/^README.md(.N); do
         ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
     done
-    
-    cd ~/.zprezto/modules/prompt/external/powerlevel9k && ln -sfr 
+
+    cd ~/.zprezto/modules/prompt/external/powerlevel9k && ln -sfr
     powerlevel9k.zsh-theme ../../functions/prompt_powerlevel9k_setup
 }
 
