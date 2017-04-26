@@ -92,12 +92,7 @@ function link_root() {
             sudo ln -sf "$rcfile" "$ROOT_HOME/.${rcfile:t}"
         done
 
-<<<<<<< HEAD
-        ln -sf "$USER_HOME/.dotfiles/misc/linux/dircolors" "$ROOT_HOME/.dircolors"
-=======
-        sudo ln -sf "$USER_HOME/.dotfiles/misc/linux/dircolors"
-        "$ROOT_HOME/.dircolors"
->>>>>>> 7a0d8744f260dbaa3589be6dd8a4f3072671f3e6
+        sudo ln -sf "$USER_HOME/.dotfiles/misc/linux/dircolors" "$ROOT_HOME/.dircolors"
         rm -rf "$USER_HOME/.config/sublime-text-3/Packages/User" && sudo ln -sd "$USER_HOME/.dotfiles/config/sublime/Packages/User" "$ROOT_HOME/.config/sublime-text-3/Packages"
     fi
 
