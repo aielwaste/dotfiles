@@ -223,10 +223,6 @@
   pushInsteadOf = "http://github.com:andrewbell8/"
   pushInsteadOf = "git@github.com:andrewbell8/"
   pushInsteadOf = "https://github.com:andrewbell8/"
-[url "ssh@github.com:fr1v/"]
-  pushInsteadOf = "http://github.com:fr1v/"
-  pushInsteadOf = "git@github.com:fr1v/"
-  pushInsteadOf = "https://github.com:fr1v/"
 [rebase]
   autosquash = true
 [push]
@@ -243,9 +239,9 @@
   logAllRefUpdates = true
   trustctime = false
   filemode = false
-	excludesfile = /Users/fr1v/.gitignore
+	excludesfile = ~/.gitignore
 [init]
-  templatedir = /Users/fr1v/.dotfiles/git/templates
+  templatedir = ~/.git/templates
 [fetch]
   prune = true
 [http]
@@ -253,7 +249,7 @@
 [advice]
   statusHints = true
 [commit]
-  template = /Users/fr1v/.dotfiles/git/templates/.stCommitMsg
+  template = ~/.git/templates/git_commit_template
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 

@@ -1,0 +1,7 @@
+[
+	{"caption": "XML: Format", "command": "format_xml"},
+	{"caption": "XML: Tidy XML Lint", "command": "tidy_xml_lint"},
+	{"caption": "Line: Reverse Characters", "command": "reverse_characters"},
+	{"caption": "Document: Prettify", "command": "reg_replace", "args": { "replacements": ["add_space_to_opening_brackets","add_space_to_closing_brackets","remove_space_between_brackets"] } },
+	{"caption": "Document: Convert Indentation", "command": "run_macro_file", "args": { "file": "res://Packages/User/identation_macro.sublime-macro" } }
+]

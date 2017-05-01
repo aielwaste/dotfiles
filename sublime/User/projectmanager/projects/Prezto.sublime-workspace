@@ -55,7 +55,8 @@
 			"file": "/Users/fr1v/.zprezto/runcoms/zprofile",
 			"settings":
 			{
-				"buffer_size": 4298,
+				"buffer_size": 4994,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		}
@@ -202,12 +203,9 @@
 		"side_bar_visible": false,
 		"status_bar_visible": false
 	},
-	"expanded_folders":
-	[
-		"/Users/fr1v/.zprezto/modules/emacs"
-	],
 	"file_history":
 	[
+		"/Users/fr1v/Prezto",
 		"/Users/f0/Library/Application Support/Sublime Text 3/Packages/GitMode/GitMode.sublime-settings",
 		"/Users/f0/Library/Application Support/Sublime Text 3/Packages/GitMode/Default.sublime-commands",
 		"/Users/fr1v/.dotfiles/zsh/prezto/runcoms/.zshrc",
@@ -334,8 +332,7 @@
 		"/Volumes/EFI/EFI/refind/refind.conf",
 		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
 		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/Default/Preferences.sublime-settings",
-		"/Users/fr1v/.dotfiles/config/git/ignore",
-		"/Users/fr1v/github/Sublime/.gitignore"
+		"/Users/fr1v/.dotfiles/config/git/ignore"
 	],
 	"find":
 	{
@@ -404,7 +401,7 @@
 					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 4298,
+						"buffer_size": 4994,
 						"regions":
 						{
 						},
@@ -412,7 +409,7 @@
 						[
 							[
 								0,
-								4298
+								0
 							]
 						],
 						"settings":
@@ -467,6 +464,10 @@
 							],
 							"close_windows_when_empty": false,
 							"font_face": "FiraCode-Retina",
+							"font_options":
+							[
+								"subpixel_antialias"
+							],
 							"git_savvy.file_path": "/Users/fr1v/.dotfiles/prezto/runcoms/zprofile",
 							"git_savvy.repo_path": "/Users/fr1v/.dotfiles/prezto",
 							"ignored_packages":
@@ -474,9 +475,12 @@
 								"JavaScript",
 								"Vintage"
 							],
+							"incomplete_sync": null,
 							"platform_settings_was_here": true,
+							"remote_loading": false,
+							"synced": false,
 							"syntax": "Packages/ShellScriptImproved/Shell-Unix-Generic.sublime-syntax",
-							"tab_size": 2,
+							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
@@ -528,8 +532,12 @@
 	{
 		"height": 0.0
 	},
+	"output.sftp":
+	{
+		"height": 0.0
+	},
 	"pinned_build_system": "Source",
-	"project": "Prezto.sublime-project",
+	"project": "",
 	"replace":
 	{
 		"height": 64.0

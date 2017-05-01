@@ -1,4 +1,4 @@
-#!/usr/bin/zsh
+#!/usr/local/bin/zsh
 #======================================================================================
 #
 # Author: Andrew Bell andrewbell8@gmail.com
@@ -12,41 +12,41 @@ setopt LOCAL_OPTIONS EXTENDED_GLOB
 USER_HOME="/home/$USER"
 ROOT_HOME="/root"
 
-if [ $# -ne 1 ]; then
-    echo "You must specify the installation directory!"
-    exit 1
-fi
+# if [ $# -ne 1 ]; then
+#     echo "You must specify the installation directory!"
+#     exit 1
+# fi
 
-# Convert the installation directory to absolute path
-case $1 in
-    /*) PLUGIN_DIR=$1;;
-    *) PLUGIN_DIR=$PWD/$1;;
-esac
-INSTALL_DIR="${PLUGIN_DIR}/.dotfiles"
-echo "Install to \"$INSTALL_DIR\"..."
-if [ -e "$INSTALL_DIR" ]; then
-    echo "\"$INSTALL_DIR\" already exists!"
-fi
+# # Convert the installation directory to absolute path
+# case $1 in
+#     /*) PLUGIN_DIR=$1;;
+#     *) PLUGIN_DIR=$PWD/$1;;
+# esac
+# INSTALL_DIR="${PLUGIN_DIR}/.dotfiles"
+# echo "Install to \"$INSTALL_DIR\"..."
+# if [ -e "$INSTALL_DIR" ]; then
+#     echo "\"$INSTALL_DIR\" already exists!"
+# fi
 
-echo ""
+# echo ""
 
-# check git command
-type git || {
-    echo 'Git not installed'
-    echo 'Installing git...'
-    sudo pacman -Sy git
-    exit 1
-}
-echo ""
+# # check git command
+# type git || {
+#     echo 'Git not installed'
+#     echo 'Installing git...'
+#     sudo pacman -Sy git
+#     exit 1
+# }
+# echo ""
 
-# make plugin dir and fetch dein
-if ! [ -e "$INSTALL_DIR" ]; then
-    echo "Begin fetching dotfiles..."
-    mkdir -p "$PLUGIN_DIR"
-    git clone https://github.com/andrewbell8/dotfiles.git "$INSTALL_DIR"
-    echo "Done."
-    echo ""
-fi
+# # make plugin dir and fetch dein
+# if ! [ -e "$INSTALL_DIR" ]; then
+#     echo "Begin fetching dotfiles..."
+#     mkdir -p "$PLUGIN_DIR"
+#     git clone https://github.com/andrewbell8/dotfiles.git "$INSTALL_DIR"
+#     echo "Done."
+#     echo ""
+# fi
 
 
 function link_root() {
@@ -80,6 +80,8 @@ function link_root() {
         
         cd "$ROOT_HOME/.zprezto/modules/prompt/external/powerlevel9k && sudo ln -sfr powerlevel9k.zsh-theme ../../functions/prompt_powerlevel9k_setup
 
+        cd "$ROOT_HOME/.zprezto/modules/prompt/external/powerlevel9k && sudo ln -sfr powerlevel9k.zsh-theme ../../functions/prompt_powerlevel9k_setup
+
         sudo ln -sf "$USER_HOME/.dotfiles/misc/macos/dircolors" "$ROOT_HOME/.dircolors"
         sudo rm -rf "$ROOT_HOME/Library/Application Support/Sublime Text 3/Packages/User" && sudo ln -sd "$USER_HOME/.dotfiles/config/sublime/Packages/User" "$ROOT_HOME/Library/Application Support/Sublime Text 3/Packages"
     elif [[ $OSTYPE == *linux* ]] ; then
@@ -91,9 +93,9 @@ function link_root() {
             sudo ln -sf "$rcfile" "$ROOT_HOME/.${rcfile:t}"
         done
 
-        cd "$ROOT_HOME/.zprezto/modules/prompt/external/powerlevel9k && sudo ln -sfr powerlevel9k.zsh-theme ../../functions/prompt_powerlevel9k_setup
 
         sudo ln -sf "$USER_HOME/.dotfiles/misc/linux/dircolors" "$ROOT_HOME/.dircolors"        
+        sudo ln -sf "$USER_HOME/.dotfiles/misc/linux/dircolors" "$ROOT_HOME/.dircolors"
         rm -rf "$USER_HOME/.config/sublime-text-3/Packages/User" && sudo ln -sd "$USER_HOME/.dotfiles/config/sublime/Packages/User" "$ROOT_HOME/.config/sublime-text-3/Packages"
     fi
 
@@ -106,7 +108,7 @@ function link_root() {
     done
 }
 
-function root_link_inquire()  {
+function root_link_inquire() {
     emulate -L zsh
 
     echo  -n "Do you want to link your config to /root as well [Y/N]? "
@@ -192,6 +194,9 @@ function link_user() {
     done
     
     cd ~/.zprezto/modules/prompt/external/powerlevel9k && ln -sfr powerlevel9k.zsh-theme ../../functions/prompt_powerlevel9k_setup
+
+    cd ~/.zprezto/modules/prompt/external/powerlevel9k && ln -sfr
+    powerlevel9k.zsh-theme ../../functions/prompt_powerlevel9k_setup
 }
 
 # Symlink config files

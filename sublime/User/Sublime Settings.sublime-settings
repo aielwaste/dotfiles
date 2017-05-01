@@ -2,7 +2,14 @@
 	"extensions":
 	[
 		"sublime-project",
+<<<<<<< HEAD
 		"ext-list",
 		"sublime-settings"
 	]
+=======
+		"ext-list"
+	],
+	"tab_size": 4,
+	"translate_tabs_to_spaces": true
+>>>>>>> 7190f0f4616bf8be9554f1401c1fa96f67444076
 }
