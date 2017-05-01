@@ -1,17 +1,4 @@
 {
-	"Linux":
-	{
-		"font_face": "FuraCode Nerd Font",
-		"font_options": ["subpixel_antialias","gray_antialias"],
-		"tab_size": 2
-	},
-	"OSX":
-	{
-		"font_face": "FuraCodeNerdFontCM-Retina",
-		"font_options": ["subpixel_antialias"],
-		"tab_size": 2,
-		"font_size": 14
-	},
 	"additional_path_items": ["~/bin","/usr/local/libexec/gnubin","~/.pyenv/shim","~/.pyenv/shims/bin","~/.rbenv/shim","~/.rbenv/shims/bin","~/.nodenv/shims","~/.nodenv/shims/bin","~/.platform_settings","/usr/local/bin","/usr/local/opt/go/libexec/bin"],
 	"color_scheme": "Packages/Seti_UX/Seti.tmTheme",
 	"email_account_default_identities":["Andrew Bell <andrewbell8@gmail.com>","Andrew Bell <a.bell@vivaldi.net","Andrew Bell <bell.andrew@icloud.com","Andrew Bell <fr1volous@icloud.com>","Andrew Bell <a.j.bell@outlook.com","Andrew Bell <fr1volous@outlook.com"],
@@ -30,5 +17,526 @@
 	"shell_exec_output_word_wrap": true,
 	"shell_exec_title": "Shell Exec",
 	"show_full_path": true,
-	"theme": "Seti_orig.sublime-theme"
+	"theme": "Seti_orig.sublime-theme",
+	"Linux":
+	{
+		"font_face": "Fira Code",
+		"font_options":
+		[
+			"subpixel_antialias",
+			"gray_antialias"
+		],
+		"font_size": 10,
+		"tab_size": 4,
+		"translate_tabs_to_spaces": true
+	},
+	"Osx":
+	{
+		"font_face": "FiraCode-Retina",
+		"font_options":
+		[
+			"subpixel_antialias"
+		],
+		"font_size": 14,
+		"tab_size": 4,
+		"translate_tabs_to_spaces": true
+	},
+	"SublimeLinter":
+	{
+		"user":
+		{
+			"debug": true,
+			"delay": 0.25,
+			"error_color": "D02000",
+			"gutter_theme": "Packages/SublimeLinter/gutter-themes/Danish Royalty/Danish Royalty.gutter-theme",
+			"gutter_theme_excludes":
+			[
+			],
+			"lint_mode": "background",
+			"linters":
+			{
+				"annotations":
+				{
+					"@disable": false,
+					"args":
+					[
+					],
+					"errors":
+					[
+						"FIXME"
+					],
+					"excludes":
+					[
+					],
+					"warnings":
+					[
+						"NOTE",
+						"README",
+						"TODO",
+						"XXX",
+						"@todo"
+					]
+				},
+				"apiblueprint":
+				{
+					"@disable": false,
+					"args":
+					[
+					],
+					"excludes":
+					[
+					]
+				},
+				"coffee":
+				{
+					"@disable": false,
+					"args":
+					[
+					],
+					"excludes":
+					[
+					]
+				},
+				"coffeelint":
+				{
+					"@disable": false,
+					"args":
+					[
+					],
+					"excludes":
+					[
+					]
+				},
+				"cppcheck":
+				{
+					"@disable": false,
+					"args":
+					[
+					],
+					"enable": "style",
+					"excludes":
+					[
+					],
+					"std":
+					[
+					]
+				},
+				"cpplint":
+				{
+					"@disable": false,
+					"args":
+					[
+					],
+					"excludes":
+					[
+					],
+					"filter": "",
+					"linelength": ""
+				},
+				"csslint":
+				{
+					"@disable": false,
+					"args":
+					[
+					],
+					"errors": "",
+					"excludes":
+					[
+					],
+					"executable": "",
+					"ignore": "",
+					"warnings": ""
+				},
+				"flake8":
+				{
+					"@disable": false,
+					"args":
+					[
+					],
+					"builtins": "",
+					"excludes":
+					[
+					],
+					"ignore": "E302,W291,W293",
+					"jobs": "1",
+					"max-complexity": -1,
+					"max-line-length": null,
+					"select": ""
+				},
+				"haml":
+				{
+					"@disable": false,
+					"args":
+					[
+					],
+					"excludes":
+					[
+					]
+				},
+				"javac":
+				{
+					"@disable": false,
+					"args":
+					[
+					],
+					"excludes":
+					[
+					],
+					"lint": ""
+				},
+				"jshint":
+				{
+					"@disable": false,
+					"args":
+					[
+					],
+					"excludes":
+					[
+					]
+				},
+				"json":
+				{
+					"@disable": false,
+					"args":
+					[
+					],
+					"excludes":
+					[
+					],
+					"executable": "",
+					"strict": true
+				},
+				"lua":
+				{
+					"@disable": false,
+					"args":
+					[
+					],
+					"excludes":
+					[
+					]
+				},
+				"luacheck":
+				{
+					"@disable": false,
+					"args":
+					[
+					],
+					"excludes":
+					[
+					],
+					"globals":
+					[
+					],
+					"ignore":
+					[
+						"channel"
+					],
+					"limit": null,
+					"only":
+					[
+					]
+				},
+				"pep8":
+				{
+					"@disable": true,
+					"args":
+					[
+					],
+					"excludes":
+					[
+					],
+					"ignore": "",
+					"max-line-length": null,
+					"select": ""
+				},
+				"proselint":
+				{
+					"@disable": false,
+					"args":
+					[
+					],
+					"excludes":
+					[
+					]
+				},
+				"pyflakes":
+				{
+					"@disable": true,
+					"args":
+					[
+					],
+					"excludes":
+					[
+					]
+				},
+				"pylint":
+				{
+					"@disable": false,
+					"args":
+					[
+					],
+					"disable": "",
+					"enable": "",
+					"excludes":
+					[
+					],
+					"paths":
+					[
+					],
+					"rcfile": "",
+					"show-codes": false
+				},
+				"rubocop":
+				{
+					"@disable": false,
+					"args":
+					[
+					],
+					"excludes":
+					[
+					]
+				},
+				"ruby":
+				{
+					"@disable": false,
+					"args":
+					[
+					],
+					"excludes":
+					[
+					]
+				},
+				"shellcheck":
+				{
+					"@disable": true,
+					"args":
+					[
+					],
+					"exclude":
+					[
+						"SC1090",
+						"SC2148"
+					],
+					"excludes":
+					[
+					]
+				},
+				"sublimesyntax":
+				{
+					"@disable": false,
+					"args":
+					[
+					],
+					"excludes":
+					[
+					]
+				},
+				"swiftlint":
+				{
+					"@disable": false,
+					"args":
+					[
+					],
+					"excludes":
+					[
+					]
+				},
+				"xmllint":
+				{
+					"@disable": false,
+					"args":
+					[
+					],
+					"excludes":
+					[
+					]
+				}
+			},
+			"mark_style": "outline",
+			"no_column_highlights_line": false,
+			"passive_warnings": false,
+			"paths":
+			{
+				"linux":
+				[
+					"~/bin",
+					"/usr/bin",
+					"/usr/sbin",
+					"~/.pyenv/shims",
+					"~/.pyenv/shims/bin",
+					"~/.rbenv/shims",
+					"~/.rbenv/shims/bin"
+				],
+				"osx":
+				[
+					"~/bin",
+					"/usr/local/bin",
+					"/usr/local/sbin",
+					"~/.pyenv/shims",
+					"~/.pyenv/shims/bin",
+					"~/.rbenv/shims",
+					"~/.rbenv/shims/bin"
+				],
+				"windows":
+				[
+				]
+			},
+			"python_paths":
+			{
+				"linux":
+				[
+					"~/.pyenv/shims/python",
+					"~/.pyenv/shims/python2",
+					"/usr/bin/python",
+					"/usr/bin/python2"
+				],
+				"osx":
+				[
+					"~/.pyenv/shims/python3",
+					"~/.pyenv/shims/python",
+					"/usr/local/bin/python3",
+					"/usr/local/bin/python"
+				],
+				"windows":
+				[
+					"G:\\Src\\Python\\Python3",
+					"G:\\Src\\Python\\Python2"
+				]
+			},
+			"rc_search_limit": 3,
+			"shell_timeout": 10,
+			"show_errors_on_save": false,
+			"show_marks_in_minimap": true,
+			"syntax_map":
+			{
+				"Sublime Settings": "flake8",
+				"coffeescript (gulpfile)": "coffeescript",
+				"html (django)": "html",
+				"html (rails)": "html",
+				"html 5": "html",
+				"javascript (babel)": "javascript",
+				"javascript (eslint)": "javascript",
+				"javascript (gruntfile)": "javascript",
+				"javascript (gulpfile)": "javascript",
+				"javascript (postcss)": "javascript",
+				"javascript (stylelint)": "javascript",
+				"javascript (webpack)": "javascript",
+				"json (babel)": "json",
+				"json (bower)": "json",
+				"json (composer)": "json",
+				"json (eslint)": "json",
+				"json (npm)": "json",
+				"json (postcss)": "json",
+				"json (settings)": "json",
+				"json (stylelint)": "json",
+				"json (sublime)": "json",
+				"json (tern js)": "json",
+				"magicpython": "python3",
+				"php": "html",
+				"python django": "python",
+				"xml (config)": "xml",
+				"xml (svg)": "xml",
+				"yaml (circleci)": "yaml",
+				"yaml (docker)": "yaml",
+				"yaml (eslint)": "yaml",
+				"yaml (lock)": "yaml",
+				"yaml (procfile)": "yaml",
+				"yaml (stylelint)": "yaml",
+				"yaml (yarn)": "yaml"
+			},
+			"warning_color": "DDB700",
+			"wrap_find": true
+		}
+	},
+	"additional_path_items":
+	[
+		"~/bin",
+		"/usr/local/libexec/gnubin",
+		"~/.pyenv/shim",
+		"~/.pyenv/shims/bin",
+		"~/.rbenv/shim",
+		"~/.rbenv/shims/bin",
+		"~/.nodenv/shims",
+		"~/.nodenv/shims/bin",
+		"~/.platform_settings",
+		"/usr/local/bin",
+		"/usr/local/opt/go/libexec/bin"
+	],
+	"close_windows_when_empty": true,
+	"color_scheme": "Packages/Seti_UX/Seti.tmTheme",
+	"email_account_default_identities":
+	[
+		"Andrew Bell <andrewbell8@gmail.com>",
+		"Andrew Bell <a.bell@vivaldi.net",
+		"Andrew Bell <bell.andrew@icloud.com",
+		"Andrew Bell <fr1volous@icloud.com>",
+		"Andrew Bell <a.j.bell@outlook.com",
+		"Andrew Bell <fr1volous@outlook.com"
+	],
+	"email_account_default_identity": "Andrew Bell <andrewbell8@gmail.com>",
+	"email_account_default_imap": "imaps://andrewbell8:@RESn0code@imap.gmail.com:993",
+	"email_account_default_smtp": "smtp+tls://andrewbell8:@RESn0code@smtp.gmail.com:465",
+	"email_accounts":
+	[
+		"andrewbell8@gmail.com"
+	],
+	"font_size": 11,
+	"highlight_line": true,
+	"ignored_packages":
+	[
+		"JavaScript",
+		"Vintage"
+	],
+	"platform_settings_keys":
+	[
+		"$platform",
+		"user_$platform"
+	],
+	"project_manager":
+	{
+		"projects_path":
+		[
+			"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/User/ProjectManager/Projects",
+			"/home/fr1v/.config/sublime-text-3/Packages/User/ProjectManager/Projects",
+			"C:/Users/fr1v/AppData/Roaming/Sublime Text 3/Packages/User/ProjectManager/Projects"
+		],
+		"show_open_files": true,
+		"show_recent_projects_first": true,
+		"use_local_projects_dir": false
+	},
+	"shell_exec_context": "project_folder",
+	"shell_exec_debug": false,
+	"shell_exec_executable": "/usr/bin/zsh",
+	"shell_exec_executable_option": "--login",
+	"shell_exec_output": "file",
+	"shell_exec_output_syntax": "Ruby",
+	"shell_exec_output_word_wrap": true,
+	"shell_exec_title": "Shell Exec",
+	"show_full_path": true,
+	"theme": "Seti_orig.sublime-theme",
+	"theme_primer_sidebar_tree_large": true,
+	"theme_primer_tab_active_blue": true,
+	"user_Linux":
+	{
+		"font_face": "Fira Code",
+		"tab_size": 4,
+		"translate_tabs_to_spaces": true
+	},
+	"user_Osx":
+	{
+		"font_face": "FiraCode-Retina",
+		"font_options":
+		[
+			"subpixel_antialias"
+		],
+		"font_options":
+		[
+			"subpixel_antialias",
+			"gray_antialias"
+		],
+		"font_size": 14,
+		"tab_size": 4,
+		"translate_tabs_to_spaces": true
+	}
 }

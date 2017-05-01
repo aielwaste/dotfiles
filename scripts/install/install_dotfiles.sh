@@ -78,8 +78,7 @@ function link_root() {
             sudo ln -sf "$rcfile" "$ROOT_HOME/.${rcfile:t}"
         done
         
-        cd "$ROOT_HOME/.zprezto/modules/prompt/external/powerlevel9k && sudo ln 
-        -sfr powerlevel9k.zsh-theme ../../functions/prompt_powerlevel9k_setup
+        cd "$ROOT_HOME/.zprezto/modules/prompt/external/powerlevel9k && sudo ln -sfr powerlevel9k.zsh-theme ../../functions/prompt_powerlevel9k_setup
 
         sudo ln -sf "$USER_HOME/.dotfiles/misc/macos/dircolors" "$ROOT_HOME/.dircolors"
         sudo rm -rf "$ROOT_HOME/Library/Application Support/Sublime Text 3/Packages/User" && sudo ln -sd "$USER_HOME/.dotfiles/config/sublime/Packages/User" "$ROOT_HOME/Library/Application Support/Sublime Text 3/Packages"
@@ -92,8 +91,9 @@ function link_root() {
             sudo ln -sf "$rcfile" "$ROOT_HOME/.${rcfile:t}"
         done
 
-        sudo ln -sf "$USER_HOME/.dotfiles/misc/linux/dircolors" 
-        "$ROOT_HOME/.dircolors"
+        cd "$ROOT_HOME/.zprezto/modules/prompt/external/powerlevel9k && sudo ln -sfr powerlevel9k.zsh-theme ../../functions/prompt_powerlevel9k_setup
+
+        sudo ln -sf "$USER_HOME/.dotfiles/misc/linux/dircolors" "$ROOT_HOME/.dircolors"        
         rm -rf "$USER_HOME/.config/sublime-text-3/Packages/User" && sudo ln -sd "$USER_HOME/.dotfiles/config/sublime/Packages/User" "$ROOT_HOME/.config/sublime-text-3/Packages"
     fi
 
@@ -147,13 +147,13 @@ function link_user() {
 
 
     for rcfile in "${ZDOTDIR:-$HOME}"/.zprezto/runcoms/^README.md(.N); do
-        ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+        ln -sf "$rcfile" "${ZDOTDIR:-$HOME}"/.${rcfile:t}
     done
 
     if [[ $OSTYPE == *darwin* ]] ; then
-        ln -sd "${ZDOTDIR:-$HOME}/.dotfiles/macos/iterm/tools" "${ZDOTDIR:-$HOME}/.iterm2"
-        ln -sf "${ZDOTDIR:-$HOME}/.dotfiles/macos/iterm/iterm2_shell_integration.zsh" "${ZDOTDIR:-$HOME}/.iterm2_shell_integration.zsh"
-        ln -sf "${ZDOTDIR:-$HOME}/.dotfiles/macos/iterm/iterm2_shell_integration.bash" "${ZDOTDIR:-$HOME}/.iterm2_shell_integration.bash"
+        ln -sd "${ZDOTDIR:-$HOME}"/.dotfiles/macos/iterm/tools "${ZDOTDIR:-$HOME}"/.iterm2
+        ln -sf "${ZDOTDIR:-$HOME}"/.dotfiles/macos/iterm/iterm2_shell_integration.zsh "${ZDOTDIR:-$HOME}"/.iterm2_shell_integration.zsh
+        ln -sf "${ZDOTDIR:-$HOME}"/.dotfiles/macos/iterm/iterm2_shell_integration.bash "${ZDOTDIR:-$HOME}"/.iterm2_shell_integration.bash
 
         brew install "${ZDOTDIR:-$HOME}/.dotfiles/macos/homebrew/macdown.rb"
 
@@ -165,9 +165,11 @@ function link_user() {
             ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
         done
 
-        ln -sf "${ZDOTDIR:-$HOME}/.dotfiles/misc/macos/dircolors" "${ZDOTDIR:-$HOME}/.dircolors"
+        ln -sf "${ZDOTDIR:-$HOME}"/.dotfiles/misc/macos/dircolors "${ZDOTDIR:-$HOME}"/.dircolors
         rm -rf "${ZDOTDIR:-$HOME}/Library/Application Support/Sublime Text 3/Packages/User" && ln -sd "${ZDOTDIR:-$HOME}/.dotfiles/config/sublime/Packages/User" "${ZDOTDIR:-$HOME}/Library/Application Support/Sublime Text 3/Packages"
+    
     elif [[ $OSTYPE == *linux* ]] ; then
+        
         for rcfile in "${ZDOTDIR:-$HOME}"/.git/linux/^README.md(.N); do
             ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
         done
@@ -176,7 +178,8 @@ function link_user() {
             ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
         done
 
-        ln -sf "${ZDOTDIR:-$HOME}/.dotfiles/misc/linux/dir_colors" "${ZDOTDIR:-$HOME}/.dir_colors"
+        ln -sf "${ZDOTDIR:-$HOME}"/.dotfiles/misc/linux/dircolors "${ZDOTDIR:-$HOME}"/.dircolors
+        
         rm -rf "${ZDOTDIR:-$HOME}/.config/sublime-text-3/Packages/User" && ln -sd "${ZDOTDIR:-$HOME}/.dotfiles/config/sublime/Packages/User" "${ZDOTDIR:-$HOME}/.config/sublime-text-3/Packages"
     fi
 
@@ -188,8 +191,7 @@ function link_user() {
         ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
     done
     
-    cd ~/.zprezto/modules/prompt/external/powerlevel9k && ln -sfr 
-    powerlevel9k.zsh-theme ../../functions/prompt_powerlevel9k_setup
+    cd ~/.zprezto/modules/prompt/external/powerlevel9k && ln -sfr powerlevel9k.zsh-theme ../../functions/prompt_powerlevel9k_setup
 }
 
 # Symlink config files

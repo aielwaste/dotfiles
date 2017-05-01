@@ -246,8 +246,8 @@ set tabstospaces
 ## them easier to remember and faster to type using nano's -Y option.
 ##
 ## To include all existing syntax definitions, you can do:
-include "/opt/nano/share/nano/*.nanorc"
-include "/opt/nano/share/nano/extra/*.nanorc"
+include "/usr/share/nano/*.nanorc"
+include "/usr/share/nano-syntax-highlighting/*.nanorc"
 
 ## Key bindings.
 ## See nanorc(5) (section REBINDING KEYS) for more details on this.
