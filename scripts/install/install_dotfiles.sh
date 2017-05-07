@@ -1,4 +1,4 @@
-#!/usr/local/bin/zsh
+#!/usr/bin/zsh
 #======================================================================================
 #
 # Author: Andrew Bell andrewbell8@gmail.com
@@ -11,42 +11,6 @@ setopt LOCAL_OPTIONS EXTENDED_GLOB
 
 USER_HOME="/home/$USER"
 ROOT_HOME="/root"
-
-# if [ $# -ne 1 ]; then
-#     echo "You must specify the installation directory!"
-#     exit 1
-# fi
-
-# # Convert the installation directory to absolute path
-# case $1 in
-#     /*) PLUGIN_DIR=$1;;
-#     *) PLUGIN_DIR=$PWD/$1;;
-# esac
-# INSTALL_DIR="${PLUGIN_DIR}/.dotfiles"
-# echo "Install to \"$INSTALL_DIR\"..."
-# if [ -e "$INSTALL_DIR" ]; then
-#     echo "\"$INSTALL_DIR\" already exists!"
-# fi
-
-# echo ""
-
-# # check git command
-# type git || {
-#     echo 'Git not installed'
-#     echo 'Installing git...'
-#     sudo pacman -Sy git
-#     exit 1
-# }
-# echo ""
-
-# # make plugin dir and fetch dein
-# if ! [ -e "$INSTALL_DIR" ]; then
-#     echo "Begin fetching dotfiles..."
-#     mkdir -p "$PLUGIN_DIR"
-#     git clone https://github.com/andrewbell8/dotfiles.git "$INSTALL_DIR"
-#     echo "Done."
-#     echo ""
-# fi
 
 
 function link_root() {

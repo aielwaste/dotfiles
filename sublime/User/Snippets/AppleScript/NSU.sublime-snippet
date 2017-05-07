@@ -1,7 +1,0 @@
-<snippet>
-	<content><![CDATA[
-[[*framework:Foundation]][[*class:NSURL]]'s fileURLWithPath:[[template:posixPath]]
-]]></content>
-	<tabTrigger>NSU</tabTrigger>
-	<scope>source.applescript</scope>
-</snippet>
