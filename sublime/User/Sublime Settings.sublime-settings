@@ -1,10 +1,12 @@
 {
 	"extensions":
-	[
-		"sublime-project",
+    [
 		"ext-list",
 		"sublime-settings",
-		"sublime-menu",
-		"sublime-workspace"
-	]
+        "sublime-menu",
+        "sublime-workspace",
+        "sublime-project"
+	],
+	"tab_size": 4,
+	"translate_tabs_to_spaces": true
 }

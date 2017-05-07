@@ -21,13 +21,8 @@
 			"grey_antialias"
 		],
 		"font_size": 14,
-		"shell_exec_executable": "/usr/local/bin/zsh",
 		"show_full_path": true,
 		"tab_size": 4,
-		"theme_font_options":
-		[
-			"subpixel_antialias"
-		],
 		"translate_tabs_to_spaces": true
 	},
 	"Windows":
@@ -38,8 +33,22 @@
 			"subpixel_antialias",
 			"grey_antialias"
 		],
-		"font_size": 11
+		"font_size": 14
 	},
+	"additional_path_items":
+	[
+		"~/bin",
+		"/usr/local/libexec/gnubin",
+		"~/.pyenv/shim",
+		"~/.pyenv/shims/bin",
+		"~/.rbenv/shim",
+		"~/.rbenv/shims/bin",
+		"~/.nodenv/shims",
+		"~/.nodenv/shims/bin",
+		"~/.platform_settings",
+		"/usr/local/bin",
+		"/usr/local/opt/go/libexec/bin"
+	],
 	"auto_complete_commit_on_tab": true,
 	"auto_complete_cycle": true,
 	"auto_complete_with_fields": true,
@@ -48,7 +57,8 @@
 	"caret_extra_bottom": 3,
 	"caret_extra_top": 3,
 	"caret_extra_width": 2,
-	"close_windows_when_empty": true,
+	"caret_style": "wide",
+	"close_windows_when_empty": false,
 	"color_scheme": "Packages/Seti_UX/Seti.tmTheme",
 	"copy_with_empty_selection": false,
 	"email_account_default_identities":
@@ -69,7 +79,7 @@
 	],
 	"fade_fold_buttons": false,
 	"font_face": "FiraCode-Medium",
-	"font_size": 15,
+	"font_size": 14,
 	"highlight_line": true,
 	"highlight_modified_tabs": true,
 	"ignored_packages":
@@ -100,9 +110,17 @@
 	"overlay_scroll_bars": "enabled",
 	"platform_settings_keys":
 	[
-		"$platform",
-		"user_$platform"
+		"Linux",
+		"OSX",
+		"Windows"
 	],
+	"projects_path":
+	[
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/User/ProjectManager/Projects",
+		"/home/fr1v/.config/sublime-text-3/Packages/User/ProjectManager/Projects",
+		"C:\\Users\\fr1v\\AppData\\Roaming\\Sublime Text 3\\Packages\\User\\ProjectManager\\Projects"
+	],
+	"protect_default_settings": false,
 	"scroll_speed": 2.0,
 	"shell_exec_context": "project_folder",
 	"shell_exec_debug": false,
@@ -115,43 +133,12 @@
 	"shift_tab_unindent": true,
 	"show_encoding": false,
 	"show_full_path": true,
-	"show_line_endings": true,
+	"show_line_endings": false,
+	"show_open_files": false,
+	"show_recent_projects_first": true,
 	"tab_size": 4,
-	"user_Linux":
-	{
-		"font_face": "Fira Code Medium",
-		"font_options":
-		[
-			"subpixel_antialias",
-			"grey_antialias"
-		],
-		"font_size": 12,
-		"tab_size": 4,
-		"translate_tabs_to_spaces": true
-	},
-	"user_Osx":
-	{
-		"font_face": "FiraCode-Medium",
-		"font_options":
-		[
-			"subpixel_antialias",
-			"grey_antialias"
-		],
-		"font_size": 14,
-		"show_full_path": true,
-		"tab_size": 4,
-		"translate_tabs_to_spaces": true
-	},
-	"user_Windows":
-	{
-		"font_face": "Fira Code Medium",
-		"font_options":
-		[
-			"subpixel_antialias",
-			"grey_antialias"
-		],
-		"font_size": 11,
-		"tab_size": 4,
-		"translate_tabs_to_spaces": true
-	}
+	"theme": "Seti_orig.sublime-theme",
+	"theme_primer_sidebar_tree_large": true,
+	"theme_primer_tab_active_blue": true,
+	"translate_tabs_to_spaces": true
 }

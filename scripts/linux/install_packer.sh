@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 set -e
 
 sudo pacman -S wget --needed --noconfirm
