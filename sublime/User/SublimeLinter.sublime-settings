@@ -27,6 +27,11 @@
                 "args": [],
                 "excludes": []
             },
+            "checksourceformatting": {
+                "@disable": false,
+                "args": [],
+                "excludes": []
+            },
             "coffee": {
                 "@disable": false,
                 "args": [],
@@ -60,6 +65,11 @@
                 "ignore": "",
                 "warnings": ""
             },
+            "eslint": {
+                "@disable": false,
+                "args": [],
+                "excludes": []
+            },
             "flake8": {
                 "@disable": false,
                 "args": [],
@@ -81,6 +91,11 @@
                 "args": [],
                 "excludes": [],
                 "lint": ""
+            },
+            "jscs": {
+                "@disable": false,
+                "args": [],
+                "excludes": []
             },
             "jshint": {
                 "@disable": false,
@@ -149,11 +164,12 @@
                 "excludes": []
             },
             "shellcheck": {
-                "@disable": true,
+                "@disable": false,
                 "args": [],
                 "exclude": [
                     "SC1090",
-                    "SC2148"
+                    "SC2148",
+                    "SC1071"
                 ],
                 "excludes": []
             },
@@ -232,6 +248,7 @@
             "javascript (postcss)": "javascript",
             "javascript (stylelint)": "javascript",
             "javascript (webpack)": "javascript",
+            "javascript.dom": "javascript",
             "json (babel)": "json",
             "json (bower)": "json",
             "json (composer)": "json",

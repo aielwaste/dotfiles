@@ -1,0 +1,1738 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"Ap",
+				"ApplySyntax"
+			],
+			[
+				"Subl",
+				"SublimeLinter"
+			],
+			[
+				"Packag",
+				"PackageResourceViewer"
+			],
+			[
+				"subl",
+				"sublime_plugin"
+			],
+			[
+				"start",
+				"start_ssh_agent"
+			],
+			[
+				"and",
+				"andrewbell8@gmail.com\t(zpreztorc)"
+			],
+			[
+				"HOM",
+				"HOMEBREW_EDITOR"
+			],
+			[
+				"_",
+				"___ORGANIZATIONNAME___"
+			],
+			[
+				"___",
+				"___FULLUSERNAME___"
+			],
+			[
+				"HOME",
+				"HOMEBREW_GITHUB_API_TOKEN"
+			],
+			[
+				"XD",
+				"XDG_DATA_HOME"
+			],
+			[
+				"SUB",
+				"SUBL_PROJECTS"
+			],
+			[
+				"TM_H",
+				"TM_HG_EXT_DIFF"
+			],
+			[
+				"TM_SV",
+				"TM_SVN_DIFF_CMD"
+			],
+			[
+				"SUBL_",
+				"SUBL_PROJECTS"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "SideBarEnhancements.sublime-project",
+			"settings":
+			{
+				"buffer_size": 657,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/PackageDev/snippet_dev.py",
+			"settings":
+			{
+				"buffer_size": 3001,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements/Side Bar.sublime-settings",
+			"settings":
+			{
+				"buffer_size": 1796,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "# coding=utf8\nimport sublime, sublime_plugin\n\nimport os, shutil\nimport threading, time\nimport re\n\nfrom .edit.Edit import Edit as Edit\nfrom .hurry.filesize import size as hurry_size\n\ntry:\n\tfrom urllib import unquote as urlunquote\nexcept ImportError:\n\tfrom urllib.parse import unquote as urlunquote\n\nfrom .SideBarAPI import SideBarItem, SideBarSelection, SideBarProject\n\nglobal Pref, s, Cache\nPref = {}\ns = {}\nCache = {}\n\ndef CACHED_SELECTION(paths = []):\n\tif Cache.cached:\n\t\treturn Cache.cached\n\telse:\n\t\treturn SideBarSelection(paths)\n\ndef escapeCMDWindows(string):\n\treturn string.replace('^', '^^')\n\nclass Pref():\n\tdef load(self):\n\t\tpass\n\ndef plugin_loaded():\n\tglobal Pref, s\n\ts = sublime.load_settings('Side Bar.sublime-settings')\n\tPref = Pref()\n\tPref.load()\n\ts.clear_on_change('reload')\n\ts.add_on_change('reload', lambda:Pref.load())\n\ndef Window(window = None):\n\treturn window if window else sublime.active_window()\n\ndef expandVars(path):\n\tfor k, v in list(os.environ.items()):\n\t\tpath = path.replace('%'+k+'%', v).replace('%'+k.lower()+'%', v)\n\treturn path\n\ndef window_set_status(key, name =''):\n\tfor window in sublime.windows():\n\t\tfor view in window.views():\n\t\t\tview.set_status('SideBar-'+key, name)\n\nclass Object():\n\tpass\n\nclass Cache():\n\tpass\nCache = Cache()\nCache.cached = False\n\nclass OpenWithListener(sublime_plugin.EventListener):\n\tdef on_load_async(self, view):\n\t\tif view and view.file_name() and not view.settings().get('open_with_edit'):\n\t\t\titem = SideBarItem(os.path.join(sublime.packages_path(), 'User', 'SideBarEnhancements', 'Open With', 'Side Bar.sublime-menu'), False)\n\t\t\tif item.exists():\n\t\t\t\tsettings = sublime.decode_value(item.contentUTF8())\n\t\t\t\tselection = SideBarSelection([view.file_name()])\n\t\t\t\tfor item in settings[0]['children']:\n\t\t\t\t\ttry:\n\t\t\t\t\t\tif item['open_automatically'] and selection.hasFilesWithExtension(item['args']['extensions']):\n\t\t\t\t\t\t\tSideBarFilesOpenWithCommand(Window()).run([view.file_name()], item['args']['application'], item['args']['extensions'])\n\t\t\t\t\t\t\tview.window().run_command('close')\n\t\t\t\t\t\t\tbreak\n\t\t\t\t\texcept:\n\t\t\t\t\t\tpass\n\nclass aaaaaSideBarCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\tpass\n\n\tdef is_visible(self, paths = []): # <- WORKS AS AN ONPOPUPSHOWING\n\t\tCache.cached = SideBarSelection(paths)\n\t\treturn False\n\nclass SideBarNewFileCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = [], name = \"\"):\n\t\timport functools\n\t\tWindow().run_command('hide_panel');\n\t\tWindow().show_input_panel(\"File Name:\", name, functools.partial(self.on_done, paths, False), None, None)\n\n\tdef on_done(self, paths, relative_to_project, name):\n\t\t_paths = paths\n\t\tif relative_to_project or s.get('new_files_relative_to_project_root', False):\n\t\t\t_paths = SideBarProject().getDirectories()\n\t\t\tif _paths:\n\t\t\t\t_paths = [SideBarItem(_paths[0], False)]\n\t\t\tif not _paths:\n\t\t\t\t_paths = SideBarSelection(_paths).getSelectedDirectoriesOrDirnames()\n\t\telse:\n\t\t\t_paths = SideBarSelection(_paths).getSelectedDirectoriesOrDirnames()\n\t\tif not _paths:\n\t\t\t_paths = SideBarProject().getDirectories()\n\t\t\tif _paths:\n\t\t\t\t_paths = [SideBarItem(_paths[0], False)]\n\t\tif not _paths:\n\t\t\tWindow().new_file()\n\t\telse:\n\t\t\tfor item in _paths:\n\t\t\t\titem = SideBarItem(item.join(name), False)\n\t\t\t\tif item.exists():\n\t\t\t\t\tsublime.error_message(\"Unable to create file, file or folder exists.\")\n\t\t\t\t\tself.run(paths, name)\n\t\t\t\t\treturn\n\t\t\t\telse:\n\t\t\t\t\ttry:\n\t\t\t\t\t\titem.create()\n\t\t\t\t\t\titem.edit()\n\t\t\t\t\texcept:\n\t\t\t\t\t\tsublime.error_message(\"Unable to create file:\\n\\n\"+item.path())\n\t\t\t\t\t\tself.run(paths, name)\n\t\t\t\t\t\treturn\n\t\t\tSideBarProject().refresh();\n\nclass SideBarNewFile2Command(sublime_plugin.WindowCommand):\n\tdef run(self, paths = [], name = \"\"):\n\t\timport functools\n\t\tWindow().run_command('hide_panel');\n\t\tWindow().show_input_panel(\"File Name:\", name, functools.partial(SideBarNewFileCommand(Window()).on_done, paths, True), None, None)\n\nclass SideBarNewDirectory2Command(sublime_plugin.WindowCommand):\n\tdef run(self, paths = [], name = \"\"):\n\t\timport functools\n\t\tWindow().run_command('hide_panel');\n\t\tWindow().show_input_panel(\"Folder Name:\", name, functools.partial(SideBarNewDirectoryCommand(Window()).on_done, paths, True), None, None)\n\nclass SideBarNewDirectoryCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = [], name = \"\"):\n\t\timport functools\n\t\tWindow().run_command('hide_panel');\n\t\tWindow().show_input_panel(\"Folder Name:\", name, functools.partial(self.on_done, paths, False), None, None)\n\n\tdef on_done(self, paths, relative_to_project, name):\n\t\t_paths = paths\n\t\tif relative_to_project or s.get('new_folders_relative_to_project_root', False):\n\t\t\t_paths = SideBarProject().getDirectories()\n\t\t\tif _paths:\n\t\t\t\t_paths = [SideBarItem(_paths[0], True)]\n\t\t\tif not _paths:\n\t\t\t\t_paths = SideBarSelection(_paths).getSelectedDirectoriesOrDirnames()\n\t\telse:\n\t\t\t_paths = SideBarSelection(_paths).getSelectedDirectoriesOrDirnames()\n\n\t\tfor item in _paths:\n\t\t\titem = SideBarItem(item.join(name), True)\n\t\t\tif item.exists():\n\t\t\t\tsublime.error_message(\"Unable to create folder, folder or file exists.\")\n\t\t\t\tself.run(paths, name)\n\t\t\t\treturn\n\t\t\telse:\n\t\t\t\titem.create()\n\t\t\t\tif not item.exists():\n\t\t\t\t\tsublime.error_message(\"Unable to create folder:\\n\\n\"+item.path())\n\t\t\t\t\tself.run(paths, name)\n\t\t\t\t\treturn\n\t\tSideBarProject().refresh();\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0\n\nclass SideBarEditCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\tfor item in SideBarSelection(paths).getSelectedFiles():\n\t\t\titem.edit()\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).hasFiles()\n\n\tdef is_visible(self, paths =[]):\n\t\treturn not s.get('disabled_menuitem_edit', False)\n\nclass SideBarEditToRightCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\n\t\twindow = Window()\n\t\twindow.run_command('set_layout', {\"cols\": [0.0, 0.5, 1.0], \"rows\": [0.0, 1.0], \"cells\": [[0, 0, 1, 1], [1, 0, 2, 1]]})\n\t\twindow.focus_group(1)\n\t\tfor item in SideBarSelection(paths).getSelectedFiles():\n\t\t\tview = item.edit()\n\t\t\twindow.set_view_index(view, 1, 0)\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).hasFiles()\n\n\tdef is_visible(self, paths =[]):\n\t\treturn not s.get('disabled_menuitem_edit', False) and not s.get('disabled_menuitem_edit_to_right', False)\n\nclass SideBarOpenCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\tfor item in SideBarSelection(paths).getSelectedItems():\n\t\t\titem.open(s.get('use_powershell', True))\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0\n\n\tdef is_visible(self, paths =[]):\n\t\treturn not s.get('disabled_menuitem_open_run', False)\n\nclass SideBarFilesOpenWithEditApplicationsCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\tplatform = '';\n\t\tif sublime.platform() == 'osx':\n\t\t\tplatform = 'OSX'\n\t\telif sublime.platform() == 'windows':\n\t\t\tplatform = 'Windows'\n\t\telse:\n\t\t\tplatform = 'Linux'\n\n\t\titem = SideBarItem(os.path.join(sublime.packages_path(), 'User', 'SideBarEnhancements', 'Open With', 'Side Bar.sublime-menu'), False)\n\t\tif not item.exists() and False:\n\t\t\titem = SideBarItem(os.path.join(sublime.packages_path(), 'User', 'SideBarEnhancements', 'Open With', 'Side Bar ('+platform+').sublime-menu'), False)\n\n\t\tif not item.exists():\n\t\t\titem.create()\n\t\t\titem.write(\"\"\"[\n\t{\"id\": \"side-bar-files-open-with\",\n\t\t\"children\":\n\t\t[\n\n\t\t\t//application 1\n\t\t\t{\n\t\t\t\t\"caption\": \"Photoshop\",\n\t\t\t\t\"id\": \"side-bar-files-open-with-photoshop\",\n\n\t\t\t\t\"command\": \"side_bar_files_open_with\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\t\t\t\t\"paths\": [],\n\t\t\t\t\t\t\t\t\t\"application\": \"Adobe Photoshop CS5.app\", // OSX\n\t\t\t\t\t\t\t\t\t\"extensions\":\"psd|png|jpg|jpeg\",  //any file with these extensions\n\t\t\t\t\t\t\t\t\t\"args\":[]\n\t\t\t\t\t\t\t\t},\n\t\t\t\t\"open_automatically\" : false // will close the view/tab and launch the application\n\t\t\t},\n\n\t\t\t//separator\n\t\t\t{\"caption\":\"-\"},\n\n\t\t\t//application 2\n\t\t\t{\n\t\t\t\t\"caption\": \"SeaMonkey\",\n\t\t\t\t\"id\": \"side-bar-files-open-with-seamonkey\",\n\n\t\t\t\t\"command\": \"side_bar_files_open_with\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\t\t\t\t\"paths\": [],\n\t\t\t\t\t\t\t\t\t\"application\": \"C:\\\\\\\\Archivos de programa\\\\\\\\SeaMonkey\\\\\\\\seamonkey.exe\", // WINNT\n\t\t\t\t\t\t\t\t\t\"extensions\":\"\", //open all even folders\n\t\t\t\t\t\t\t\t\t\"args\":[]\n\t\t\t\t\t\t\t\t},\n\t\t\t\t\"open_automatically\" : false // will close the view/tab and launch the application\n\t\t\t},\n\t\t\t//application n\n\t\t\t{\n\t\t\t\t\"caption\": \"Chrome\",\n\t\t\t\t\"id\": \"side-bar-files-open-with-chrome\",\n\n\t\t\t\t\"command\": \"side_bar_files_open_with\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\t\t\t\t\"paths\": [],\n\t\t\t\t\t\t\t\t\t\"application\": \"C:\\\\\\\\Documents and Settings\\\\\\\\tito\\\\\\\\local\\\\\\\\Datos de programa\\\\\\\\Google\\\\\\\\Chrome\\\\\\\\Application\\\\\\\\chrome.exe\",\n\t\t\t\t\t\t\t\t\t\"extensions\":\".*\", //any file with extension\n\t\t\t\t\t\t\t\t\t\"args\":[]\n\t\t\t\t\t\t},\n\t\t\t\t\"open_automatically\" : false // will close the view/tab and launch the application\n\t\t\t},\n\n\t\t\t{\"caption\":\"-\"}\n\t\t]\n\t}\n]\"\"\");\n\t\titem.edit()\n\n\tdef is_enabled(self, paths = []):\n\t\treturn True\n\nclass SideBarFilesOpenWithCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = [], application = \"\", extensions = \"\"):\n\t\tself.run(self, paths = [], application = \"\", extensions = \"\", args=[])\n\tdef run(self, paths = [], application = \"\", extensions = \"\", args=[]):\n\t\tapplication_dir, application_name = os.path.split(application)\n\n\t\tif extensions == '*':\n\t\t\textensions = '.*'\n\t\tif extensions == '':\n\t\t\titems = SideBarSelection(paths).getSelectedItems()\n\t\telse:\n\t\t\titems = SideBarSelection(paths).getSelectedFilesWithExtension(extensions)\n\t\timport subprocess\n\t\ttry:\n\t\t\tfor item in items:\n\t\t\t\tif sublime.platform() == 'osx':\n\t\t\t\t\tsubprocess.Popen(['open', '-a', application] + args + [item.name()], cwd=item.dirname())\n\t\t\t\telif sublime.platform() == 'windows':\n\t\t\t\t\tsubprocess.Popen([application_name] + args + [escapeCMDWindows(item.path())], cwd=expandVars(application_dir), shell=True)\n\t\t\t\telse:\n\t\t\t\t\tsubprocess.Popen([application_name] + args + [escapeCMDWindows(item.name())], cwd=item.dirname())\n\t\texcept:\n\t\t\tsublime.error_message('Unable to \"Open With..\", probably incorrect path to application.')\n\n\tdef is_enabled(self, paths = [], application = \"\", extensions = \"\"):\n\t\tself.is_enabled(self, paths = [], application = \"\", extensions = \"\", args=[])\n\tdef is_enabled(self, paths = [], application = \"\", extensions = \"\", args=[]):\n\t\tif extensions == '*':\n\t\t\textensions = '.*'\n\t\tif extensions == '':\n\t\t\treturn CACHED_SELECTION(paths).len() > 0\n\t\telse:\n\t\t\treturn CACHED_SELECTION(paths).hasFilesWithExtension(extensions)\n\n\tdef is_visible(self, paths = [], application = \"\", extensions = \"\"):\n\t\tself.is_visible(self, paths = [], application = \"\", extensions = \"\", args=[])\n\tdef is_visible(self, paths = [], application = \"\", extensions = \"\", args=[]):\n\t\tif extensions == '*':\n\t\t\textensions = '.*'\n\t\tif extensions == '':\n\t\t\treturn CACHED_SELECTION(paths).len() > 0\n\t\telse:\n\t\t\thas = CACHED_SELECTION(paths).hasFilesWithExtension(extensions)\n\t\t\treturn has or (not has and not s.get(\"hide_open_with_entries_when_there_are_no_applicable\", False))\n\nclass SideBarFindInSelectedCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\twindow = Window()\n\t\tviews = []\n\t\tfor view in window.views():\n\t\t\tif view.name() == 'Find Results':\n\t\t\t\tviews.append(view);\n\t\tfor view in views:\n\t\t\tview.close();\n\t\titems = []\n\t\tfor item in SideBarSelection(paths).getSelectedItemsWithoutChildItems():\n\t\t\titems.append(item.path())\n\t\tWindow().run_command('hide_panel');\n\t\tWindow().run_command(\"show_panel\", {\"panel\": \"find_in_files\", \"where\":\",\".join(items) })\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0\n\nclass SideBarFindInParentCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\titems = []\n\t\tfor item in SideBarSelection(paths).getSelectedItems():\n\t\t\titems.append(item.dirname())\n\t\titems = list(set(items))\n\t\tWindow().run_command('hide_panel');\n\t\tWindow().run_command(\"show_panel\", {\"panel\": \"find_in_files\", \"where\":\",\".join(items) })\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0\n\nclass SideBarFindInProjectFoldersCommand(sublime_plugin.WindowCommand):\n\tdef run(self):\n\t\tWindow().run_command('hide_panel');\n\t\tWindow().run_command(\"show_panel\", {\"panel\": \"find_in_files\", \"where\":\"<project>\"})\n\nclass SideBarFindInProjectCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\tWindow().run_command('hide_panel');\n\t\tWindow().run_command(\"show_panel\", {\"panel\": \"find_in_files\", \"where\":\"<project>\"})\n\n\tdef is_visible(self, paths = []):\n\t\treturn not s.get('disabled_menuitem_find_in_project', False)\n\nclass SideBarFindInProjectFolderCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\titems = []\n\t\tfor item in SideBarSelection(paths).getSelectedItemsWithoutChildItems():\n\t\t\titems.append(SideBarProject().getDirectoryFromPath(item.path()))\n\t\titems = list(set(items))\n\t\tif items:\n\t\t\tWindow().run_command('hide_panel');\n\t\t\tWindow().run_command(\"show_panel\", {\"panel\": \"find_in_files\", \"where\":\",\".join(items)})\n\nclass SideBarFindInFilesWithExtensionCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\titems = []\n\t\tfor item in SideBarSelection(paths).getSelectedItems():\n\t\t\titems.append('*'+item.extension())\n\t\titems = list(set(items))\n\t\tWindow().run_command('hide_panel');\n\t\tWindow().run_command(\"show_panel\", {\"panel\": \"find_in_files\", \"where\":\",\".join(items) })\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).hasFiles()\n\n\tdef description(self, paths = []):\n\t\titems = []\n\t\tfor item in CACHED_SELECTION(paths).getSelectedFiles():\n\t\t\titems.append('*'+item.extension())\n\t\titems = list(set(items))\n\t\tif len(items) > 1:\n\t\t\treturn 'In Files With Extensions '+(\",\".join(items))+'…'\n\t\telif len(items) > 0:\n\t\t\treturn 'In Files With Extension '+(\",\".join(items))+'…'\n\t\telse:\n\t\t\treturn 'In Files With Extension…'\n\nObject.sidebar_instant_search_id = 0\nclass SideBarFindFilesPathContainingCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\tif paths == [] and SideBarProject().getDirectories():\n\t\t\tpaths = SideBarProject().getDirectories()\n\t\telse:\n\t\t\tpaths = [item.path() for item in SideBarSelection(paths).getSelectedDirectoriesOrDirnames()]\n\t\tif paths == []:\n\t\t\treturn\n\t\tview = Window().new_file()\n\t\tview.settings().set('word_wrap', False)\n\t\tview.set_name('Instant File Search')\n\t\tview.set_syntax_file('Packages/SideBarEnhancements/SideBar Results.hidden-tmLanguage')\n\t\tview.set_scratch(True)\n\t\tview.run_command('insert', {\"characters\": \"Type to search: \"})\n\t\tview.sel().clear()\n\t\tview.sel().add(sublime.Region(16,16))\n\t\tview.settings().set('sidebar_instant_search_paths', paths)\n\tdef is_enabled(self, paths=[]):\n\t\treturn True\n\nclass SideBarFindFilesPathContainingViewListener(sublime_plugin.EventListener):\n\tdef on_modified(self, view):\n\t\tview.settings().has('sidebar_instant_search_paths') # for some reason the first call in some conditions returns true, but not the next one WTH\n\t\tif view.settings().has('sidebar_instant_search_paths'):\n\t\t\tsearchTerm = view.substr(view.line(0)).replace(\"Type to search:\", \"\").strip()\n\t\t\tif searchTerm and Object.sidebar_instant_search_id != searchTerm:\n\t\t\t\tSideBarFindFilesPathContainingSearchThread(view, searchTerm).start()\n\t\t\telif not searchTerm:\n\t\t\t\tview.set_name('Instant File Search')\n\nclass SideBarFindFilesPathContainingSearchThread(threading.Thread):\n\tdef __init__(self, view, searchTerm):\n\t\tself.view = view\n\t\tself.searchTerm = searchTerm\n\t\tthreading.Thread.__init__(self)\n\n\tdef run(self):\n\t\tif Object.sidebar_instant_search_id == self.searchTerm:\n\t\t\treturn\n\t\tsearchTerm = self.searchTerm\n\t\tObject.sidebar_instant_search_id = searchTerm\n\t\tview = self.view\n\n\t\tpaths = view.settings().get('sidebar_instant_search_paths')\n\t\tself.ignore_paths = view.settings().get('file_exclude_patterns', [])\n\t\ttry:\n\t\t\tself.searchTermRegExp = re.compile(searchTerm, re.I | re.U)\n\t\t\tself.match_function = self.match_regexp\n\t\t\tsearch_type = 'REGEXP'\n\t\texcept:\n\t\t\tself.match_function = self.match_string\n\t\t\tsearch_type = 'LITERAL'\n\n\t\tif Object.sidebar_instant_search_id == searchTerm:\n\t\t\ttotal = 0\n\t\t\thighlight_from = 0\n\t\t\tmatch_result = ''\n\t\t\tmatch_result += 'Type to search: '+searchTerm+'\\n'\n\t\t\tfind = self.find\n\t\t\tfor item in SideBarSelection(paths).getSelectedDirectoriesOrDirnames():\n\t\t\t\tself.files = []\n\t\t\t\tself.num_files = 0\n\t\t\t\tfind(item.path())\n\t\t\t\tmatch_result += '\\n'\n\t\t\t\tlength = len(self.files)\n\t\t\t\tif length > 1:\n\t\t\t\t\tmatch_result += str(length)+' matches'\n\t\t\t\telif length > 0:\n\t\t\t\t\tmatch_result += '1 match'\n\t\t\t\telse:\n\t\t\t\t\tmatch_result += 'No match'\n\t\t\t\tmatch_result += ' in '+str(self.num_files)+' files for term \"'+searchTerm+'\" using '+search_type+' under \\n\"'+item.path()+'\"\\n\\n'\n\t\t\t\tif highlight_from == 0:\n\t\t\t\t\thighlight_from = len(match_result)\n\t\t\t\tmatch_result += ('\\n'.join(self.files))\n\t\t\t\ttotal += length\n\t\t\tmatch_result += '\\n'\n\n\t\t\tif Object.sidebar_instant_search_id == searchTerm:\n\t\t\t\tsel = view.sel()\n\t\t\t\tposition = sel[0].begin()\n\t\t\t\tif position > 16+len(searchTerm):\n\t\t\t\t\tposition = 16+len(searchTerm)\n\t\t\t\tif sublime.platform() == 'osx':\n\t\t\t\t\tview.run_command('side_bar_enhancements_write_to_view', {'content' :match_result, 'position': position, 'searchTerm': searchTerm})\n\t\t\t\telse:\n\t\t\t\t\twith Edit(view) as edit:\n\t\t\t\t\t\tedit.replace(sublime.Region(0, view.size()), match_result);\n\t\t\t\t\tsel.clear()\n\t\t\t\t\tsel.add(sublime.Region(position, position))\n\t\t\t\tview.set_name(searchTerm+' - IFS')\n\t\t\t\tif Object.sidebar_instant_search_id == searchTerm:\n\t\t\t\t\tview.erase_regions(\"sidebar_search_instant_highlight\")\n\t\t\t\t\tif total < 5000 and len(searchTerm) > 1:\n\t\t\t\t\t\tif search_type == 'REGEXP':\n\t\t\t\t\t\t\tregions = [item for item in view.find_all(searchTerm, sublime.IGNORECASE) if item.begin() >= highlight_from]\n\t\t\t\t\t\telse:\n\t\t\t\t\t\t\tregions = [item for item in view.find_all(searchTerm, sublime.LITERAL|sublime.IGNORECASE) if item.begin() >= highlight_from]\n\t\t\t\t\t\tif Object.sidebar_instant_search_id == searchTerm:\n\t\t\t\t\t\t\tview.add_regions(\"sidebar_search_instant_highlight\", regions, 'entity.name.function', '', sublime.PERSISTENT | sublime.DRAW_SQUIGGLY_UNDERLINE | sublime.DRAW_NO_FILL | sublime.DRAW_NO_OUTLINE | sublime.DRAW_EMPTY_AS_OVERWRITE)\n\n\tdef find(self, path):\n\t\tif os.path.isfile(path) or os.path.islink(path):\n\t\t\tself.num_files = self.num_files+1\n\t\t\tif self.match_function(path):\n\t\t\t\tself.files.append(path)\n\t\telif os.path.isdir(path):\n\t\t\tfor content in os.listdir(path):\n\t\t\t\tfile = os.path.join(path, content)\n\t\t\t\tif os.path.isfile(file) or os.path.islink(file):\n\t\t\t\t\tself.num_files = self.num_files+1\n\t\t\t\t\tif self.match_function(file):\n\t\t\t\t\t\tself.files.append(file)\n\t\t\t\telse:\n\t\t\t\t\tself.find(file)\n\n\tdef match_regexp(self, path):\n\t\treturn self.searchTermRegExp.search(path) and not [1 for s in self.ignore_paths if s in path]\n\n\tdef match_string(self, path):\n\t\treturn self.searchTerm in path and not [1 for s in self.ignore_paths if s in path]\n\nclass SideBarEnhancementsWriteToViewCommand(sublime_plugin.TextCommand):\n\tdef run(self, edit, content, position, searchTerm):\n\t\tif Object.sidebar_instant_search_id == searchTerm:\n\t\t\tview = self.view\n\t\t\tview.replace(edit, sublime.Region(0, view.size()), content);\n\t\t\tview.sel().clear()\n\t\t\tview.sel().add(sublime.Region(position,position))\n\t\t\tview.end_edit(edit)\n\nclass SideBarCutCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\ts = sublime.load_settings(\"SideBarEnhancements/Clipboard.sublime-settings\")\n\t\titems = []\n\t\tfor item in SideBarSelection(paths).getSelectedItemsWithoutChildItems():\n\t\t\titems.append(item.path())\n\n\t\tif len(items) > 0:\n\t\t\ts.set('cut', \"\\n\".join(items))\n\t\t\ts.set('copy', '')\n\t\t\tif len(items) > 1 :\n\t\t\t\tsublime.status_message(\"Items cut\")\n\t\t\telse :\n\t\t\t\tsublime.status_message(\"Item cut\")\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0 and CACHED_SELECTION(paths).hasProjectDirectories() == False\n\nclass SideBarCopyCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\ts = sublime.load_settings(\"SideBarEnhancements/Clipboard.sublime-settings\")\n\t\titems = []\n\t\tfor item in SideBarSelection(paths).getSelectedItemsWithoutChildItems():\n\t\t\titems.append(item.path())\n\n\t\tif len(items) > 0:\n\t\t\ts.set('cut', '')\n\t\t\ts.set('copy', \"\\n\".join(items))\n\t\t\tif len(items) > 1 :\n\t\t\t\tsublime.status_message(\"Items copied\")\n\t\t\telse :\n\t\t\t\tsublime.status_message(\"Item copied\")\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0\n\nclass SideBarPasteCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = [], in_parent = 'False', test = 'True', replace = 'False'):\n\t\tkey = 'paste-'+str(time.time())\n\t\tSideBarPasteThread(paths, in_parent, test, replace, key).start()\n\n\tdef is_enabled(self, paths = [], in_parent = False):\n\t\ts = sublime.load_settings(\"SideBarEnhancements/Clipboard.sublime-settings\")\n\t\treturn (s.get('cut', '') + s.get('copy', '')) != '' and len(CACHED_SELECTION(paths).getSelectedDirectoriesOrDirnames()) == 1\n\n\tdef is_visible(self, paths = [], in_parent = False):\n\t\tif in_parent == 'True':\n\t\t\treturn not s.get('disabled_menuitem_paste_in_parent', False)\n\t\telse:\n\t\t\treturn True\n\nclass SideBarPasteThread(threading.Thread):\n\tdef __init__(self, paths = [], in_parent = 'False', test = 'True', replace = 'False', key = ''):\n\t\tself.paths = paths\n\t\tself.in_parent = in_parent\n\t\tself.test = test\n\t\tself.replace = replace\n\t\tself.key = key\n\t\tthreading.Thread.__init__(self)\n\n\tdef run(self):\n\t\tSideBarPasteCommand2(Window()).run(self.paths, self.in_parent, self.test, self.replace, self.key)\n\nclass SideBarPasteCommand2(sublime_plugin.WindowCommand):\n\tdef run(self, paths = [], in_parent = 'False', test = 'True', replace = 'False', key = ''):\n\t\twindow_set_status(key, 'Pasting…')\n\n\t\ts = sublime.load_settings(\"SideBarEnhancements/Clipboard.sublime-settings\")\n\n\t\tcut = s.get('cut', '')\n\t\tcopy = s.get('copy', '')\n\n\t\talready_exists_paths = []\n\n\t\tif SideBarSelection(paths).len() > 0:\n\t\t\tif in_parent == 'False':\n\t\t\t\tlocation = SideBarSelection(paths).getSelectedItems()[0].path()\n\t\t\telse:\n\t\t\t\tlocation = SideBarSelection(paths).getSelectedDirectoriesOrDirnames()[0].dirname()\n\n\t\t\tif os.path.isdir(location) == False:\n\t\t\t\tlocation = SideBarItem(os.path.dirname(location), True)\n\t\t\telse:\n\t\t\t\tlocation = SideBarItem(location, True)\n\n\t\t\tif cut != '':\n\t\t\t\tcut = cut.split(\"\\n\")\n\t\t\t\tfor path in cut:\n\t\t\t\t\tpath = SideBarItem(path, os.path.isdir(path))\n\t\t\t\t\tnew  = os.path.join(location.path(), path.name())\n\t\t\t\t\tif test == 'True' and os.path.exists(new):\n\t\t\t\t\t\talready_exists_paths.append(new)\n\t\t\t\t\telif test == 'False':\n\t\t\t\t\t\tif os.path.exists(new) and replace == 'False':\n\t\t\t\t\t\t\tpass\n\t\t\t\t\t\telse:\n\t\t\t\t\t\t\ttry:\n\t\t\t\t\t\t\t\tif not path.move(new, replace == 'True'):\n\t\t\t\t\t\t\t\t\twindow_set_status(key, '')\n\t\t\t\t\t\t\t\t\tsublime.error_message(\"Unable to cut and paste, destination exists.\")\n\t\t\t\t\t\t\t\t\treturn\n\t\t\t\t\t\t\texcept:\n\t\t\t\t\t\t\t\twindow_set_status(key, '')\n\t\t\t\t\t\t\t\tsublime.error_message(\"Unable to move:\\n\\n\"+path.path()+\"\\n\\nto\\n\\n\"+new)\n\t\t\t\t\t\t\t\treturn\n\n\t\t\tif copy != '':\n\t\t\t\tcopy = copy.split(\"\\n\")\n\t\t\t\tfor path in copy:\n\t\t\t\t\tpath = SideBarItem(path, os.path.isdir(path))\n\t\t\t\t\tnew  = os.path.join(location.path(), path.name())\n\t\t\t\t\tif test == 'True' and os.path.exists(new):\n\t\t\t\t\t\talready_exists_paths.append(new)\n\t\t\t\t\telif test == 'False':\n\t\t\t\t\t\tif os.path.exists(new) and replace == 'False':\n\t\t\t\t\t\t\tpass\n\t\t\t\t\t\telse:\n\t\t\t\t\t\t\ttry:\n\t\t\t\t\t\t\t\tif not path.copy(new, replace == 'True'):\n\t\t\t\t\t\t\t\t\twindow_set_status(key, '')\n\t\t\t\t\t\t\t\t\tsublime.error_message(\"Unable to copy and paste, destination exists.\")\n\t\t\t\t\t\t\t\t\treturn\n\t\t\t\t\t\t\texcept:\n\t\t\t\t\t\t\t\twindow_set_status(key, '')\n\t\t\t\t\t\t\t\tsublime.error_message(\"Unable to copy:\\n\\n\"+path.path()+\"\\n\\nto\\n\\n\"+new)\n\t\t\t\t\t\t\t\treturn\n\n\t\t\tif test == 'True' and len(already_exists_paths):\n\t\t\t\tself.confirm(paths, in_parent, already_exists_paths, key)\n\t\t\telif test == 'True' and not len(already_exists_paths):\n\t\t\t\tSideBarPasteThread(paths, in_parent, 'False', 'False', key).start();\n\t\t\telif test == 'False':\n\t\t\t\tcut = s.set('cut', '')\n\t\t\t\tSideBarProject().refresh();\n\t\t\t\twindow_set_status(key, '')\n\t\telse:\n\t\t\twindow_set_status(key, '')\n\n\tdef confirm(self, paths, in_parent, data, key):\n\t\timport functools\n\t\twindow = Window()\n\t\twindow.show_input_panel(\"BUG!\", '', '', None, None)\n\t\twindow.run_command('hide_panel');\n\n\t\tyes = []\n\t\tyes.append('Yes, Replace the following items:');\n\t\tfor item in data:\n\t\t\tyes.append(SideBarItem(item, os.path.isdir(item)).pathWithoutProject())\n\n\t\tno = []\n\t\tno.append('No');\n\t\tno.append('Continue without replacing');\n\n\t\twhile len(no) != len(yes):\n\t\t\tno.append('ST3 BUG');\n\n\t\twindow.show_quick_panel([yes, no], functools.partial(self.on_done, paths, in_parent, key))\n\n\tdef on_done(self, paths, in_parent, key, result):\n\t\twindow_set_status(key, '')\n\t\tif result != -1:\n\t\t\tif result == 0:\n\t\t\t\tSideBarPasteThread(paths, in_parent, 'False', 'True', key).start()\n\t\t\telse:\n\t\t\t\tSideBarPasteThread(paths, in_parent, 'False', 'False', key).start()\n\nclass SideBarCopyNameCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\titems = []\n\t\tfor item in SideBarSelection(paths).getSelectedItems():\n\t\t\titems.append(item.name())\n\n\t\tif len(items) > 0:\n\t\t\tsublime.set_clipboard(\"\\n\".join(items));\n\t\t\tif len(items) > 1 :\n\t\t\t\tsublime.status_message(\"Items copied\")\n\t\t\telse :\n\t\t\t\tsublime.status_message(\"Item copied\")\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0\n\n\tdef is_visible(self, paths =[]):\n\t\treturn not s.get('disabled_menuitem_copy_name', False)\n\nclass SideBarCopyNameEncodedCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\titems = []\n\t\tfor item in SideBarSelection(paths).getSelectedItems():\n\t\t\titems.append(item.nameEncoded())\n\n\t\tif len(items) > 0:\n\t\t\tsublime.set_clipboard(\"\\n\".join(items));\n\t\t\tif len(items) > 1 :\n\t\t\t\tsublime.status_message(\"Items copied\")\n\t\t\telse :\n\t\t\t\tsublime.status_message(\"Item copied\")\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0\n\nclass SideBarCopyPathCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\titems = []\n\t\tfor item in SideBarSelection(paths).getSelectedItems():\n\t\t\titems.append(item.path())\n\n\t\tif len(items) > 0:\n\t\t\tsublime.set_clipboard(\"\\n\".join(items));\n\t\t\tif len(items) > 1 :\n\t\t\t\tsublime.status_message(\"Items copied\")\n\t\t\telse :\n\t\t\t\tsublime.status_message(\"Item copied\")\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0\n\nclass SideBarCopyDirPathCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\titems = []\n\t\tfor item in SideBarSelection(paths).getSelectedDirectoriesOrDirnames():\n\t\t\titems.append(item.path())\n\n\t\tif len(items) > 0:\n\t\t\tsublime.set_clipboard(\"\\n\".join(items));\n\t\t\tif len(items) > 1 :\n\t\t\t\tsublime.status_message(\"Items copied\")\n\t\t\telse :\n\t\t\t\tsublime.status_message(\"Item copied\")\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0\n\n\tdef is_visible(self, paths =[]):\n\t\treturn not s.get('disabled_menuitem_copy_dir_path', False)\n\nclass SideBarCopyPathEncodedCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\titems = []\n\t\tfor item in SideBarSelection(paths).getSelectedItems():\n\t\t\titems.append(item.uri())\n\n\t\tif len(items) > 0:\n\t\t\tsublime.set_clipboard(\"\\n\".join(items));\n\t\t\tif len(items) > 1 :\n\t\t\t\tsublime.status_message(\"Items copied\")\n\t\t\telse :\n\t\t\t\tsublime.status_message(\"Item copied\")\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0\n\nclass SideBarCopyPathRelativeFromProjectCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\titems = []\n\t\tfor item in SideBarSelection(paths).getSelectedItems():\n\t\t\titems.append(item.pathRelativeFromProject())\n\n\t\tif len(items) > 0:\n\t\t\tsublime.set_clipboard(\"\\n\".join(items));\n\t\t\tif len(items) > 1 :\n\t\t\t\tsublime.status_message(\"Items copied\")\n\t\t\telse :\n\t\t\t\tsublime.status_message(\"Item copied\")\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0 and CACHED_SELECTION(paths).hasItemsUnderProject()\n\nclass SideBarCopyPathRelativeFromProjectEncodedCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\titems = []\n\t\tfor item in SideBarSelection(paths).getSelectedItems():\n\t\t\titems.append(item.pathRelativeFromProjectEncoded())\n\n\t\tif len(items) > 0:\n\t\t\tsublime.set_clipboard(\"\\n\".join(items));\n\t\t\tif len(items) > 1 :\n\t\t\t\tsublime.status_message(\"Items copied\")\n\t\t\telse :\n\t\t\t\tsublime.status_message(\"Item copied\")\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0 and CACHED_SELECTION(paths).hasItemsUnderProject()\n\nclass SideBarCopyPathRelativeFromViewCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\titems = []\n\t\tfor item in SideBarSelection(paths).getSelectedItems():\n\t\t\titems.append(item.pathRelativeFromView())\n\n\t\tif len(items) > 0:\n\t\t\tsublime.set_clipboard(\"\\n\".join(items));\n\t\t\tif len(items) > 1 :\n\t\t\t\tsublime.status_message(\"Items copied\")\n\t\t\telse :\n\t\t\t\tsublime.status_message(\"Item copied\")\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0\n\nclass SideBarCopyPathRelativeFromViewEncodedCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\titems = []\n\t\tfor item in SideBarSelection(paths).getSelectedItems():\n\t\t\titems.append(item.pathRelativeFromViewEncoded())\n\n\t\tif len(items) > 0:\n\t\t\tsublime.set_clipboard(\"\\n\".join(items));\n\t\t\tif len(items) > 1 :\n\t\t\t\tsublime.status_message(\"Items copied\")\n\t\t\telse :\n\t\t\t\tsublime.status_message(\"Item copied\")\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0\n\nclass SideBarCopyPathAbsoluteFromProjectCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\titems = []\n\t\tfor item in SideBarSelection(paths).getSelectedItems():\n\t\t\titems.append(item.pathAbsoluteFromProject())\n\n\t\tif len(items) > 0:\n\t\t\tsublime.set_clipboard(\"\\n\".join(items));\n\t\t\tif len(items) > 1 :\n\t\t\t\tsublime.status_message(\"Items copied\")\n\t\t\telse :\n\t\t\t\tsublime.status_message(\"Item copied\")\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0 and CACHED_SELECTION(paths).hasItemsUnderProject()\n\nclass SideBarCopyPathAbsoluteFromProjectEncodedCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\titems = []\n\t\tfor item in SideBarSelection(paths).getSelectedItems():\n\t\t\titems.append(item.pathAbsoluteFromProjectEncoded())\n\n\t\tif len(items) > 0:\n\t\t\tsublime.set_clipboard(\"\\n\".join(items));\n\t\t\tif len(items) > 1 :\n\t\t\t\tsublime.status_message(\"Items copied\")\n\t\t\telse :\n\t\t\t\tsublime.status_message(\"Item copied\")\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0 and CACHED_SELECTION(paths).hasItemsUnderProject()\n\n\tdef is_visible(self, paths =[]):\n\t\treturn not s.get('disabled_menuitem_copy_path', False)\n\nclass SideBarCopyPathAbsoluteFromProjectEncodedWindowsCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\titems = []\n\t\tfor item in SideBarSelection(paths).getSelectedItems():\n\t\t\titems.append(item.pathAbsoluteFromProjectEncoded())\n\n\t\tif len(items) > 0:\n\t\t\tsublime.set_clipboard((\"\\n\".join(items)).replace('/', '\\\\'));\n\t\t\tif len(items) > 1 :\n\t\t\t\tsublime.status_message(\"Items copied\")\n\t\t\telse :\n\t\t\t\tsublime.status_message(\"Item copied\")\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0 and CACHED_SELECTION(paths).hasItemsUnderProject()\n\n\tdef is_visible(self, paths =[]):\n\t\treturn not s.get('disabled_menuitem_copy_path_windows', True)\n\nclass SideBarCopyTagAhrefCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\titems = []\n\t\tfor item in SideBarSelection(paths).getSelectedItems():\n\t\t\titems.append('<a href=\"'+item.pathAbsoluteFromProjectEncoded()+'\">'+item.namePretty()+'</a>')\n\n\t\tif len(items) > 0:\n\t\t\tsublime.set_clipboard(\"\\n\".join(items));\n\t\t\tif len(items) > 1 :\n\t\t\t\tsublime.status_message(\"Items copied\")\n\t\t\telse :\n\t\t\t\tsublime.status_message(\"Item copied\")\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0 and CACHED_SELECTION(paths).hasItemsUnderProject()\n\nclass SideBarCopyTagImgCommand(sublime_plugin.WindowCommand):\n\n\tdef run(self, paths = []):\n\t\titems = []\n\t\tfor item in SideBarSelection(paths).getSelectedImages():\n\t\t\ttry:\n\t\t\t\timage_type, width, height = self.getImageInfo(item.path())\n\t\t\t\titems.append('<img src=\"'+item.pathAbsoluteFromProjectEncoded()+'\" width=\"'+str(width)+'\" height=\"'+str(height)+'\">')\n\t\t\texcept:\n\t\t\t\titems.append('<img src=\"'+item.pathAbsoluteFromProjectEncoded()+'\">')\n\t\tif len(items) > 0:\n\t\t\tsublime.set_clipboard(\"\\n\".join(items));\n\t\t\tif len(items) > 1 :\n\t\t\t\tsublime.status_message(\"Items copied\")\n\t\t\telse :\n\t\t\t\tsublime.status_message(\"Item copied\")\n\n\t# http://stackoverflow.com/questions/8032642/how-to-obtain-image-size-using-standard-python-class-without-using-external-lib\n\n\tdef getImageInfo(self, fname):\n\t\timport struct\n\t\timport imghdr\n\n\t\t'''Determine the image type of fhandle and return its size.\n\t\tfrom draco'''\n\t\tfhandle = open(fname, 'rb')\n\t\thead = fhandle.read(24)\n\t\tif len(head) != 24:\n\t\t\treturn\n\t\tif imghdr.what(fname) == 'png':\n\t\t\tcheck = struct.unpack('>i', head[4:8])[0]\n\t\t\tif check != 0x0d0a1a0a:\n\t\t\t\treturn\n\t\t\twidth, height = struct.unpack('>ii', head[16:24])\n\t\telif imghdr.what(fname) == 'gif':\n\t\t\twidth, height = struct.unpack('<HH', head[6:10])\n\t\telif imghdr.what(fname) == 'jpeg':\n\t\t\ttry:\n\t\t\t\tfhandle.seek(0) # Read 0xff next\n\t\t\t\tsize = 2\n\t\t\t\tftype = 0\n\t\t\t\twhile not 0xc0 <= ftype <= 0xcf:\n\t\t\t\t\tfhandle.seek(size, 1)\n\t\t\t\t\tbyte = fhandle.read(1)\n\t\t\t\t\twhile ord(byte) == 0xff:\n\t\t\t\t\t\tbyte = fhandle.read(1)\n\t\t\t\t\tftype = ord(byte)\n\t\t\t\t\tsize = struct.unpack('>H', fhandle.read(2))[0] - 2\n\t\t\t\t# We are at a SOFn block\n\t\t\t\tfhandle.seek(1, 1)  # Skip `precision' byte.\n\t\t\t\theight, width = struct.unpack('>HH', fhandle.read(4))\n\t\t\texcept Exception: #IGNORE:W0703\n\t\t\t\treturn\n\t\telse:\n\t\t\treturn\n\t\treturn None, width, height\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).hasImages() and CACHED_SELECTION(paths).hasItemsUnderProject()\n\nclass SideBarCopyTagStyleCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\titems = []\n\t\tfor item in SideBarSelection(paths).getSelectedFilesWithExtension('css'):\n\t\t\titems.append('<link rel=\"stylesheet\" type=\"text/css\" href=\"'+item.pathAbsoluteFromProjectEncoded()+'\"/>')\n\n\t\tif len(items) > 0:\n\t\t\tsublime.set_clipboard(\"\\n\".join(items));\n\t\t\tif len(items) > 1 :\n\t\t\t\tsublime.status_message(\"Items copied\")\n\t\t\telse :\n\t\t\t\tsublime.status_message(\"Item copied\")\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).hasFilesWithExtension('css') and CACHED_SELECTION(paths).hasItemsUnderProject()\n\nclass SideBarCopyTagScriptCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\titems = []\n\t\tfor item in SideBarSelection(paths).getSelectedFilesWithExtension('js'):\n\t\t\titems.append('<script type=\"text/javascript\" src=\"'+item.pathAbsoluteFromProjectEncoded()+'\"></script>')\n\n\t\tif len(items) > 0:\n\t\t\tsublime.set_clipboard(\"\\n\".join(items));\n\t\t\tif len(items) > 1 :\n\t\t\t\tsublime.status_message(\"Items copied\")\n\t\t\telse :\n\t\t\t\tsublime.status_message(\"Item copied\")\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).hasFilesWithExtension('js') and CACHED_SELECTION(paths).hasItemsUnderProject()\n\nclass SideBarCopyProjectDirectoriesCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\titems = []\n\t\tfor directory in SideBarProject().getDirectories():\n\t\t\titems.append(directory)\n\n\t\tif len(items) > 0:\n\t\t\tsublime.set_clipboard(\"\\n\".join(items));\n\t\t\tif len(items) > 1 :\n\t\t\t\tsublime.status_message(\"Items copied\")\n\t\t\telse :\n\t\t\t\tsublime.status_message(\"Item copied\")\n\n\tdef is_enabled(self, paths = []):\n\t\treturn True\n\nclass SideBarCopyContentUtf8Command(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\titems = []\n\t\tfor item in SideBarSelection(paths).getSelectedFiles():\n\t\t\titems.append(item.contentUTF8())\n\n\t\tif len(items) > 0:\n\t\t\tsublime.set_clipboard(\"\\n\".join(items));\n\t\t\tif len(items) > 1 :\n\t\t\t\tsublime.status_message(\"Items content copied\")\n\t\t\telse :\n\t\t\t\tsublime.status_message(\"Item content copied\")\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).hasFiles()\n\nclass SideBarCopyContentBase64Command(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\titems = []\n\t\tfor item in SideBarSelection(paths).getSelectedFiles():\n\t\t\titems.append(item.contentBase64())\n\n\t\tif len(items) > 0:\n\t\t\tsublime.set_clipboard(\"\\n\".join(items));\n\t\t\tif len(items) > 1 :\n\t\t\t\tsublime.status_message(\"Items content copied\")\n\t\t\telse :\n\t\t\t\tsublime.status_message(\"Item content copied\")\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).hasFiles()\n\nclass SideBarCopyUrlCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\titems = []\n\n\t\tfor item in SideBarSelection(paths).getSelectedItems():\n\t\t\tif item.isUnderCurrentProject():\n\t\t\t\titems.append(item.url('url_production'))\n\n\t\tif len(items) > 0:\n\t\t\tsublime.set_clipboard(\"\\n\".join(items));\n\t\t\tif len(items) > 1 :\n\t\t\t\tsublime.status_message(\"Items URL copied\")\n\t\t\telse :\n\t\t\t\tsublime.status_message(\"Item URL copied\")\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).hasItemsUnderProject()\n\nclass SideBarCopyUrlDecodedCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\titems = []\n\n\t\tfor item in SideBarSelection(paths).getSelectedItems():\n\t\t\tif item.isUnderCurrentProject():\n\t\t\t\ttxt = item.url('url_production')\n\t\t\t\ttry:\n\t\t\t\t\ttxt = urlunquote(txt.encode('utf8')).decode('utf8')\n\t\t\t\texcept TypeError:\n\t\t\t\t\ttxt = urlunquote(txt)\n\t\t\t\titems.append(txt)\n\n\t\tif len(items) > 0:\n\t\t\tsublime.set_clipboard(\"\\n\".join(items));\n\t\t\tif len(items) > 1 :\n\t\t\t\tsublime.status_message(\"Items URL copied\")\n\t\t\telse :\n\t\t\t\tsublime.status_message(\"Item URL copied\")\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).hasItemsUnderProject()\n\nclass SideBarDuplicateCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = [], new = False):\n\t\timport functools\n\t\tWindow().run_command('hide_panel');\n\t\tview = Window().show_input_panel(\"Duplicate As:\", new or SideBarSelection(paths).getSelectedItems()[0].path(), functools.partial(self.on_done, SideBarSelection(paths).getSelectedItems()[0].path()), None, None)\n\t\tview.sel().clear()\n\t\tview.sel().add(sublime.Region(view.size()-len(SideBarSelection(paths).getSelectedItems()[0].name()), view.size()-len(SideBarSelection(paths).getSelectedItems()[0].extension())))\n\n\tdef on_done(self, old, new):\n\t\tkey = 'duplicate-'+str(time.time())\n\t\tSideBarDuplicateThread(old, new, key).start()\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() == 1 and CACHED_SELECTION(paths).hasProjectDirectories() == False\n\nclass SideBarDuplicateThread(threading.Thread):\n\tdef __init__(self, old, new, key):\n\t\tself.old = old\n\t\tself.new = new\n\t\tself.key = key\n\t\tthreading.Thread.__init__(self)\n\n\tdef run(self):\n\t\told = self.old\n\t\tnew = self.new\n\t\tkey = self.key\n\t\twindow_set_status(key, 'Duplicating…')\n\n\t\titem = SideBarItem(old, os.path.isdir(old))\n\t\ttry:\n\t\t\tif not item.copy(new):\n\t\t\t\twindow_set_status(key, '')\n\t\t\t\tif SideBarItem(new, os.path.isdir(new)).overwrite():\n\t\t\t\t\tself.run()\n\t\t\t\telse:\n\t\t\t\t\tSideBarDuplicateCommand(Window()).run([old], new)\n\t\t\t\treturn\n\t\texcept:\n\t\t\twindow_set_status(key, '')\n\t\t\tsublime.error_message(\"Unable to copy:\\n\\n\"+old+\"\\n\\nto\\n\\n\"+new)\n\t\t\tSideBarDuplicateCommand(Window()).run([old], new)\n\t\t\treturn\n\t\titem = SideBarItem(new, os.path.isdir(new))\n\t\tif item.isFile():\n\t\t\titem.edit();\n\t\tSideBarProject().refresh();\n\t\twindow_set_status(key, '')\n\nclass SideBarRenameCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = [], newLeaf = False):\n\t\timport functools\n\t\tbranch, leaf = os.path.split(SideBarSelection(paths).getSelectedItems()[0].path())\n\t\tWindow().run_command('hide_panel');\n\t\tview = Window().show_input_panel(\"New Name:\", newLeaf or leaf, functools.partial(self.on_done, SideBarSelection(paths).getSelectedItems()[0].path(), branch), None, None)\n\t\tview.sel().clear()\n\t\tview.sel().add(sublime.Region(view.size()-len(SideBarSelection(paths).getSelectedItems()[0].name()), view.size()-len(SideBarSelection(paths).getSelectedItems()[0].extension())))\n\n\tdef on_done(self, old, branch, leaf):\n\t\tkey = 'rename-'+str(time.time())\n\t\tSideBarRenameThread(old, branch, leaf, key).start()\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() == 1 and CACHED_SELECTION(paths).hasProjectDirectories() == False\n\nclass SideBarRenameThread(threading.Thread):\n\tdef __init__(self, old, branch, leaf, key):\n\t\tself.old = old\n\t\tself.branch = branch\n\t\tself.leaf = leaf\n\t\tself.key = key\n\t\tthreading.Thread.__init__(self)\n\n\tdef run(self):\n\t\told = self.old\n\t\tbranch = self.branch\n\t\tleaf = self.leaf\n\t\tkey = self.key\n\t\twindow_set_status(key, 'Renaming…')\n\n\t\tWindow().run_command('hide_panel');\n\t\tleaf = leaf.strip();\n\t\tnew = os.path.join(branch, leaf)\n\t\titem = SideBarItem(old, os.path.isdir(old))\n\t\ttry:\n\t\t\tif not item.move(new):\n\t\t\t\tif SideBarItem(new, os.path.isdir(new)).overwrite():\n\t\t\t\t\tself.run()\n\t\t\t\telse:\n\t\t\t\t\twindow_set_status(key, '')\n\t\t\t\t\tSideBarRenameCommand(Window()).run([old], leaf)\n\t\texcept:\n\t\t\twindow_set_status(key, '')\n\t\t\tsublime.error_message(\"Unable to rename:\\n\\n\"+old+\"\\n\\nto\\n\\n\"+new)\n\t\t\tSideBarRenameCommand(Window()).run([old], leaf)\n\t\t\traise\n\t\t\treturn\n\t\tSideBarProject().refresh();\n\t\twindow_set_status(key, '')\n\nclass SideBarMassRenameCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\timport functools\n\t\tWindow().run_command('hide_panel');\n\t\tWindow().show_input_panel(\"Find:\", '', functools.partial(self.on_find, paths), None, None)\n\n\tdef on_find(self, paths, find):\n\t\tif not find:\n\t\t\treturn\n\t\timport functools\n\t\tWindow().run_command('hide_panel');\n\t\tWindow().show_input_panel(\"Replace:\", '', functools.partial(self.on_replace, paths, find), None, None)\n\n\tdef on_replace(self, paths, find, replace):\n\t\tkey = 'mass-renaming-'+str(time.time())\n\t\tSideBarMassRenameThread(paths, find, replace, key).start()\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0\n\nclass SideBarMassRenameThread(threading.Thread):\n\tdef __init__(self, paths, find, replace, key):\n\t\tself.paths = paths\n\t\tself.find = find\n\t\tself.replace = replace\n\t\tself.key = key\n\t\tthreading.Thread.__init__(self)\n\n\tdef run(self):\n\t\tpaths = self.paths\n\t\tfind = self.find\n\t\treplace = self.replace\n\t\tkey = self.key\n\n\t\tif find == '':\n\t\t\treturn None\n\t\telse:\n\t\t\twindow_set_status(key, 'Mass renaming…')\n\n\t\t\tto_rename_or_move = []\n\t\t\tfor item in SideBarSelection(paths).getSelectedItemsWithoutChildItems():\n\t\t\t\tself.recurse(item.path(), to_rename_or_move)\n\t\t\tto_rename_or_move.sort()\n\t\t\tto_rename_or_move.reverse()\n\t\t\tfor item in to_rename_or_move:\n\t\t\t\tif find in item:\n\t\t\t\t\torigin = SideBarItem(item, os.path.isdir(item))\n\t\t\t\t\tdestination = SideBarItem(origin.pathProject()+''+(origin.pathWithoutProject().replace(find, replace)), os.path.isdir(item))\n\t\t\t\t\torigin.move(destination.path());\n\n\t\t\tSideBarProject().refresh();\n\t\t\twindow_set_status(key, '')\n\n\tdef recurse(self, path, paths):\n\t\tif os.path.isfile(path) or os.path.islink(path):\n\t\t\tpaths.append(path)\n\t\telse:\n\t\t\tfor content in os.listdir(path):\n\t\t\t\tfile = os.path.join(path, content)\n\t\t\t\tif os.path.isfile(file) or os.path.islink(file):\n\t\t\t\t\tpaths.append(file)\n\t\t\t\telse:\n\t\t\t\t\tself.recurse(file, paths)\n\t\t\tpaths.append(path)\n\nclass SideBarMoveCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = [], new = False):\n\t\timport functools\n\t\tWindow().run_command('hide_panel');\n\t\tview = Window().show_input_panel(\"New Location:\", new or SideBarSelection(paths).getSelectedItems()[0].path(), functools.partial(self.on_done, SideBarSelection(paths).getSelectedItems()[0].path()), None, None)\n\t\tview.sel().clear()\n\t\tview.sel().add(sublime.Region(view.size()-len(SideBarSelection(paths).getSelectedItems()[0].name()), view.size()-len(SideBarSelection(paths).getSelectedItems()[0].extension())))\n\n\tdef on_done(self, old, new):\n\t\tkey = 'move-'+str(time.time())\n\t\tSideBarMoveThread(old, new, key).start()\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() == 1 and CACHED_SELECTION(paths).hasProjectDirectories() == False\n\nclass SideBarMoveThread(threading.Thread):\n\tdef __init__(self, old, new, key):\n\t\tself.old = old\n\t\tself.new = new\n\t\tself.key = key\n\t\tthreading.Thread.__init__(self)\n\n\tdef run(self):\n\t\told = self.old\n\t\tnew = self.new\n\t\tkey = self.key\n\t\twindow_set_status(key, 'Moving…')\n\n\t\titem = SideBarItem(old, os.path.isdir(old))\n\t\ttry:\n\t\t\tif not item.move(new):\n\t\t\t\tif SideBarItem(new, os.path.isdir(new)).overwrite():\n\t\t\t\t\tself.run()\n\t\t\t\telse:\n\t\t\t\t\twindow_set_status(key, '')\n\t\t\t\t\tSideBarMoveCommand(Window()).run([old], new)\n\t\t\t\treturn\n\t\texcept:\n\t\t\twindow_set_status(key, '')\n\t\t\tsublime.error_message(\"Unable to move:\\n\\n\"+old+\"\\n\\nto\\n\\n\"+new)\n\t\t\tSideBarMoveCommand(Window()).run([old], new)\n\t\t\traise\n\t\t\treturn\n\t\tSideBarProject().refresh();\n\t\twindow_set_status(key, '')\n\nclass SideBarDeleteThread(threading.Thread):\n\tdef __init__(self, paths):\n\t\tself.paths = paths\n\t\tthreading.Thread.__init__(self)\n\n\tdef run(self):\n\t\tSideBarDeleteCommand(Window())._delete_threaded(self.paths)\n\nclass SideBarDeleteCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = [], confirmed = 'False'):\n\n\t\tif confirmed == 'False' and s.get('confirm_before_deleting', True):\n\t\t\tif sublime.platform() == 'osx':\n\t\t\t\tif sublime.ok_cancel_dialog('Delete the selected items?'):\n\t\t\t\t\tself.run(paths, 'True')\n\t\t\telse:\n\t\t\t\tself.confirm([item.path() for item in SideBarSelection(paths).getSelectedItems()], [item.pathWithoutProject() for item in SideBarSelection(paths).getSelectedItems()])\n\t\telse:\n\t\t\tSideBarDeleteThread(paths).start()\n\n\tdef _delete_threaded(self, paths):\n\t\tkey = 'delete-'+str(time.time())\n\t\twindow_set_status(key, 'Deleting…')\n\t\ttry:\n\t\t\tfrom .send2trash import send2trash\n\t\t\tfor item in SideBarSelection(paths).getSelectedItemsWithoutChildItems():\n\t\t\t\tif s.get('close_affected_buffers_when_deleting_even_if_dirty', False):\n\t\t\t\t\titem.closeViews()\n\t\t\t\tif s.get('disable_send_to_trash', False):\n\t\t\t\t\tif sublime.platform() == 'windows':\n\t\t\t\t\t\tself.remove('\\\\\\\\?\\\\'+item.path());\n\t\t\t\t\telse:\n\t\t\t\t\t\tself.remove(item.path());\n\t\t\t\telse:\n\t\t\t\t\tsend2trash(item.path())\n\t\t\tSideBarProject().refresh();\n\t\texcept:\n\t\t\tshould_confirm = s.get('confirm_before_permanently_deleting', True)\n\t\t\tif not should_confirm or sublime.ok_cancel_dialog('There is no trash bin, permanently delete?', 'Yes, Permanent Deletion'):\n\t\t\t\tfor item in SideBarSelection(paths).getSelectedItemsWithoutChildItems():\n\t\t\t\t\tif s.get('close_affected_buffers_when_deleting_even_if_dirty', False):\n\t\t\t\t\t\titem.closeViews()\n\t\t\t\t\tif sublime.platform() == 'windows':\n\t\t\t\t\t\tself.remove('\\\\\\\\?\\\\'+item.path());\n\t\t\t\t\telse:\n\t\t\t\t\t\tself.remove(item.path());\n\t\t\t\tSideBarProject().refresh();\n\t\twindow_set_status(key, '')\n\n\tdef confirm(self, paths, display_paths):\n\t\timport functools\n\t\twindow = Window()\n\t\twindow.show_input_panel(\"BUG!\", '', '', None, None)\n\t\twindow.run_command('hide_panel');\n\n\t\tyes = []\n\t\tyes.append('Yes, delete the selected items.');\n\t\tfor item in display_paths:\n\t\t\tyes.append(item);\n\n\t\tno = []\n\t\tno.append('No');\n\t\tno.append('Cancel the operation.');\n\n\t\twhile len(no) != len(yes):\n\t\t\tno.append('');\n\n\t\tif sublime.platform() == 'osx':\n\t\t\tsublime.set_timeout(lambda:window.show_quick_panel([yes, no], functools.partial(self.on_confirm, paths)), 200);\n\t\telse:\n\t\t\twindow.show_quick_panel([yes, no], functools.partial(self.on_confirm, paths))\n\n\tdef on_confirm(self, paths, result):\n\t\tif result != -1:\n\t\t\tif result == 0:\n\t\t\t\tself.run(paths, 'True')\n\n\tdef on_done(self, old, new):\n\t\tif s.get('close_affected_buffers_when_deleting_even_if_dirty', False):\n\t\t\titem = SideBarItem(new, os.path.isdir(new))\n\t\t\titem.closeViews()\n\t\tif sublime.platform() == 'windows':\n\t\t\tself.remove('\\\\\\\\?\\\\'+new);\n\t\telse:\n\t\t\tself.remove(new)\n\t\tSideBarProject().refresh();\n\n\tdef remove(self, path):\n\t\tif os.path.isfile(path) or os.path.islink(path):\n\t\t\tself.remove_safe_file(path)\n\t\telse:\n\t\t\tfor content in os.listdir(path):\n\t\t\t\tfile = os.path.join(path, content)\n\t\t\t\tif os.path.isfile(file) or os.path.islink(file):\n\t\t\t\t\tself.remove_safe_file(file)\n\t\t\t\telse:\n\t\t\t\t\tself.remove(file)\n\t\t\tself.remove_safe_dir(path)\n\n\tdef remove_safe_file(self, path):\n\t\tif not SideBarSelection().isNone(path):\n\t\t\ttry:\n\t\t\t\tos.remove(path)\n\t\t\texcept:\n\t\t\t\ttry:\n\t\t\t\t\tif not os.access(path, os.W_OK):\n\t\t\t\t\t\timport stat\n\t\t\t\t\t\tos.chmod(path, stat.S_IWUSR)\n\t\t\t\t\tos.remove(path)\n\t\t\t\texcept:\n\t\t\t\t\t# raise error in case we were unable to delete.\n\t\t\t\t\tif os.path.exists(path):\n\t\t\t\t\t\tprint(\"Unable to remove file:\\n\"+path)\n\t\t\t\t\t\tos.remove(path)\n\t\telse:\n\t\t\tprint('path is none')\n\t\t\tprint(path)\n\n\tdef remove_safe_dir(self, path):\n\t\tif not SideBarSelection().isNone(path):\n\t\t\ttry:\n\t\t\t\tshutil.rmtree(path)\n\t\t\texcept:\n\t\t\t\ttry:\n\t\t\t\t\tif not os.access(path, os.W_OK):\n\t\t\t\t\t\timport stat\n\t\t\t\t\t\tos.chmod(path, stat.S_IWUSR)\n\t\t\t\t\tshutil.rmtree(path)\n\t\t\t\texcept:\n\t\t\t\t\t# raise error in case we were unable to delete.\n\t\t\t\t\tif os.path.exists(path):\n\t\t\t\t\t\tprint(\"Unable to remove folder:\\n\"+path)\n\t\t\t\t\t\tshutil.rmtree(path)\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0 and CACHED_SELECTION(paths).hasProjectDirectories() == False\n\nclass SideBarEmptyCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = [], confirmed = 'False'):\n\n\t\tif confirmed == 'False' and s.get('confirm_before_deleting', True):\n\t\t\tif sublime.platform() == 'osx':\n\t\t\t\tif sublime.ok_cancel_dialog('empty the content of the folder?'):\n\t\t\t\t\tself.run(paths, 'True')\n\t\t\telse:\n\t\t\t\tself.confirm([item.path() for item in SideBarSelection(paths).getSelectedDirectoriesOrDirnames()], [item.pathWithoutProject() for item in SideBarSelection(paths).getSelectedDirectoriesOrDirnames()])\n\t\telse:\n\t\t\tkey = 'move-'+str(time.time())\n\t\t\tSideBarEmptyThread(paths, key).start()\n\n\tdef confirm(self, paths, display_paths):\n\t\timport functools\n\t\twindow = Window()\n\t\twindow.show_input_panel(\"BUG!\", '', '', None, None)\n\t\twindow.run_command('hide_panel');\n\n\t\tyes = []\n\t\tyes.append('Yes, empty the selected items.');\n\t\tfor item in display_paths:\n\t\t\tyes.append(item);\n\n\t\tno = []\n\t\tno.append('No');\n\t\tno.append('Cancel the operation.');\n\n\t\twhile len(no) != len(yes):\n\t\t\tno.append('');\n\n\t\tif sublime.platform() == 'osx':\n\t\t\tsublime.set_timeout(lambda:window.show_quick_panel([yes, no], functools.partial(self.on_confirm, paths)), 200);\n\t\telse:\n\t\t\twindow.show_quick_panel([yes, no], functools.partial(self.on_confirm, paths))\n\n\tdef on_confirm(self, paths, result):\n\t\tif result != -1:\n\t\t\tif result == 0:\n\t\t\t\tself.run(paths, 'True')\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0\n\n\tdef is_visible(self, paths =[]):\n\t\treturn not s.get('disabled_menuitem_empty', True)\n\nclass SideBarEmptyThread(threading.Thread):\n\tdef __init__(self, paths, key):\n\t\tself.paths = paths\n\t\tself.key = key\n\t\tthreading.Thread.__init__(self)\n\n\tdef run(self):\n\t\tpaths = self.paths\n\t\tkey = self.key\n\t\twindow_set_status(key, 'Emptying…')\n\t\ttry:\n\t\t\tfrom .send2trash import send2trash\n\t\t\tfor item in SideBarSelection(paths).getSelectedDirectoriesOrDirnames():\n\t\t\t\tfor content in os.listdir(item.path()):\n\t\t\t\t\tfile = os.path.join(item.path(), content)\n\t\t\t\t\tif not SideBarSelection().isNone(file):\n\t\t\t\t\t\tsend2trash(file)\n\t\t\t\tif s.get('close_affected_buffers_when_deleting_even_if_dirty', False):\n\t\t\t\t\titem.closeViews()\n\t\texcept:\n\t\t\tpass\n\t\tSideBarProject().refresh();\n\t\twindow_set_status(key, '')\n\nclass SideBarRevealCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\tif len(paths) > 1:\n\t\t\tpaths = SideBarSelection(paths).getSelectedDirectoriesOrDirnames()\n\t\telse:\n\t\t\tpaths = SideBarSelection(paths).getSelectedItems()\n\t\tfor item in paths:\n\t\t\titem.reveal()\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0\n\nclass SideBarProjectOpenFileCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\tproject = SideBarProject()\n\t\tif project.hasOpenedProject():\n\t\t\tSideBarItem(project.getProjectFile(), False).edit();\n\n\tdef is_enabled(self, paths = []):\n\t\treturn SideBarProject().hasOpenedProject()\n\nclass SideBarPreviewEditUrlsCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\titem = SideBarItem(os.path.dirname(sublime.packages_path())+'/Settings/SideBarEnhancements.json', False)\n\t\titem.dirnameCreate();\n\t\titem.edit();\n\nclass SideBarProjectItemAddCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\tproject = SideBarProject()\n\t\tfor item in SideBarSelection(paths).getSelectedDirectories():\n\t\t\tproject.add(item.path())\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).hasDirectories() and CACHED_SELECTION(paths).hasProjectDirectories() == False\n\nclass SideBarProjectItemRemoveFolderCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\tWindow().run_command('remove_folder', {\"dirs\":paths})\n\n\tdef is_enabled(self, paths =[]):\n\t\tselection = CACHED_SELECTION(paths)\n\t\tproject = SideBarProject()\n\t\treturn project.hasDirectories() and all([item.path() in project.getDirectories() or not item.exists() for item in selection.getSelectedItems()])\n\nclass SideBarProjectItemExcludeCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\tproject = SideBarProject()\n\t\tfor item in SideBarSelection(paths).getSelectedItems():\n\t\t\tif item.isDirectory():\n\t\t\t\tproject.excludeDirectory(item.path(), item.pathRelativeFromProject())\n\t\t\telse:\n\t\t\t\tproject.excludeFile(item.path(), item.pathRelativeFromProject())\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0 and CACHED_SELECTION(paths).hasProjectDirectories() == False\n\nclass SideBarProjectItemExcludeFromIndexCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = [], type = 'item'):\n\t\tPreferences = sublime.load_settings(\"Preferences.sublime-settings\")\n\t\texcluded = Preferences.get(\"binary_file_patterns\", [])\n\t\tfor item in self.items(paths, type, SideBarSelection(paths)):\n\t\t\texcluded.append(item)\n\t\tfor k, v in enumerate(excluded):\n\t\t\texcluded[k] = excluded[k].replace('\\\\', '/')\n\t\t\texcluded[k] = re.sub('([a-z])\\:/', '/\\\\1/', excluded[k], 0, re.I)\n\t\t\texcluded[k] = re.sub('/$', '/**', excluded[k])\n\t\texcluded = list(set(excluded))\n\t\texcluded = sorted(excluded)\n\t\tPreferences.set(\"binary_file_patterns\", excluded);\n\t\tsublime.save_settings(\"Preferences.sublime-settings\");\n\n\tdef is_visible(self, paths = [], type = 'item'):\n\t\treturn len(self.items(paths, type, CACHED_SELECTION(paths))) > 0\n\n\tdef description(self, paths = [], type = 'item'):\n\t\titems = self.items(paths, type, CACHED_SELECTION(paths))\n\t\treturn 'Exclude From Index (mark as binary) \"'+(\",\".join(items))+'\"'\n\n\tdef items(self, paths = [], type = 'item', object = None):\n\t\titems = []\n\t\tif type == 'item':\n\t\t\tfor item in object.getSelectedItems():\n\t\t\t\tif item.isDirectory():\n\t\t\t\t\titems.append(re.sub('([a-z])\\:/', '/\\\\1/', (item.path().replace('\\\\', '/')+'/**'), 0, re.I))\n\t\t\t\telse:\n\t\t\t\t\titems.append(re.sub('([a-z])\\:/', '/\\\\1/', (item.path().replace('\\\\', '/')), 0, re.I))\n\t\telif type == 'relative':\n\t\t\tfor item in object.getSelectedItems():\n\t\t\t\tif item.isDirectory():\n\t\t\t\t\titems.append(item.pathRelativeFromProject().replace('\\\\', '/')+'/**')\n\t\t\t\telse:\n\t\t\t\t\titems.append(item.pathRelativeFromProject().replace('\\\\', '/'))\n\t\telif type == 'extension':\n\t\t\tfor item in object.getSelectedFiles():\n\t\t\t\titems.append('*'+item.extension())\n\t\telif type == 'file':\n\t\t\tfor item in object.getSelectedFiles():\n\t\t\t\titems.append(item.name())\n\t\telif type == 'directory':\n\t\t\tfor item in object.getSelectedDirectories():\n\t\t\t\titems.append(item.name() +'/**')\n\t\titems = list(set(items))\n\t\treturn items\n\nclass SideBarOpenBrowsersCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\tbrowsers = s.get('open_all_browsers', [])\n\t\tif browsers:\n\t\t\twindow =  Window()\n\t\t\tfor browser in browsers:\n\t\t\t\twindow.run_command(\"side_bar_open_in_browser\", {'paths':paths, 'type':'testing', 'browser':browser})\n\nclass SideBarOpenInBrowserCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = [], type = False, browser = \"\"):\n\n\t\tif not browser:\n\t\t\tbrowser = s.get('default_browser', '')\n\n\t\tif type == False or type == 'testing':\n\t\t\ttype = 'url_testing'\n\t\telif type == 'production':\n\t\t\ttype = 'url_production'\n\t\telse:\n\t\t\ttype = 'url_testing'\n\n\t\tSideBarOpenInBrowserThread(paths, type, browser).start()\n\n\tdef is_enabled(self, paths = []):\n\t\treturn CACHED_SELECTION(paths).len() > 0\n\n\tdef is_visible(self, paths =[]):\n\t\treturn not s.get('disabled_menuitem_open_in_browser', False)\n\nclass SideBarOpenInBrowserThread(threading.Thread):\n\tdef __init__(self, paths, type, browser):\n\t\tself.paths = paths\n\t\tself.type = type\n\t\tself.browser = browser\n\t\tthreading.Thread.__init__(self)\n\n\tdef run(self):\n\t\tpaths = self.paths\n\t\ttype = self.type\n\t\tbrowser = self.browser\n\n\t\tfor item in SideBarSelection(paths).getSelectedItems():\n\t\t\turl = item.url(type) or item.uri()\n\t\t\tself.try_open(url, browser)\n\n\tdef try_open(self, url, browser):\n\t\timport subprocess\n\n\t\tif sublime.platform() == 'windows':\n\t\t\timport winreg\n\n\t\tbrowser = browser.lower().strip();\n\t\titems = []\n\n\t\tif browser == 'chrome':\n\t\t\tif sublime.platform() == 'osx':\n\t\t\t\titems.extend(['open'])\n\t\t\t\tcommands = ['-a', '/Applications/Google Chrome.app', url]\n\t\t\telif sublime.platform() == 'windows':\n\t\t\t\taKey = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r\"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders\")\n\t\t\t\treg_value, reg_type = winreg.QueryValueEx (aKey, \"Local AppData\")\n\n\t\t\t\tif s.get('portable_browser', '') != '':\n\t\t\t\t\titems.extend([s.get('portable_browser', '')])\n\t\t\t\titems.extend([\n\t\t\t\t\t'%HOMEPATH%\\\\AppData\\\\Local\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe'\n\n\t\t\t\t\t,reg_value+'\\\\Chrome\\\\Application\\\\chrome.exe'\n\t\t\t\t\t,reg_value+'\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe'\n\t\t\t\t\t,'%HOMEPATH%\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe'\n\t\t\t\t\t,'%PROGRAMFILES%\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe'\n\t\t\t\t\t,'%PROGRAMFILES(X86)%\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe'\n\t\t\t\t\t,'%USERPROFILE%\\\\Local\\ Settings\\\\Application\\ Data\\\\Google\\\\Chrome\\\\chrome.exe'\n\t\t\t\t\t,'%HOMEPATH%\\\\Chromium\\\\Application\\\\chrome.exe'\n\t\t\t\t\t,'%PROGRAMFILES%\\\\Chromium\\\\Application\\\\chrome.exe'\n\t\t\t\t\t,'%PROGRAMFILES(X86)%\\\\Chromium\\\\Application\\\\chrome.exe'\n\t\t\t\t\t,'%HOMEPATH%\\\\Local\\ Settings\\\\Application\\ Data\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe'\n\t\t\t\t\t,'%HOMEPATH%\\\\Local Settings\\\\Application Data\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe'\n\t\t\t\t\t,'chrome.exe'\n\t\t\t\t])\n\n\n\t\t\t\tcommands = ['-new-tab', url]\n\t\t\telse:\n\t\t\t\tif s.get('portable_browser', '') != '':\n\t\t\t\t\titems.extend([s.get('portable_browser', '')])\n\t\t\t\titems.extend([\n\t\t\t\t\t'/usr/bin/google-chrome'\n\t\t\t\t\t,'/opt/google/chrome/chrome'\n\t\t\t\t\t,'chrome'\n\t\t\t\t\t,'google-chrome'\n\t\t\t\t])\n\t\t\t\tcommands = ['-new-tab', url]\n\n\t\telif browser == 'canary':\n\t\t\tif sublime.platform() == 'osx':\n\t\t\t\t\titems.extend(['open'])\n\t\t\t\t\tcommands = ['-a', '/Applications/Google Chrome Canary.app', url]\n\t\t\telif sublime.platform() == 'windows':\n\t\t\t\taKey = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r\"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders\")\n\t\t\t\treg_value, reg_type = winreg.QueryValueEx (aKey, \"Local AppData\")\n\n\t\t\t\tif s.get('portable_browser', '') != '':\n\t\t\t\t\titems.extend([s.get('portable_browser', '')])\n\t\t\t\titems.extend([\n\t\t\t\t\t'%HOMEPATH%\\\\AppData\\\\Local\\\\Google\\\\Chrome SxS\\\\Application\\\\chrome.exe'\n\n\t\t\t\t\t,reg_value+'\\\\Chrome SxS\\\\Application\\\\chrome.exe'\n\t\t\t\t\t,reg_value+'\\\\Google\\\\Chrome SxS\\\\Application\\\\chrome.exe'\n\t\t\t\t\t,'%HOMEPATH%\\\\Google\\\\Chrome SxS\\\\Application\\\\chrome.exe'\n\t\t\t\t\t,'%PROGRAMFILES%\\\\Google\\\\Chrome SxS\\\\Application\\\\chrome.exe'\n\t\t\t\t\t,'%PROGRAMFILES(X86)%\\\\Google\\\\Chrome SxS\\\\Application\\\\chrome.exe'\n\t\t\t\t\t,'%USERPROFILE%\\\\Local\\ Settings\\\\Application\\ Data\\\\Google\\\\Chrome SxS\\\\chrome.exe'\n\t\t\t\t\t,'%HOMEPATH%\\\\Local\\ Settings\\\\Application\\ Data\\\\Google\\\\Chrome SxS\\\\Application\\\\chrome.exe'\n\t\t\t\t\t,'%HOMEPATH%\\\\Local Settings\\\\Application Data\\\\Google\\\\Chrome SxS\\\\Application\\\\chrome.exe'\n\t\t\t\t])\n\n\t\t\t\tcommands = ['-new-tab', url]\n\n\t\telif browser == 'chromium':\n\t\t\tif sublime.platform() == 'osx':\n\t\t\t\titems.extend(['open'])\n\t\t\t\tcommands = ['-a', '/Applications/Chromium.app', url]\n\t\t\telif sublime.platform() == 'windows':\n\t\t\t\taKey = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r\"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders\")\n\t\t\t\treg_value, reg_type = winreg.QueryValueEx (aKey, \"Local AppData\")\n\t\t\t\tif s.get('portable_browser', '') != '':\n\t\t\t\t\titems.extend([s.get('portable_browser', '')])\n\t\t\t\titems.extend([\n\t\t\t\t\t'%HOMEPATH%\\\\AppData\\\\Local\\\\Google\\\\Chrome SxS\\\\Application\\\\chrome.exe'\n\n\t\t\t\t\t, reg_value+'\\\\Chromium\\\\Application\\\\chromium.exe'\n\t\t\t\t\t,'%USERPROFILE%\\\\Local Settings\\\\Application Data\\\\Google\\\\Chrome\\\\chromium.exe'\n\t\t\t\t\t,'%USERPROFILE%\\\\Local\\ Settings\\\\Application\\ Data\\\\Google\\\\Chrome\\\\chromium.exe'\n\t\t\t\t\t,'%HOMEPATH%\\\\Chromium\\\\Application\\\\chromium.exe'\n\t\t\t\t\t,'%PROGRAMFILES%\\\\Chromium\\\\Application\\\\chromium.exe'\n\t\t\t\t\t,'%PROGRAMFILES(X86)%\\\\Chromium\\\\Application\\\\chromium.exe'\n\t\t\t\t\t,'%HOMEPATH%\\\\Local Settings\\\\Application\\ Data\\\\Google\\\\Chrome\\\\Application\\\\chromium.exe'\n\t\t\t\t\t,'%HOMEPATH%\\\\Local Settings\\\\Application Data\\\\Google\\\\Chrome\\\\Application\\\\chromium.exe'\n\t\t\t\t\t,'chromium.exe'\n\n\t\t\t\t\t, reg_value+'\\\\Chromium\\\\Application\\\\chrome.exe'\n\t\t\t\t\t,'%USERPROFILE%\\\\Local Settings\\\\Application Data\\\\Google\\\\Chrome\\\\chrome.exe'\n\t\t\t\t\t,'%USERPROFILE%\\\\Local\\ Settings\\\\Application\\ Data\\\\Google\\\\Chrome\\\\chrome.exe'\n\t\t\t\t\t,'%HOMEPATH%\\\\Chromium\\\\Application\\\\chrome.exe'\n\t\t\t\t\t,'%PROGRAMFILES%\\\\Chromium\\\\Application\\\\chrome.exe'\n\t\t\t\t\t,'%PROGRAMFILES(X86)%\\\\Chromium\\\\Application\\\\chrome.exe'\n\t\t\t\t\t,'%HOMEPATH%\\\\Local\\ Settings\\\\Application\\ Data\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe'\n\t\t\t\t\t,'%HOMEPATH%\\\\Local Settings\\\\Application Data\\\\Google\\\\Chrome\\\\Application\\\\chrome.exe'\n\t\t\t\t\t,'chrome.exe'\n\n\t\t\t\t])\n\t\t\t\tcommands = ['-new-tab', url]\n\t\t\telse:\n\t\t\t\tif s.get('portable_browser', '') != '':\n\t\t\t\t\titems.extend([s.get('portable_browser', '')])\n\t\t\t\titems.extend([\n\t\t\t\t\t'/usr/bin/chromium'\n\t\t\t\t\t,'chromium'\n\t\t\t\t\t,'/usr/bin/chromium-browser'\n\t\t\t\t\t,'chromium-browser'\n\t\t\t\t])\n\t\t\t\tcommands = ['-new-tab', url]\n\t\telif browser == 'firefox':\n\t\t\tif sublime.platform() == 'osx':\n\t\t\t\titems.extend(['open'])\n\t\t\t\tcommands = ['-a', '/Applications/Firefox.app', url]\n\t\t\telse:\n\t\t\t\tif s.get('portable_browser', '') != '':\n\t\t\t\t\titems.extend([s.get('portable_browser', '')])\n\t\t\t\titems.extend([\n\t\t\t\t\t'/usr/bin/firefox'\n\n\t\t\t\t\t,'%PROGRAMFILES%\\\\Firefox Developer Edition\\\\firefox.exe'\n\t\t\t\t\t,'%PROGRAMFILES(X86)%\\\\Firefox Developer Edition\\\\firefox.exe'\n\n\t\t\t\t\t,'%PROGRAMFILES%\\\\Nightly\\\\firefox.exe'\n\t\t\t\t\t,'%PROGRAMFILES(X86)%\\\\Nightly\\\\firefox.exe'\n\n\t\t\t\t\t,'%PROGRAMFILES%\\\\Mozilla Firefox\\\\firefox.exe'\n\t\t\t\t\t,'%PROGRAMFILES(X86)%\\\\Mozilla Firefox\\\\firefox.exe'\n\n\t\t\t\t\t,'firefox'\n\t\t\t\t\t,'firefox.exe'\n\t\t\t\t])\n\t\t\t\tcommands = ['-new-tab', url]\n\t\telif browser == 'opera':\n\t\t\tif sublime.platform() == 'osx':\n\t\t\t\titems.extend(['open'])\n\t\t\t\tcommands = ['-a', '/Applications/Opera.app', url]\n\t\t\telse:\n\t\t\t\tif s.get('portable_browser', '') != '':\n\t\t\t\t\titems.extend([s.get('portable_browser', '')])\n\t\t\t\titems.extend([\n\t\t\t\t\t'/usr/bin/opera'\n\t\t\t\t\t,'/usr/bin/opera-next'\n\t\t\t\t\t,'/usr/bin/operamobile'\n\n\t\t\t\t\t,'%PROGRAMFILES%\\\\Opera\\\\opera.exe'\n\t\t\t\t\t,'%PROGRAMFILES(X86)%\\\\Opera\\\\opera.exe'\n\n\t\t\t\t\t,'%PROGRAMFILES%\\\\Opera\\\\launcher.exe'\n\t\t\t\t\t,'%PROGRAMFILES(X86)%\\\\Opera\\\\launcher.exe'\n\n\t\t\t\t\t,'%PROGRAMFILES%\\\\Opera Next\\\\opera.exe'\n\t\t\t\t\t,'%PROGRAMFILES(X86)%\\\\Opera Next\\\\opera.exe'\n\n\t\t\t\t\t,'%PROGRAMFILES%\\\\Opera Mobile Emulator\\\\OperaMobileEmu.exe'\n\t\t\t\t\t,'%PROGRAMFILES(X86)%\\\\Opera Mobile Emulator\\\\OperaMobileEmu.exe'\n\n\t\t\t\t\t,'opera'\n\t\t\t\t\t,'opera.exe'\n\t\t\t\t])\n\t\t\t\tcommands = ['-newtab', url]\n\t\telif browser == 'ie':\n\t\t\tif s.get('portable_browser', '') != '':\n\t\t\t\titems.extend([s.get('portable_browser', '')])\n\t\t\titems.extend([\n\t\t\t\t'%PROGRAMFILES%\\\\Internet Explorer\\\\iexplore.exe'\n\t\t\t\t,'%PROGRAMFILES(X86)%\\\\Internet Explorer\\\\iexplore.exe'\n\n\t\t\t\t,'iexplore'\n\t\t\t\t,'iexplore.exe'\n\t\t\t])\n\t\t\tcommands = ['-newtab', url]\n\t\telif browser == 'edge':\n\t\t\tif s.get('portable_browser', '') != '':\n\t\t\t\titems.extend([s.get('portable_browser', '')])\n\t\t\titems.extend(['open'])\n\t\t\tcommands = ['-newtab', url]\n\t\telif browser == 'safari':\n\t\t\tif sublime.platform() == 'osx':\n\t\t\t\titems.extend(['open'])\n\t\t\t\tcommands = ['-a', 'Safari', url]\n\t\t\telse:\n\t\t\t\tif s.get('portable_browser', '') != '':\n\t\t\t\t\titems.extend([s.get('portable_browser', '')])\n\t\t\t\titems.extend([\n\t\t\t\t\t'/usr/bin/safari'\n\n\t\t\t\t\t,'%PROGRAMFILES%\\\\Safari\\\\Safari.exe'\n\t\t\t\t\t,'%PROGRAMFILES(X86)%\\\\Safari\\\\Safari.exe'\n\n\t\t\t\t\t,'Safari'\n\t\t\t\t\t,'Safari.exe'\n\t\t\t\t])\n\t\t\t\tcommands = ['-new-tab', '-url', url]\n\t\telse:\n\t\t\tif s.get('portable_browser', '') != '':\n\t\t\t\titems.extend([s.get('portable_browser', '')])\n\t\t\tcommands = ['-new-tab', url]\n\n\t\tfor item in items:\n\t\t\ttry:\n\t\t\t\tcommand2 = list(commands)\n\t\t\t\tcommand2.insert(0, expandVars(item))\n\t\t\t\tsubprocess.Popen(command2)\n\t\t\t\treturn\n\t\t\texcept:\n\t\t\t\ttry:\n\t\t\t\t\tcommand2 = list(commands)\n\t\t\t\t\tcommand2.insert(0, item)\n\t\t\t\t\tsubprocess.Popen(command2)\n\t\t\t\t\treturn\n\t\t\t\texcept:\n\t\t\t\t\tpass\n\t\ttry:\n\t\t\tif sublime.platform() == 'windows':\n\t\t\t\tif browser and browser == 'edge':\n\t\t\t\t\tcommands = ['cmd','/c','start', 'microsoft-edge:' + url]\n\t\t\t\telse:\n\t\t\t\t\tcommands = ['cmd','/c','start', '', url]\n\t\t\t\tsubprocess.Popen(commands)\n\t\t\telif sublime.platform() == 'linux':\n\t\t\t\tcommands = ['xdg-open', url]\n\t\t\t\tsubprocess.Popen(commands)\n\t\t\telse:\n\t\t\t\tcommands = ['open', url]\n\t\t\t\tsubprocess.Popen(commands)\n\t\t\treturn\n\t\texcept:\n\t\t\tpass\n\n\t\tsublime.error_message('Browser \"'+browser+'\" not found!\\nIs installed? Which location...?')\n\nclass SideBarOpenInNewWindowCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\timport subprocess\n\t\titems = []\n\n\t\texecutable_path = sublime.executable_path()\n\n\t\tif sublime.platform() == 'osx':\n\t\t\tapp_path = executable_path[:executable_path.rfind(\".app/\")+5]\n\t\t\texecutable_path = app_path+\"Contents/SharedSupport/bin/subl\"\n\n\t\titems.append(executable_path)\n\n\t\tfor item in SideBarSelection(paths).getSelectedItems():\n\t\t\titems.append(item.forCwdSystemPath())\n\t\t\titems.append(item.path())\n\t\tsubprocess.Popen(items, cwd=items[1])\n\n\tdef is_visible(self, paths =[]):\n\t\treturn not s.get('disabled_menuitem_open_in_new_window', False)\n\nclass SideBarOpenWithFinderCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\timport subprocess\n\t\tfor item in SideBarSelection(paths).getSelectedDirectoriesOrDirnames():\n\t\t\tsubprocess.Popen(['open', item.name()], cwd=item.dirname())\n\n\tdef is_visible(self, paths =[]):\n\t\treturn sublime.platform() == 'osx'\n\nclass SideBarOpenWithPathFinderCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\timport subprocess\n\t\tfor item in SideBarSelection(paths).getSelectedDirectoriesOrDirnames():\n\t\t\tsubprocess.Popen([\"open -a /Applications/Path Finder.app\", item.name()], cwd=item.dirname())\n\n\tdef is_visible(self, paths =[]):\n\t\treturn sublime.platform() == 'osx'\n\nclass SideBarStatusBarFileSize(sublime_plugin.EventListener):\n\n\tdef on_activated(self, v):\n\t\tif v.file_name() and s.get('statusbar_file_size', False):\n\t\t\ttry:\n\t\t\t\tself.show(v, hurry_size(os.path.getsize(v.file_name())))\n\t\t\texcept:\n\t\t\t\tpass\n\n\tdef on_post_save(self, v):\n\t\tif v.file_name() and s.get('statusbar_file_size', False):\n\t\t\ttry:\n\t\t\t\tself.show(v, hurry_size(os.path.getsize(v.file_name())))\n\t\t\texcept:\n\t\t\t\tpass\n\n\tdef show(self, v, size):\n\t\tv.set_status('statusbar_file_size', size);\n\nclass SideBarStatusBarModifiedTime(sublime_plugin.EventListener):\n\n\tdef on_activated(self, v):\n\t\tif v.file_name() and s.get('statusbar_modified_time', False):\n\t\t\ttry:\n\t\t\t\tself.show(v, os.path.getmtime(v.file_name()))\n\t\t\texcept:\n\t\t\t\tpass\n\n\tdef on_post_save(self, v):\n\t\tif v.file_name() and s.get('statusbar_modified_time', False):\n\t\t\ttry:\n\t\t\t\tself.show(v, os.path.getmtime(v.file_name()))\n\t\t\texcept:\n\t\t\t\tpass\n\n\tdef show(self, v, mtime):\n\t\tmodified_time = time.strftime(s.get('statusbar_modified_time_format', '%A %b %d %H:%M:%S %Y'), time.localtime(mtime))\n\t\tif s.get('statusbar_modified_time_locale', '') != '':\n\t\t\tmodified_time = modified_time.decode(s.get('statusbar_modified_time_locale', ''))\n\t\tv.set_status('statusbar_modified_time', modified_time);\n\nclass SideBarDefaultNewFolder(sublime_plugin.EventListener):\n\tdef on_new(self, view):\n\t\tpaths = SideBarProject().getDirectories()\n\t\tif paths:\n\t\t\tview.settings().set('default_dir', paths[0])\n\n\nclass SideBarAutoCloseEmptyGroupsCommand(sublime_plugin.EventListener):\n\tdef on_close(self, view):\n\t\tif s.get('auto_close_empty_groups', False):\n\t\t\tsublime.set_timeout(self.run, 250);\n\n\tdef run(self):\n\t\twindow = Window()\n\t\tif window.num_groups() > 1:\n\t\t\tto_close = []\n\t\t\tfor i in range(1, window.num_groups()):\n\t\t\t\tif len(window.views_in_group(i)) < 1:\n\t\t\t\t\tto_close.append(i)\n\t\t\tto_close.reverse()\n\t\t\tfor item in to_close:\n\t\t\t\twindow.focus_group(item)\n\t\t\t\twindow.run_command('close_pane')\n\t\t\tif len(to_close) > 0:\n\t\t\t\twindow.focus_group(0)\n\t\t\t\twindow.run_command('close_file')\n\nclass SideBarDonateCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\tsublime.message_dialog('Sidebar Enhancements: Thanks for your support ^.^')\n\t\tbrowser = s.get('default_browser', '')\n\t\tSideBarOpenInBrowserThread('','','').try_open(\"https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DD4SL2AHYJGBW\", browser)\n\n\tdef is_visible(self, paths =[]):\n\t\treturn not (s.get('i_donated_to_sidebar_enhancements_developer', False) == 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DD4SL2AHYJGBW')\n\nclass zzzzzSideBarCommand(sublime_plugin.WindowCommand):\n\tdef run(self, paths = []):\n\t\tpass\n\n\tdef is_visible(self, paths = []): # <- WORKS AS AN ONPOPUPSHOWN\n\t\tCache.cached = False\n\t\treturn False\n",
+			"file": "/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements/SideBar.py",
+			"file_size": 68776,
+			"file_write_time": 131378744390000000,
+			"settings":
+			{
+				"buffer_size": 69117,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Searching 25 files for \"Open with Finder\"\n\n/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements/Side Bar.sublime-menu:\n  170  \t},\n  171  \t{\n  172: \t\t\"caption\": \"Open With Finder\",\n  173  \t\t\"id\": \"side-bar-open-with-finde\",\n  174  \t\t\"command\": \"side_bar_open_with_finder\",\n\n1 match in 1 file\n",
+			"settings":
+			{
+				"buffer_size": 322,
+				"line_ending": "Unix",
+				"name": "Find Results",
+				"scratch": true
+			}
+		},
+		{
+			"contents": "[\n\t{\n\t\t\"caption\": \"aaaaa_side_bar\",\n\t\t\"id\": \"aaaaa_side_bar\",\n\t\t\"command\": \"aaaaa_side_bar\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"-\",\n\t\t\"id\": \"side-bar-start-separator\"\n\t},\n\t{\n\t\t\"caption\": \"New File…\",\n\t\t\"id\": \"side-bar-new-file\",\n\t\t\"command\": \"side_bar_new_file\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"New Folder…\",\n\t\t\"id\": \"side-bar-new-directory\",\n\t\t\"command\": \"side_bar_new_directory\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"-\",\n\t\t\"id\": \"side-bar-new-separator\"\n\t},\n\n\t{\n\t\t\"caption\": \"Edit\",\n\t\t\"id\": \"side-bar-edit\",\n\t\t\"command\": \"side_bar_edit\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"Edit to Right\",\n\t\t\"id\": \"side-bar-edit-to-right\",\n\t\t\"command\": \"side_bar_edit_to_right\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"Open / Run\",\n\t\t\"id\": \"side-bar-open\",\n\t\t\"command\": \"side_bar_open\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"Open In Browser\",\n\t\t\"id\": \"side-bar-open-in-browser\",\n\t\t\"children\": [\n\t\t\t{\n\t\t\t\t\"caption\": \"Default\",\n\t\t\t\t\"command\": \"side_bar_open_in_browser\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"-\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Firefox\",\n\t\t\t\t\"command\": \"side_bar_open_in_browser\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": [],\n\t\t\t\t\t\"type\": \"testing\",\n\t\t\t\t\t\"browser\": \"firefox\"\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"-\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Chromium\",\n\t\t\t\t\"command\": \"side_bar_open_in_browser\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": [],\n\t\t\t\t\t\"type\": \"testing\",\n\t\t\t\t\t\"browser\": \"chromium\"\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Chrome\",\n\t\t\t\t\"command\": \"side_bar_open_in_browser\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": [],\n\t\t\t\t\t\"type\": \"testing\",\n\t\t\t\t\t\"browser\": \"chrome\"\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Google Chrome Canary\",\n\t\t\t\t\"command\": \"side_bar_open_in_browser\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": [],\n\t\t\t\t\t\"type\": \"testing\",\n\t\t\t\t\t\"browser\": \"canary\"\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"-\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Opera\",\n\t\t\t\t\"command\": \"side_bar_open_in_browser\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": [],\n\t\t\t\t\t\"type\": \"testing\",\n\t\t\t\t\t\"browser\": \"opera\"\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Safari\",\n\t\t\t\t\"command\": \"side_bar_open_in_browser\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": [],\n\t\t\t\t\t\"type\": \"testing\",\n\t\t\t\t\t\"browser\": \"safari\"\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"-\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Internet Explorer\",\n\t\t\t\t\"command\": \"side_bar_open_in_browser\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": [],\n\t\t\t\t\t\"type\": \"testing\",\n\t\t\t\t\t\"browser\": \"ie\"\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Edge\",\n\t\t\t\t\"command\": \"side_bar_open_in_browser\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": [],\n\t\t\t\t\t\"type\": \"testing\",\n\t\t\t\t\t\"browser\": \"edge\"\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"-\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Open In All Browsers\",\n\t\t\t\t\"command\": \"side_bar_open_browsers\"\n\t\t\t}\n\t\t]\n\t},\n\t{\n\t\t\"caption\": \"Open In New Window\",\n\t\t\"id\": \"side-bar-open-in-new-window\",\n\t\t\"command\": \"side_bar_open_in_new_window\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"Open With Finder\",\n\t\t\"id\": \"side-bar-open-with-finde\",\n\t\t\"command\": \"side_bar_open_with_finder\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"Open With Path Finder\",\n\t\t\"id\": \"side-bar-open-with-path-finder\",\n\t\t\"command\": \"side_bar_open_with_path_finder\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"Open With\",\n\t\t\"id\": \"side-bar-files-open-with\",\n\n\t\t\"children\": [\n\n\t\t\t{\n\t\t\t\t\"caption\": \"-\",\n\t\t\t\t\"id\": \"side-bar-files-open-with-edit-application-separator\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Edit Applications…\",\n\t\t\t\t\"id\": \"side-bar-files-open-with-edit-applications\",\n\t\t\t\t\"command\": \"side_bar_files_open_with_edit_applications\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"-\",\n\t\t\t\t\"id\": \"side-bar-files-open-with-edit-applications-separator\"\n\t\t\t}\n\n\t\t]\n\t},\n\t{\n\t\t\"caption\": \"Reveal\",\n\t\t\"id\": \"side-bar-reveal\",\n\t\t\"command\": \"side_bar_reveal\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n\n\t{\n\t\t\"caption\": \"-\",\n\t\t\"id\": \"side-bar-edit-open-separator\"\n\t},\n\n\t{\n\t\t\"caption\": \"Find & Replace…\",\n\t\t\"id\": \"side-bar-find-selected\",\n\t\t\"command\": \"side_bar_find_in_selected\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"Find Files Named…\",\n\t\t\"id\": \"side-bar-find-files\",\n\t\t\"command\": \"side_bar_find_files_path_containing\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"Find Advanced\",\n\t\t\"id\": \"side-bar-find-advanced\",\n\t\t\"children\": [\n\t\t\t{\n\t\t\t\t\"caption\": \"In Parent Folder…\",\n\t\t\t\t\"id\": \"side-bar-find-parent\",\n\t\t\t\t\"command\": \"side_bar_find_in_parent\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"-\",\n\t\t\t\t\"id\": \"side-bar-find-parent-separator\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"In Project…\",\n\t\t\t\t\"id\": \"side-bar-find-in-project\",\n\t\t\t\t\"command\": \"side_bar_find_in_project\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"In Project Folder…\",\n\t\t\t\t\"id\": \"side-bar-find-project-folder\",\n\t\t\t\t\"command\": \"side_bar_find_in_project_folder\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"In Project Folders…\",\n\t\t\t\t\"id\": \"side-bar-find-project-folders\",\n\t\t\t\t\"command\": \"side_bar_find_in_project_folders\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"-\",\n\t\t\t\t\"id\": \"side-bar-find-project-separator\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": \"side-bar-find-in-files-with-extension\",\n\t\t\t\t\"command\": \"side_bar_find_in_files_with_extension\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"In Paths Containing…\",\n\t\t\t\t\"id\": \"side-bar-find-files-path-containing\",\n\t\t\t\t\"command\": \"side_bar_find_files_path_containing\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"-\",\n\t\t\t\t\"id\": \"side-bar-mass-rename-separator\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Mass Rename Selection…\",\n\t\t\t\t\"id\": \"side-bar-mass-rename\",\n\t\t\t\t\"command\": \"side_bar_mass_rename\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t}\n\n\t\t]\n\t},\n\t{\n\t\t\"caption\": \"-\",\n\t\t\"id\": \"side-bar-find-separator\"\n\t},\n\t{\n\t\t\"caption\": \"Cut\",\n\t\t\"id\": \"side-bar-clip-cut\",\n\t\t\"command\": \"side_bar_cut\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"Copy\",\n\t\t\"id\": \"side-bar-clip-copy\",\n\t\t\"command\": \"side_bar_copy\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"Copy Name\",\n\t\t\"id\": \"side-bar-clip-copy-name\",\n\t\t\"command\": \"side_bar_copy_name\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"Copy Path\",\n\t\t\"id\": \"side-bar-clip-copy-path\",\n\t\t\"command\": \"side_bar_copy_path_absolute_from_project_encoded\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"Copy Path (Windows)\",\n\t\t\"id\": \"side-bar-clip-copy-path-windows\",\n\t\t\"command\": \"side_bar_copy_path_absolute_from_project_encoded_windows\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"Copy Dir Path\",\n\t\t\"id\": \"side-bar-clip-copy-dir-path\",\n\t\t\"command\": \"side_bar_copy_dir_path\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"Copy as Text\",\n\t\t\"id\": \"side-bar-clip-copy-as\",\n\t\t\"children\": [\n\t\t\t{\n\t\t\t\t\"caption\": \"Relative Path From View Encoded\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-path-relative-from-view-encoded\",\n\t\t\t\t\"command\": \"side_bar_copy_path_relative_from_view_encoded\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Relative Path From View\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-path-relative-from-view\",\n\t\t\t\t\"command\": \"side_bar_copy_path_relative_from_view\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"-\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-path-relative-from-view-separator\"\n\t\t\t},\n\n\t\t\t{\n\t\t\t\t\"caption\": \"Relative Path From Project Encoded\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-path-relative-from-project-encoded\",\n\t\t\t\t\"command\": \"side_bar_copy_path_relative_from_project_encoded\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Relative Path From Project\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-path-relative-from-project\",\n\t\t\t\t\"command\": \"side_bar_copy_path_relative_from_project\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"-\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-path-relative-from-project-separator\"\n\t\t\t},\n\n\t\t\t{\n\t\t\t\t\"caption\": \"Absolute Path From Project Encoded\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-path-absolute-from-project-encoded\",\n\t\t\t\t\"command\": \"side_bar_copy_path_absolute_from_project_encoded\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Absolute Path From Project\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-path-absolute-from-project\",\n\t\t\t\t\"command\": \"side_bar_copy_path_absolute_from_project\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"-\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-path-absolute-from-project-separator\"\n\t\t\t},\n\n\t\t\t{\n\t\t\t\t\"caption\": \"Path as URI\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-path-encoded\",\n\t\t\t\t\"command\": \"side_bar_copy_path_encoded\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Path\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-path\",\n\t\t\t\t\"command\": \"side_bar_copy_path\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"-\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-path-separator\"\n\t\t\t},\n\n\t\t\t{\n\t\t\t\t\"caption\": \"Name Encoded\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-name-encoded\",\n\t\t\t\t\"command\": \"side_bar_copy_name_encoded\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"-\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-name-encoded-separator\"\n\t\t\t},\n\n\t\t\t{\n\t\t\t\t\"caption\": \"URL\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-url\",\n\t\t\t\t\"command\": \"side_bar_copy_url\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"URL Decoded\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-url-decoded\",\n\t\t\t\t\"command\": \"side_bar_copy_url_decoded\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"-\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-url-separator\"\n\t\t\t},\n\n\t\t\t{\n\t\t\t\t\"caption\": \"Tag a\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-tag-a\",\n\t\t\t\t\"command\": \"side_bar_copy_tag_ahref\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Tag img\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-tag-img\",\n\t\t\t\t\"command\": \"side_bar_copy_tag_img\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Tag script\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-tag-script\",\n\t\t\t\t\"command\": \"side_bar_copy_tag_script\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Tag style\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-tag-style\",\n\t\t\t\t\"command\": \"side_bar_copy_tag_style\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"-\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-tag-separator\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Project Folders\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-project-directories\",\n\t\t\t\t\"command\": \"side_bar_copy_project_directories\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"-\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-project-directories-separator\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Content as UTF-8\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-content-utf8\",\n\t\t\t\t\"command\": \"side_bar_copy_content_utf8\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Content as Data URI\",\n\t\t\t\t\"id\": \"side-bar-clip-copy-content-base-64\",\n\t\t\t\t\"command\": \"side_bar_copy_content_base64\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t}\n\t\t]\n\t},\n\n\t{\n\t\t\"caption\": \"Paste\",\n\t\t\"id\": \"side-bar-clip-paste\",\n\t\t\"command\": \"side_bar_paste\",\n\t\t\"args\": {\n\t\t\t\"paths\": [],\n\t\t\t\"in_parent\": \"False\"\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"Paste in Parent\",\n\t\t\"id\": \"side-bar-clip-paste-in-parent\",\n\t\t\"command\": \"side_bar_paste\",\n\t\t\"args\": {\n\t\t\t\"paths\": [],\n\t\t\t\"in_parent\": \"True\"\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"-\",\n\t\t\"id\": \"side-bar-clip-separator\"\n\t},\n\t{\n\t\t\"caption\": \"Duplicate…\",\n\t\t\"id\": \"side-bar-duplicate\",\n\t\t\"command\": \"side_bar_duplicate\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"-\",\n\t\t\"id\": \"side-bar-duplicate-separator\"\n\t},\n\n\t{\n\t\t\"caption\": \"Rename…\",\n\t\t\"id\": \"side-bar-rename\",\n\t\t\"command\": \"side_bar_rename\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"Move…\",\n\t\t\"id\": \"side-bar-move\",\n\t\t\"command\": \"side_bar_move\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"-\",\n\t\t\"id\": \"side-bar-rename-move-separator\"\n\t},\n\n\t{\n\t\t\"caption\": \"Delete\",\n\t\t\"id\": \"side-bar-delete\",\n\t\t\"command\": \"side_bar_delete\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"Empty\",\n\t\t\"id\": \"side-bar-empty\",\n\t\t\"command\": \"side_bar_empty\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"-\",\n\t\t\"id\": \"side-bar-delete-separator\"\n\t},\n\n\t{\n\t\t\"caption\": \"Refresh\",\n\t\t\"id\": \"side-bar-refresh\",\n\t\t\"command\": \"refresh_folder_list\"\n\t},\n\t{\n\t\t\"caption\": \"-\",\n\t\t\"id\": \"side-bar-refresh-separator\"\n\t},\n\t{\n\t\t\"caption\": \"Project\",\n\t\t\"id\": \"side-bar-project\",\n\t\t\"children\": [\n\t\t\t{\n\t\t\t\t\"caption\": \"Edit Project\",\n\t\t\t\t\"id\": \"side-bar-project-open-file\",\n\t\t\t\t\"command\": \"side_bar_project_open_file\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Edit Preview URLs\",\n\t\t\t\t\"id\": \"side-bar-preview-edit-urls\",\n\t\t\t\t\"command\": \"side_bar_preview_edit_urls\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"-\",\n\t\t\t\t\"id\": \"side-bar-project-open-file-separator\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"command\": \"prompt_add_folder\",\n\t\t\t\t\"caption\": \"Add Folder to Project…\",\n\t\t\t\t\"mnemonic\": \"d\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"-\",\n\t\t\t\t\"id\": \"side-bar-promote-as-project-folder-separator\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Promote as Project Folder\",\n\t\t\t\t\"id\": \"side-bar-project-item-add\",\n\t\t\t\t\"command\": \"side_bar_project_item_add\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Hide From Sidebar (In theory exclude from project)\",\n\t\t\t\t\"id\": \"side-bar-project-item-exclude\",\n\t\t\t\t\"command\": \"side_bar_project_item_exclude\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"-\",\n\t\t\t\t\"id\": \"side-bar-project-item-separator\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": \"side-bar-project-item-exclude-from-index-item\",\n\t\t\t\t\"command\": \"side_bar_project_item_exclude_from_index\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": [],\n\t\t\t\t\t\"type\": \"item\"\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": \"side-bar-project-item-exclude-from-index-relative\",\n\t\t\t\t\"command\": \"side_bar_project_item_exclude_from_index\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": [],\n\t\t\t\t\t\"type\": \"relative\"\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": \"side-bar-project-item-exclude-from-index-directory\",\n\t\t\t\t\"command\": \"side_bar_project_item_exclude_from_index\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": [],\n\t\t\t\t\t\"type\": \"directory\"\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": \"side-bar-project-item-exclude-from-index-file\",\n\t\t\t\t\"command\": \"side_bar_project_item_exclude_from_index\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": [],\n\t\t\t\t\t\"type\": \"file\"\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"id\": \"side-bar-project-item-exclude-from-index-extension\",\n\t\t\t\t\"command\": \"side_bar_project_item_exclude_from_index\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": [],\n\t\t\t\t\t\"type\": \"extension\"\n\t\t\t\t}\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"-\",\n\t\t\t\t\"id\": \"side-bar-project-item-separator\"\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"caption\": \"Remove Folder from Project\",\n\t\t\t\t\"id\": \"side-bar-project-item-remove-folder\",\n\t\t\t\t\"command\": \"side_bar_project_item_remove_folder\",\n\t\t\t\t\"args\": {\n\t\t\t\t\t\"paths\": []\n\t\t\t\t}\n\t\t\t}\n\n\t\t]\n\t},\n\t{\n\t\t\"caption\": \"-\",\n\t\t\"id\": \"side-bar-donate-separator\"\n\t},\n\t{\n\t\t\"caption\": \"Give 20$\",\n\t\t\"command\": \"side_bar_donate\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n\t{\n\t\t\"caption\": \"-\",\n\t\t\"id\": \"side-bar-end-separator\"\n\t},\n\t{\n\t\t\"caption\": \"zzzzz_side_bar\",\n\t\t\"id\": \"zzzzz_side_bar\",\n\t\t\"command\": \"zzzzz_side_bar\",\n\t\t\"args\": {\n\t\t\t\"paths\": []\n\t\t}\n\t},\n]",
+			"file": "/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements/Side Bar.sublime-menu",
+			"file_size": 14501,
+			"file_write_time": 131378745180000000,
+			"settings":
+			{
+				"buffer_size": 14636,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements/Commands.sublime-commands",
+			"settings":
+			{
+				"buffer_size": 2602,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 174.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"upgra",
+				"Package Control: Upgrade Package"
+			],
+			[
+				"upgr",
+				"Package Control: Upgrade Package"
+			],
+			[
+				"folder",
+				"Snippet: new folder in project"
+			],
+			[
+				"ex",
+				"PackageResourceViewer: Extract Package"
+			],
+			[
+				"upg",
+				"Package Control: Upgrade Package"
+			],
+			[
+				"Snippet: ",
+				"Snippet: editor-base"
+			],
+			[
+				"Preferences: ",
+				"Preferences: Commands - User"
+			],
+			[
+				"xml",
+				"Set Syntax: XML"
+			],
+			[
+				"pyth",
+				"Set Syntax: PythonImproved"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"extr",
+				"PackageResourceViewer: Extract Package"
+			],
+			[
+				"Package Control: ",
+				"Package Control: List Unmanaged Packages"
+			],
+			[
+				"ext",
+				"PackageResourceViewer: Extract Package"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"run",
+				"Run"
+			],
+			[
+				"python",
+				"Set Syntax: Python3"
+			],
+			[
+				"toggle",
+				"Toggle ScopeAlways"
+			],
+			[
+				"rename",
+				"File: Rename"
+			],
+			[
+				"shels",
+				"Set Syntax: ShellScript Improved"
+			],
+			[
+				"shells",
+				"Set Syntax: ShellScript Improved"
+			],
+			[
+				"she",
+				"Set Syntax: ShellScript"
+			],
+			[
+				"vim",
+				"Set Syntax: Vim"
+			],
+			[
+				"ruby",
+				"Set Syntax: Ruby"
+			],
+			[
+				"shel",
+				"Set Syntax: Shell Script (Bash)"
+			],
+			[
+				"wra",
+				"Word Wrap: Toggle"
+			],
+			[
+				"wrap",
+				"Word Wrap: Toggle"
+			],
+			[
+				"shellsc",
+				"Set Syntax: ShellScript"
+			],
+			[
+				"extrac",
+				"PackageResourceViewer: Extract Package"
+			],
+			[
+				"remo",
+				"Package Control: Remove Package"
+			],
+			[
+				"extra",
+				"PackageResourceViewer: Extract Package"
+			],
+			[
+				"yam",
+				"Cheatsheet: Yaml"
+			],
+			[
+				"coffee",
+				"Set Syntax: CoffeeScript"
+			],
+			[
+				"sort",
+				"Sort Lines"
+			],
+			[
+				"remove",
+				"Package Control: Remove Package"
+			],
+			[
+				"shell co",
+				"ShellCommand"
+			],
+			[
+				"sublime sett",
+				"Set Syntax: Sublime Settings"
+			],
+			[
+				"shell",
+				"Set Syntax: Shell Script (Bash)"
+			],
+			[
+				"toggl",
+				"Toggle ScopeAlways"
+			],
+			[
+				"upload",
+				"Sync Settings: Upload"
+			],
+			[
+				"ini",
+				"Set Syntax: INI"
+			],
+			[
+				"sync",
+				"Sync Settings: Upload"
+			],
+			[
+				"ig",
+				"Set Syntax: Git Ignore"
+			],
+			[
+				"extract",
+				"PackageResourceViewer: Extract Package"
+			],
+			[
+				"instal",
+				"Package Control: Install Local Dependency"
+			]
+		],
+		"width": 548.0
+	},
+	"console":
+	{
+		"height": 217.0,
+		"history":
+		[
+			"print(view.syntax_name(view.sel()[0].begin()))"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements/desktop",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements/edit"
+	],
+	"file_history":
+	[
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/PackageDev/settings_dev.py",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/User/Package Control.sublime-settings",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/User/print_scope_list.py",
+		"/Users/fr1v/.dotfiles/sublime/User/Default.sublime-commands",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/Default/Default.sublime-commands",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/User/Default.sublime-commands",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/User/ESLint-Formatter.sublime-settings",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/User/SublimeLinter.sublime-settings",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/Edit Command Palette/symlink.sh",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/Edit Command Palette/edit_command_palette.py",
+		"/Users/fr1v/.dotfiles/sublime/User/Sublime Text Snippet.sublime-settings",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/PackageDev/build_sys_dev.py",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/Package Control/Package Control.sublime-settings",
+		"/Users/fr1v/.dotfiles/sublime/User/Bash.sublime-build",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/Python 3/Python3.sublime-build",
+		"/Users/fr1v/.eslintrc",
+		"/Users/fr1v/.dotfiles/sublime/User/.editorConfig",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/ESLint-Formatter/ESLint-Formatter.sublime-settings",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/Edit Command Palette/Main.sublime-menu",
+		"/Users/fr1v/.dotfiles/sublime/User/User.sublime-commands",
+		"/Users/fr1v/.dotfiles/sublime/User/Base File.sublime-settings",
+		"/Users/fr1v/.dotfiles/sublime/User/ApplySyntax.ext-list",
+		"/Users/fr1v/.dotfiles/prezto/runcoms/zprofile",
+		"/Users/fr1v/.dotfiles/sublime/User/Python3.sublime-build",
+		"/Users/fr1v/.dotfiles/sublime/User/Main.sublime-menu",
+		"/Users/fr1v/.dotfiles/sublime/User/tidy_xml_lint.py",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/Edit Command Palette/package-metadata.json",
+		"/Users/fr1v/.zpreztorc",
+		"/Users/fr1v/Desktop/Generic Config.sublime-package",
+		"/Users/fr1v/.dotfiles/sublime/User/Python.sublime-settings",
+		"/Users/fr1v/.dotfiles/sublime/User/Python3.sublime-settings",
+		"/Users/fr1v/.dotfiles/sublime/User/PythonImproved.sublime-settings",
+		"/Users/fr1v/.dotfiles/sublime/User/Shell-Unix-Generic.sublime-settings",
+		"/Users/fr1v/.dotfiles/sublime/User/Sublime Macros.sublime-settings",
+		"/Users/fr1v/.dotfiles/sublime/User/Sublime Command.sublime-settings",
+		"/Users/fr1v/.dotfiles/sublime/User/Sublime Keymap.sublime-settings",
+		"/Users/fr1v/.dotfiles/sublime/User/Sublime Menu.sublime-settings",
+		"/Users/fr1v/.dotfiles/sublime/User/Sublime Project.sublime-settings",
+		"/Users/fr1v/.dotfiles/sublime/User/Sublime Settings.sublime-settings",
+		"/Users/fr1v/.dotfiles/sublime/User/Vim.sublime-settings",
+		"/Users/fr1v/.dotfiles/sublime/User/XML.sublime-settings",
+		"/Users/fr1v/.dotfiles/sublime/User/Python Extended.sublime-settings",
+		"/Users/fr1v/.dotfiles/sublime/User/EditorConfig.sublime-settings",
+		"/Users/fr1v/test",
+		"/Users/fr1v/.sublimelinterrc",
+		"/Users/fr1v/.zprezto/modules/syntax-highlighting/init.zsh",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/ZSH/snippets/start.sublime-snippet",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/ZSH/zsh.py",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/User/ProjectManager/Projects/Dotfiles.sublime-project",
+		"/Users/fr1v/.dotfiles/prezto/runcoms/zpreztorc",
+		"/Users/fr1v/.dotfiles/prezto/runcoms/zshenv",
+		"/Users/fr1v/.dotfiles/prezto/runcoms/zlogout",
+		"/Users/fr1v/.dotfiles/prezto/runcoms/zlogin",
+		"/Users/fr1v/.bash_functions",
+		"/Users/fr1v/.bash_aliases",
+		"/Users/fr1v/.bashrc",
+		"/Users/fr1v/.bash_prompt",
+		"/Users/fr1v/.bash_profile",
+		"/Users/fr1v/Prezto",
+		"/Users/f0/Library/Application Support/Sublime Text 3/Packages/GitMode/GitMode.sublime-settings",
+		"/Users/f0/Library/Application Support/Sublime Text 3/Packages/GitMode/Default.sublime-commands",
+		"/Users/fr1v/.dotfiles/zsh/prezto/runcoms/.zshrc",
+		"/Users/f0/Library/Application Support/Sublime Text 3/Packages/User/ProjectManager/Projects/Prezto.sublime-project",
+		"/Users/fr1v/.dotfiles/zsh/prezto/runcoms/zshrc",
+		"/Users/fr1v/.zprezto/modules/tmux/init.zsh",
+		"/Users/fr1v/.zprezto/modules/terminal/init.zsh",
+		"/Users/fr1v/.zprezto/modules/osx/init.zsh",
+		"/Users/fr1v/.zprezto/modules/command-not-found/README.md",
+		"/Users/fr1v/.zprezto/modules/archive/archive[Module].md",
+		"/Users/fr1v/Dropbox/bin/readmes.sh",
+		"/Users/fr1v/.zprezto/runcoms/zshenv",
+		"/usr/local/Cellar/archey/1.6.0/bin/archey",
+		"/Users/fr1v/.zprezto/runcoms/zshrc",
+		"/Users/fr1v/.zprezto/init.zsh",
+		"/Users/fr1v/.zprezto/runcoms/zpreztorc",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/User/Projects/Prezto.sublime-project",
+		"/Users/fr1v/github/prezto/init.zsh",
+		"/Users/fr1v/github/prezto/modules/utility/functions/fn.zsh",
+		"/Users/fr1v/github/prezto/runcoms/zlogin",
+		"/Users/fr1v/github/prezto/modules/utility/functions/bc",
+		"/Users/fr1v/github/prezto/modules/utility/functions/_bc",
+		"/Users/fr1v/github/prezto/runcoms/zpreztorc",
+		"/Users/fr1v/github/prezto/runcoms/zprofile",
+		"/Users/fr1v/github/prezto/runcoms/zlogout",
+		"/Users/fr1v/github/prezto/runcoms/zshrc",
+		"/Users/fr1v/.dotfiles/zsh/.zprezto/runcoms/zshrc",
+		"/Users/fr1v/.zshrc",
+		"/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/User/GitSavvy.sublime-settings",
+		"/Users/fr1v/.dotfiles/zsh/aliases/git.zsh",
+		"/Users/fr1v/.dotfiles/zsh/aliases/apg.zsh",
+		"/Users/fr1v/.dotfiles/zsh/aliases/ssh.zsh",
+		"/Users/fr1v/.dotfiles/zsh/functions/ssh-reload.zsh",
+		"/Users/fr1v/.dotfiles/zsh/aliases/global.aliases.zsh",
+		"/Users/fr1v/.dotfiles/zsh/.zhistory",
+		"/Users/fr1v/.dotfiles/ttytterrc",
+		"/Users/fr1v/.dotfiles/zsh/zaliases",
+		"/Users/fr1v/.dotfiles/zsh/settings/zexternals",
+		"/Users/fr1v/.dotfiles/zsh/zfunctions",
+		"/Users/fr1v/.dotfiles/zsh/functions/extract.zsh",
+		"/Users/fr1v/.dotfiles/zsh/after/path.zsh",
+		"/Users/fr1v/.dotfiles/zsh/functions/toggle_hidden.sh",
+		"/Users/fr1v/.dotfiles/zsh/README.md",
+		"/Users/fr1v/.dotfiles/zsh/zexports",
+		"/Users/fr1v/.dotfiles/zsh/functions/colored_man.zsh",
+		"/Users/fr1v/.dotfiles/zsh/settings/zsetopts",
+		"/Users/fr1v/.dotfiles/zsh/zsetopts",
+		"/Users/fr1v/.dotfiles/zsh/functions/cd",
+		"/Users/fr1v/.dotfiles/zsh/functions/envr",
+		"/Users/fr1v/.dotfiles/zsh/functions/cd.sh",
+		"/Users/fr1v/.dotfiles/zsh/functions/rename",
+		"/Users/fr1v/.dotfiles/zsh/functions/scpzshconf.sh",
+		"/Users/fr1v/.dotfiles/zsh/functions/hgrep.sh",
+		"/Users/fr1v/.dotfiles/zsh/functions/pzt_whatsnext",
+		"/Users/fr1v/.dotfiles/zsh/functions/pzt_extract_alias",
+		"/Users/fr1v/.dotfiles/zsh/functions/pzt_update_externals",
+		"/Users/fr1v/.dotfiles/zsh/functions/ostype",
+		"/Users/fr1v/.dotfiles/zsh/functions/prepend",
+		"/etc/zshenv",
+		"/Users/fr1v/.dotfiles/zsh/functions/zsmbpasswd",
+		"/Users/fr1v/Dropbox/bin/echos.sh",
+		"/Users/fr1v/.dotfiles/zsh/runcoms/zshrc",
+		"/Users/fr1v/.dotfiles/zsh/runcoms/zshenv",
+		"/Users/fr1v/.dotfiles/zsh/runcoms/zprofile",
+		"/Users/fr1v/.dotfiles/zsh/runcoms/zpreztorc",
+		"/Users/fr1v/.dotfiles/zsh/runcoms/zlogout",
+		"/Users/fr1v/.dotfiles/iterm/untitled file.txt",
+		"/Users/fr1v/.dotfiles/zsh/runcoms/zlogin",
+		"/Users/fr1v/.dotfiles/zsh/settings/rvm.zsh"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 94.0,
+		"where_history":
+		[
+			"<project>"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"Open with Finder",
+			"Finder",
+			"xml",
+			"fr1v",
+			"# ",
+			"7za",
+			"ls --group-directories-first --color=auto",
+			"alias ls",
+			"HIST_REDUCE_BLANKS",
+			"setopt HIST_REDUCE_BLANKS",
+			"setopt HIST_REDUCE_BLANKS ",
+			"less",
+			" -p",
+			"-p ",
+			"chpwd",
+			"/usr/bin/lp",
+			"alias ls=",
+			"$pbz",
+			"$1",
+			"export ",
+			"://"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"f0",
+			"#=== ",
+			"#===== ",
+			"7za",
+			"$filename",
+			""
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 4,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "SideBarEnhancements.sublime-project",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 657,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								287,
+								287
+							]
+						],
+						"settings":
+						{
+							"apply_syntax_touched": true,
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+									"1":
+									[
+										288,
+										289
+									]
+								},
+								"icon":
+								{
+									"1":
+									[
+										"Packages/BracketHighlighter/icons/square_bracket.png",
+										"brackethighlighter.default"
+									]
+								},
+								"open":
+								{
+									"1":
+									[
+										280,
+										281
+									]
+								},
+								"unmatched":
+								{
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
+							],
+							"c_time":
+							[
+								128,
+								3,
+								99,
+								100,
+								97,
+								116,
+								101,
+								116,
+								105,
+								109,
+								101,
+								10,
+								100,
+								97,
+								116,
+								101,
+								116,
+								105,
+								109,
+								101,
+								10,
+								113,
+								0,
+								67,
+								10,
+								7,
+								225,
+								4,
+								28,
+								13,
+								37,
+								26,
+								0,
+								0,
+								0,
+								113,
+								1,
+								133,
+								113,
+								2,
+								82,
+								113,
+								3,
+								46
+							],
+							"editorconfig": true,
+							"git_savvy.file_path": "/Users/fr1v/.dotfiles/sublime/User/ProjectManager/Projects/SideBarEnhancements.sublime-project",
+							"git_savvy.repo_path": "/Users/fr1v/.dotfiles",
+							"platform_settings_was_here": true,
+							"syntax": "Packages/PackageDev/Package/Sublime Text Settings/Sublime Settings.tmLanguage",
+							"tab_size": 4
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/PackageDev/snippet_dev.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3001,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"apply_syntax_touched": true,
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+								},
+								"icon":
+								{
+								},
+								"open":
+								{
+								},
+								"unmatched":
+								{
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
+							],
+							"c_time":
+							[
+								128,
+								3,
+								99,
+								100,
+								97,
+								116,
+								101,
+								116,
+								105,
+								109,
+								101,
+								10,
+								100,
+								97,
+								116,
+								101,
+								116,
+								105,
+								109,
+								101,
+								10,
+								113,
+								0,
+								67,
+								10,
+								7,
+								225,
+								4,
+								28,
+								12,
+								54,
+								40,
+								0,
+								0,
+								0,
+								113,
+								1,
+								133,
+								113,
+								2,
+								82,
+								113,
+								3,
+								46
+							],
+							"platform_settings_was_here": true,
+							"syntax": "Packages/Python 3/Python3.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 839.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements/Side Bar.sublime-settings",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1796,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								34,
+								34
+							]
+						],
+						"settings":
+						{
+							"apply_syntax_touched": true,
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+									"1":
+									[
+										1795,
+										1796
+									]
+								},
+								"icon":
+								{
+									"1":
+									[
+										"Packages/BracketHighlighter/icons/curly_bracket.png",
+										"brackethighlighter.default"
+									]
+								},
+								"open":
+								{
+									"1":
+									[
+										0,
+										1
+									]
+								},
+								"unmatched":
+								{
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
+							],
+							"c_time":
+							[
+								128,
+								3,
+								99,
+								100,
+								97,
+								116,
+								101,
+								116,
+								105,
+								109,
+								101,
+								10,
+								100,
+								97,
+								116,
+								101,
+								116,
+								105,
+								109,
+								101,
+								10,
+								113,
+								0,
+								67,
+								10,
+								7,
+								225,
+								4,
+								28,
+								13,
+								33,
+								59,
+								0,
+								0,
+								0,
+								113,
+								1,
+								133,
+								113,
+								2,
+								82,
+								113,
+								3,
+								46
+							],
+							"git_savvy.file_path": "/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements/Side Bar.sublime-settings",
+							"platform_settings_was_here": true,
+							"syntax": "Packages/PackageDev/Package/Sublime Text Settings/Sublime Settings.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements/SideBar.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 69117,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								66418,
+								66418
+							]
+						],
+						"settings":
+						{
+							"apply_syntax_touched": true,
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+								},
+								"icon":
+								{
+								},
+								"open":
+								{
+								},
+								"unmatched":
+								{
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
+							],
+							"c_time":
+							[
+								128,
+								3,
+								99,
+								100,
+								97,
+								116,
+								101,
+								116,
+								105,
+								109,
+								101,
+								10,
+								100,
+								97,
+								116,
+								101,
+								116,
+								105,
+								109,
+								101,
+								10,
+								113,
+								0,
+								67,
+								10,
+								7,
+								225,
+								4,
+								28,
+								13,
+								33,
+								59,
+								0,
+								0,
+								0,
+								113,
+								1,
+								133,
+								113,
+								2,
+								82,
+								113,
+								3,
+								46
+							],
+							"git_savvy.file_path": "/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements/SideBar.py",
+							"platform_settings_was_here": true,
+							"syntax": "Packages/Python 3/Python3.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 34755.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 322,
+						"regions":
+						{
+							"match":
+							{
+								"flags": 112,
+								"regions":
+								[
+									[
+										192,
+										208
+									]
+								],
+								"scope": ""
+							}
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"apply_syntax_touched": true,
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+								},
+								"icon":
+								{
+								},
+								"open":
+								{
+								},
+								"unmatched":
+								{
+									"1":
+									[
+										158,
+										159
+									]
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"default_dir": "/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements",
+							"detect_indentation": false,
+							"line_numbers": false,
+							"output_tag": 1,
+							"platform_settings_was_here": true,
+							"result_base_dir": "",
+							"result_file_regex": "^([^ \t].*):$",
+							"result_line_regex": "^ +([0-9]+):",
+							"scroll_past_end": true,
+							"syntax": "Packages/Default/Find Results.hidden-tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements/Side Bar.sublime-menu",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 14636,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3090,
+								3120
+							]
+						],
+						"settings":
+						{
+							"apply_syntax_touched": true,
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+									"1":
+									[
+										3155,
+										3156
+									]
+								},
+								"icon":
+								{
+									"1":
+									[
+										"Packages/BracketHighlighter/icons/curly_bracket.png",
+										"brackethighlighter.default"
+									]
+								},
+								"open":
+								{
+									"1":
+									[
+										2994,
+										2995
+									]
+								},
+								"unmatched":
+								{
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content"
+							],
+							"c_time":
+							[
+								128,
+								3,
+								99,
+								100,
+								97,
+								116,
+								101,
+								116,
+								105,
+								109,
+								101,
+								10,
+								100,
+								97,
+								116,
+								101,
+								116,
+								105,
+								109,
+								101,
+								10,
+								113,
+								0,
+								67,
+								10,
+								7,
+								225,
+								4,
+								28,
+								13,
+								35,
+								18,
+								0,
+								0,
+								0,
+								113,
+								1,
+								133,
+								113,
+								2,
+								82,
+								113,
+								3,
+								46
+							],
+							"git_savvy.file_path": "/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements/Side Bar.sublime-menu",
+							"platform_settings_was_here": true,
+							"syntax": "Packages/PackageDev/Package/Sublime Text Settings/Sublime Settings.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2785.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements/Commands.sublime-commands",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2602,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								557,
+								557
+							]
+						],
+						"settings":
+						{
+							"apply_syntax_touched": true,
+							"bracket_highlighter.busy": false,
+							"bracket_highlighter.locations":
+							{
+								"close":
+								{
+									"1":
+									[
+										628,
+										629
+									]
+								},
+								"icon":
+								{
+									"1":
+									[
+										"Packages/BracketHighlighter/icons/curly_bracket.png",
+										"brackethighlighter.default"
+									]
+								},
+								"open":
+								{
+									"1":
+									[
+										556,
+										557
+									]
+								},
+								"unmatched":
+								{
+								}
+							},
+							"bracket_highlighter.regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_regex_content",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_double_quote_content",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_square_content",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_angle_content",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_curly_content",
+								"bh_c_define",
+								"bh_c_define_center",
+								"bh_c_define_open",
+								"bh_c_define_close",
+								"bh_c_define_content",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_default_content",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_tag_content",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_round_content",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_unmatched_content",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close",
+								"bh_single_quote_content"
+							],
+							"c_time":
+							[
+								128,
+								3,
+								99,
+								100,
+								97,
+								116,
+								101,
+								116,
+								105,
+								109,
+								101,
+								10,
+								100,
+								97,
+								116,
+								101,
+								116,
+								105,
+								109,
+								101,
+								10,
+								113,
+								0,
+								67,
+								10,
+								7,
+								225,
+								4,
+								28,
+								13,
+								33,
+								59,
+								0,
+								0,
+								0,
+								113,
+								1,
+								133,
+								113,
+								2,
+								82,
+								113,
+								3,
+								46
+							],
+							"git_savvy.file_path": "/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements/Commands.sublime-commands",
+							"platform_settings_was_here": true,
+							"syntax": "Packages/PackageDev/Package/Sublime Text Commands/Sublime Commands.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 26.0
+	},
+	"input":
+	{
+		"height": 27.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "Packages/User/Python3.sublime-build",
+	"project": "SideBarEnhancements.sublime-project",
+	"replace":
+	{
+		"height": 48.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 218.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

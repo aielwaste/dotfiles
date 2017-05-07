@@ -3,7 +3,7 @@
     [
         {
             "name": "Packages",
-            "path": "/Users/fr1v/Library/Application Support/Sublime Text 3/Packages",
+            "path": "~/Library/Application Support/Sublime Text 3/Packages",
             "file_include_patterns": [],
             "folder_include_patterns": [],
             "file_exclude_patterns": [],
@@ -12,7 +12,7 @@
         },
         {
             "name": "Installed Packages",
-            "path": "/Users/fr1v/Library/Application Support/Sublime Text 3/Installed Packages",
+            "path": "~/Library/Application Support/Sublime Text 3/Installed Packages",
             "file_include_patterns": [],
             "folder_include_patterns": [],
             "file_exclude_patterns": [],
@@ -21,7 +21,7 @@
         },
         {
             "name": "User",
-            "path": "/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/User",
+            "path": "~/Library/Application Support/Sublime Text 3/Packages/User",
             "file_include_patterns": [],
             "folder_include_patterns": [],
             "file_exclude_patterns": ["*cache*","*ca-bundle*"],

@@ -3,6 +3,15 @@
 	[
 		"editorconfig"
 	],
+	"GenericConfig":
+	[
+		"conf",
+		"desktop",
+		"directory",
+		"gitattributes",
+		"list",
+		"network"
+	],
 	"HTML (Rails)":
 	[
 		"html.erb"
@@ -37,6 +46,10 @@
 		"php5",
 		"phtml"
 	],
+	"Property List":
+	[
+		"plist"
+	],
 	"Python":
 	[
 		"py3",
@@ -44,6 +57,7 @@
 	],
 	"Ruby":
 	[
+		"gemrc",
 		"jbuilder",
 		"podspec",
 		"rabl",
@@ -56,15 +70,25 @@
 	[
 		"haml"
 	],
-	"Shell-Unix-Generic":
+	"Sublime Macros":
 	[
-		"bash",
-		"sh",
-		"zsh"
+		"sublime-macros"
 	],
-	"XML":
+	"Sublime Mouse Map":
 	[
-		"xml.dist"
+		"sublime-mousemap"
+	],
+	"Sublime Text Syntax Definition":
+	[
+		"tmPreferences"
+	],
+	"TextMate Syntax Definition (JSON)":
+	[
+		"JSON-tmLanguage"
+	],
+	"TextMate Syntax Definition (YAML)":
+	[
+		"YAML-tmLanguage"
 	],
 	"YAML":
 	[

@@ -1,37 +1,44 @@
 {
-    "folders":
-    [
-        { 
-            "name": "Prezto",
-            "path": "/Users/fr1v/.zprezto",
-            "file_exclude_patterns": ["*.log","CONTRIBUTING.md",".gitignore"],
-            "folder_exclude_patterns": ["log"],
-            "follow_symlinks": true
-        },
-        { 
-            "name": "Modules",
-            "path": "/Users/fr1v/.zprezto/modules",
-            "file_exclude_patterns": ["*.log","CONTRIBUTING.md",".gitignore"],
-            "folder_exclude_patterns": ["log"],
-            "follow_symlinks": true
-        },
-        { 
-            "name": "RunComs",
-            "path": "/Users/fr1v/.zprezto/runcoms",
-            "file_exclude_patterns": ["*.log","CONTRIBUTING.md",".gitignore"],
-            "folder_exclude_patterns": ["log"],
-            "follow_symlinks": true
-        }
-    ],
-    "settings":
-    {
-        "tab_size": 2
-    },
-    "build_systems":
-    [
-        {
-            "name": "List",
-            "cmd": ["ls -lahbFk --color=auto --group-directories-first"]
-        }
-    ]
+	"build_systems":
+	[
+		{
+			"name": "List",
+			"shell_cmd": "ls -l"
+		}
+	],
+	"folders":
+	[
+		{
+			"file_exclude_patterns":
+			[
+				"LICENSE",
+				"*.git*",
+				"CONTRIBUTING.md",
+				"*.log"
+			],
+			"folder_exclude_patterns":
+			[
+				"runcoms",
+				"modules"
+			],
+			"name": "Prezto",
+			"path": "/Users/fr1v/.zprezto"
+		},
+		{
+			"name": "Modules",
+			"path": "/Users/fr1v/.zprezto/modules"
+		},
+		{
+			"name": "Runcoms",
+			"path": "/Users/fr1v/.zprezto/runcoms"
+		},
+		{
+			"path": "/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/SideBarEnhancements"
+		}
+	],
+	"settings":
+	{
+		"tab_size": 4,
+		"translate_tabs_to_spaces": true
+	}
 }

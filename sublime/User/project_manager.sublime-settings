@@ -1,6 +1,11 @@
 {
-    // A list of folders containing *.sublime-project files
-  "projects_path": ["/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/User/ProjectManager/Projects"],
+  // A list of folders containing *.sublime-project files
+  "projects_path":
+  [
+    "/Users/fr1v/Library/Application Support/Sublime Text 3/Packages/User/ProjectManager/Projects",
+    "/home/fr1v/.config/sublime-text-3/Packages/User/ProjectManager/Projects",
+    "C:\\Users\\fr1v\\AppData\\Roaming\\Sublime Text 3\\Packages\\User\\ProjectManager\\Projects"
+  ],
 
   // Enable local projects directory, such a directory will be named as
   // "Projects - computer_name", where computer_name is your computer hostname.

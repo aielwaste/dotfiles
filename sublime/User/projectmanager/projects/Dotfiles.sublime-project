@@ -8,6 +8,17 @@
             "folder_include_patterns": [],
             "file_exclude_patterns": [],
             "folder_exclude_patterns": [
+                ".cups",
+                ".electron",
+                ".emacs.d",
+                ".FBReader",
+                ".Genymobile",
+                ".gitkraken",
+                ".IdentityService",
+                ".JS Minify",
+                ".kite",
+                ".LESS Compiler",
+                ".mailmate",
                 "prezto",
                 ".android",
                 ".atom",
@@ -46,7 +57,16 @@
             "name": "Prezto",
             "file_include_patterns": [],
             "folder_include_patterns": [],
-            "file_exclude_patterns": [],
+            "file_exclude_patterns": [".git*","CONTRIBUTING.md","npm-debug.log"],
+            "folder_exclude_patterns": [],
+            "follow_symlinks": true
+        },
+        {
+            "path": "~/bin",
+            "name": "Bin",
+            "file_include_patterns": [],
+            "folder_include_patterns": [],
+            "file_exclude_patterns": [".git*","CONTRIBUTING.md","npm-debug.log"],
             "folder_exclude_patterns": [],
             "follow_symlinks": true
         }
@@ -61,6 +81,40 @@
         {
             "name": "List",
             "shell_cmd": "ls -l"
+        },
+        {
+            "name": "Make File Executable",
+            "selector": "source.shell",
+            "shell_cmd": ["sudo chmod +x", "$file"],
+
+            "variants": [
+                {
+                    "name": "List Python Files",
+                    "selector": "source.shell",
+                    "working_dir": "${project_path:${folder}}",
+                    "osx": {
+                        "shell_cmd": ["ls -l *.py"]
+                    }
+                },
+                { 
+                    "name": "Word Count (current file)",
+                    "cmd": ["wc", "$file"]
+                },
+                {
+                    "name": "Run Python Script",
+                    "selector": "source.python",
+                    "working_dir": "${project_path:${folder}}",
+                    "osx": {
+                       "cmd": ["~/.pyenv/shims/python", "-u", "$file"]
+                    },
+                    "linux": {
+                       "cmd": ["~/.pyenv/shims/python", "-u", "$file"]
+                    },
+                    "windows": {
+                       "cmd": ["G:\\Src\\Python\\Python3\\python.exe", "-u", "$file"]
+                    }
+                }
+            ]
         }
     ]
 }

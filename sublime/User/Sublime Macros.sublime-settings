@@ -1,5 +1,9 @@
-// These settings override both User and Default settings for the Sublime Macros syntax
 {
-  "tab_size": 2,
-  "translate_tabs_to_spaces": false
+	"extensions":
+	[
+		"sublime-macro",
+		"sublime-macros"
+	],
+	"tab_size": 4,
+	"translate_tabs_to_spaces": true
 }

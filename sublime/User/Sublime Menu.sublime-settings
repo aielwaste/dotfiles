@@ -1,8 +1,8 @@
 {
-	"extensions":
-	[
-		"sublime-menu"
-	],
-  "tab_size": 2,
-  "translate_tabs_to_spaces": true
+    "extensions":
+    [
+        "sublime-menu"
+    ],
+    "tab_size": 4,
+    "translate_tabs_to_spaces": true
 }
