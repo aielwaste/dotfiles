@@ -1,0 +1,4 @@
+# renamed network interfaces for Arch Linux on Frivdesk
+SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="90:2b:34:d1:21:3a", NAME="lan0"
+SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="90:2b:34:d1:21:38", NAME="lan1"
+SUBSYSTEM=="net", ACTION=="add", ATTR{address}=="42:d3:3f:88:8f:c2", NAME="wifi0"

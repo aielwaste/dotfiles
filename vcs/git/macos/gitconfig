@@ -1,8 +1,8 @@
 # set your user tokens as environment variables, such as ~/.secrets
 # See the README for examples.
 [user]
-  name = Andrew Bell
-  email = andrewbell8@gmail.com
+	name = Andrew Bell
+	email = andrew@fr1v.org
 [github]
   user = andrewbell8
   token = token
@@ -254,7 +254,7 @@
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
 [mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	cmd = /private/var/folders/1m/_blpj3ls54sf9wqmq7g1psgw0000gn/T/AppTranslocation/BFAE3207-50A0-445B-87C0-48AD0A82B1AD/d/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
 [credential]
 	helper = !/Library/Internet\\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java -Ddebug=false -Djava.net.useSystemProxies=true -jar /usr/local/Cellar/git-credential-manager/2.0.3/libexec/git-credential-manager-2.0.3.jar
