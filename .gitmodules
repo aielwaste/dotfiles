@@ -1,6 +1,6 @@
 [submodule "prezto"]
 	path = prezto
-	url = https://github.com/andrewbell8/prezto.git
+	url = https://github.com/ajb3ll/prezto.git
 [submodule "sublime-text"]
 	path = sublime-text
-	url = https://github.com/andrewbell8/st3_settings.git
+	url = https://github.com/ajb3ll/st3_settings.git
