@@ -180,6 +180,7 @@
   human = name-rev --name-only --refs=refs/heads/*
   serve = !git daemon --reuseaddr --verbose  --base-path=. --export-all ./.git
   snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
+	spull = !git pull && git submodule sync --recursive && git submodule update --init --recursive
 [format]
   pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
 [merge]
@@ -224,3 +225,5 @@
   statusHints = true
 [commit]
   template = ~/.git/templates/git_commit_template
+[status]
+	submoduleSummary = true
