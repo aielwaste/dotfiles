@@ -35,32 +35,30 @@ function link_root() {
         sudo ln -sf "$USER_HOME/.dotfiles/macos/iterm/iterm2_shell_integration.bash" "$ROOT_HOME/.iterm2_shell_integration.bash"
 
         for rcfile in "$USER_HOME"/.git/macos/^README.md(.N); do
-            sudo ln -sf "$rcfile" "$ROOT_HOME/.${rcfile:t}"
+            sudo ln -sf "$rcfile" "$ROOT_HOME/.${rcfile:t}_global"
         done
 
         for rcfile in "$USER_HOME"/.hg/macos/^README.md(.N); do
             sudo ln -sf "$rcfile" "$ROOT_HOME/.${rcfile:t}"
         done
-        
-        cd "$ROOT_HOME/.zprezto/modules/prompt/external/powerlevel9k && sudo ln -sfr powerlevel9k.zsh-theme ../../functions/prompt_powerlevel9k_setup
 
-        cd "$ROOT_HOME/.zprezto/modules/prompt/external/powerlevel9k && sudo ln -sfr powerlevel9k.zsh-theme ../../functions/prompt_powerlevel9k_setup
+        sudo ln -sf "$USER_HOME"/.hg/macos/config/hgignore "$ROOT_HOME"/.hgignore_global
 
         sudo ln -sf "$USER_HOME/.dotfiles/misc/macos/dircolors" "$ROOT_HOME/.dircolors"
-        sudo rm -rf "$ROOT_HOME/Library/Application Support/Sublime Text 3/Packages/User" && sudo ln -sd "$USER_HOME/.dotfiles/config/sublime/Packages/User" "$ROOT_HOME/Library/Application Support/Sublime Text 3/Packages"
+
     elif [[ $OSTYPE == *linux* ]] ; then
+
         for rcfile in "$USER_HOME"/.git/linux/^README.md(.N); do
-            sudo ln -sf "$rcfile" "$ROOT_HOME/.${rcfile:t}"
+            sudo ln -sf "$rcfile" "$ROOT_HOME/.${rcfile:t}_global"
         done
 
         for rcfile in "$USER_HOME"/.hg/linux/^README.md(.N); do
             sudo ln -sf "$rcfile" "$ROOT_HOME/.${rcfile:t}"
         done
 
+        sudo ln -sf "$USER_HOME"/.hg/linux/config/hgignore "$ROOT_HOME"/.hgignore_global
 
-        sudo ln -sf "$USER_HOME/.dotfiles/misc/linux/dircolors" "$ROOT_HOME/.dircolors"        
-        sudo ln -sf "$USER_HOME/.dotfiles/misc/linux/dircolors" "$ROOT_HOME/.dircolors"
-        rm -rf "$USER_HOME/.config/sublime-text-3/Packages/User" && sudo ln -sd "$USER_HOME/.dotfiles/config/sublime/Packages/User" "$ROOT_HOME/.config/sublime-text-3/Packages"
+        sudo ln -sf "$USER_HOME/.dotfiles/misc/linux/dircolors" "$ROOT_HOME/.dircolors" 
     fi
 
     for rcfile in "$USER_HOME"/.misc/^README.md(.N); do
@@ -124,29 +122,31 @@ function link_user() {
         brew install "${ZDOTDIR:-$HOME}/.dotfiles/macos/homebrew/macdown.rb"
 
         for rcfile in "${ZDOTDIR:-$HOME}"/.git/macos/^README.md(.N); do
-            ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+            ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}_global"
         done
 
         for rcfile in "${ZDOTDIR:-$HOME}"/.hg/macos/^README.md(.N); do
             ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
         done
 
+        ln -sf "${ZDOTDIR:-$HOME}"/.hg/macos/config/hgignore "${ZDOTDIR:-$HOME}"/.hgignore_global
+
         ln -sf "${ZDOTDIR:-$HOME}"/.dotfiles/misc/macos/dircolors "${ZDOTDIR:-$HOME}"/.dircolors
-        rm -rf "${ZDOTDIR:-$HOME}/Library/Application Support/Sublime Text 3/Packages/User" && ln -sd "${ZDOTDIR:-$HOME}/.dotfiles/config/sublime/Packages/User" "${ZDOTDIR:-$HOME}/Library/Application Support/Sublime Text 3/Packages"
     
     elif [[ $OSTYPE == *linux* ]] ; then
         
         for rcfile in "${ZDOTDIR:-$HOME}"/.git/linux/^README.md(.N); do
-            ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+            ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}_global"
         done
 
         for rcfile in "${ZDOTDIR:-$HOME}"/.hg/linux/^README.md(.N); do
             ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
         done
 
+        ln -sf "${ZDOTDIR:-$HOME}"/.hg/linux/config/hgignore "${ZDOTDIR:-$HOME}"/.hgignore_global
+
         ln -sf "${ZDOTDIR:-$HOME}"/.dotfiles/misc/linux/dircolors "${ZDOTDIR:-$HOME}"/.dircolors
         
-        rm -rf "${ZDOTDIR:-$HOME}/.config/sublime-text-3/Packages/User" && ln -sd "${ZDOTDIR:-$HOME}/.dotfiles/config/sublime/Packages/User" "${ZDOTDIR:-$HOME}/.config/sublime-text-3/Packages"
     fi
 
     for rcfile in "${ZDOTDIR:-$HOME}"/.misc/^README.md(.N); do
@@ -156,11 +156,6 @@ function link_user() {
     for rcfile in "${ZDOTDIR:-$HOME}"/.xorg/^README.md(.N); do
         ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
     done
-    
-    cd ~/.zprezto/modules/prompt/external/powerlevel9k && ln -sfr powerlevel9k.zsh-theme ../../functions/prompt_powerlevel9k_setup
-
-    cd ~/.zprezto/modules/prompt/external/powerlevel9k && ln -sfr
-    powerlevel9k.zsh-theme ../../functions/prompt_powerlevel9k_setup
 }
 
 # Symlink config files
