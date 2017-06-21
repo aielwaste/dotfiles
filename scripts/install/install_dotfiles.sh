@@ -1,4 +1,4 @@
-#!/usr/bin/zsh
+#!/bin/zsh
 #======================================================================================
 #
 # Author: Andrew Bell andrewbell8@gmail.com
@@ -9,8 +9,13 @@
 
 setopt LOCAL_OPTIONS EXTENDED_GLOB
 
-USER_HOME="/home/$USER"
-ROOT_HOME="/root"
+if [[ $OSTYPE == *darwin* ]] ; then
+    USER_HOME="/Users/$USER"
+    ROOT_HOME="/root"
+elif [[ $OSTYPE == *linux* ]] ; then
+    USER_HOME="/home/$USER"
+    ROOT_HOME="/root"
+fi
 
 
 function link_root() {
@@ -42,9 +47,21 @@ function link_root() {
             sudo ln -sf "$rcfile" "$ROOT_HOME/.${rcfile:t}"
         done
 
+        for rcfile in "$USER_HOME"/.misc/^README.md(.N); do
+            sudo ln -sf "$rcfile" "$ROOT_HOME/.${rcfile:t}"
+        done
+
         sudo ln -sf "$USER_HOME"/.hg/macos/config/hgignore "$ROOT_HOME"/.hgignore_global
 
         sudo ln -sf "$USER_HOME/.dotfiles/misc/macos/dircolors" "$ROOT_HOME/.dircolors"
+
+        # Sublime Text 3
+        sudo rm -rf "$ROOT_HOME/Library/Application Support/Sublime Text 3" \
+            sudo rm -rf "$ROOT_HOME/Library/Caches/com.sublimetext.3" \
+            sudo rm -rf "$ROOT_HOME/Library/Preferences/com.sublimetext.3.plist" \
+            sudo rm -rf "$ROOT_HOME/Library/Saved Application State/com.sublimetext.3.savedState" \
+            sudo mkdir -p "$ROOT_HOME/Library/Application Support" \
+            sudo ln -s "$USER_HOME/Library/Application Support/Sublime Text 3/" "$ROOT_HOME/Library/Application Support/Sublime Text 3"
 
     elif [[ $OSTYPE == *linux* ]] ; then
 
@@ -58,16 +75,24 @@ function link_root() {
 
         sudo ln -sf "$USER_HOME"/.hg/linux/config/hgignore "$ROOT_HOME"/.hgignore_global
 
-        sudo ln -sf "$USER_HOME/.dotfiles/misc/linux/dircolors" "$ROOT_HOME/.dircolors" 
+        sudo ln -sf "$USER_HOME/.dotfiles/misc/linux/dircolors" "$ROOT_HOME/.dircolors"
+
+        for rcfile in "$USER_HOME"/.misc/^README.md(.N); do
+            sudo ln -sf "$rcfile" "$ROOT_HOME/.${rcfile:t}"
+        done
+
+        for rcfile in "$USER_HOME"/.xorg/^README.md(.N); do
+            sudo ln -sf "$rcfile" "$ROOT_HOME/.${rcfile:t}"
+        done
+
+        # Sublime Text 3
+        sudo rm -rf "$ROOT_HOME/.config/sublime-text-3" \
+            sudo rm -rf "$ROOT_HOME/Library/Caches/com.sublimetext.3" \
+            sudo rm -rf "$ROOT_HOME/Library/Preferences/com.sublimetext.3.plist" \
+            sudo rm -rf "$ROOT_HOME/Library/Saved Application State/com.sublimetext.3.savedState" \
+            sudo mkdir -p "$ROOT_HOME/.config" \
+            sudo ln -s "$USER_HOME/.config/sublime-text-3/" "$ROOT_HOME/Library/Application Support/Sublime Text 3"
     fi
-
-    for rcfile in "$USER_HOME"/.misc/^README.md(.N); do
-        sudo ln -sf "$rcfile" "$ROOT_HOME/.${rcfile:t}"
-    done
-
-    for rcfile in "$USER_HOME"/.xorg/^README.md(.N); do
-        sudo ln -sf "$rcfile" "$ROOT_HOME/.${rcfile:t}"
-    done
 }
 
 function root_link_inquire() {
@@ -132,9 +157,9 @@ function link_user() {
         ln -sf "${ZDOTDIR:-$HOME}"/.hg/macos/config/hgignore "${ZDOTDIR:-$HOME}"/.hgignore_global
 
         ln -sf "${ZDOTDIR:-$HOME}"/.dotfiles/misc/macos/dircolors "${ZDOTDIR:-$HOME}"/.dircolors
-    
+
     elif [[ $OSTYPE == *linux* ]] ; then
-        
+
         for rcfile in "${ZDOTDIR:-$HOME}"/.git/linux/^README.md(.N); do
             ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}_global"
         done
@@ -146,7 +171,7 @@ function link_user() {
         ln -sf "${ZDOTDIR:-$HOME}"/.hg/linux/config/hgignore "${ZDOTDIR:-$HOME}"/.hgignore_global
 
         ln -sf "${ZDOTDIR:-$HOME}"/.dotfiles/misc/linux/dircolors "${ZDOTDIR:-$HOME}"/.dircolors
-        
+
     fi
 
     for rcfile in "${ZDOTDIR:-$HOME}"/.misc/^README.md(.N); do
