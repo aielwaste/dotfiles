@@ -217,5 +217,4 @@
 [commit]
     template = ~/.git/templates/git_commit_template
 [credential]
-    helper = !/Library/Internet\\ Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/bin/java -Ddebug=false -Djava.net.useSystemProxies=true -jar /usr/local/Cellar/git-credential-manager/2.0.3/libexec/git-credential-manager-2.0.3.jar
     canFallBackToInsecureStore = true
