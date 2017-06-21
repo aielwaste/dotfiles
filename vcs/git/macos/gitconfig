@@ -187,8 +187,8 @@
 [branch]
     autosetuprebase = always
     autosetupmerge = true
-[url "ssh@github.com:andrewbell8/"]
-    pushInsteadOf = "https://github.com:andrewbell8/"
+[url "ssh@github.com:ajb3ll/"]
+    pushInsteadOf = "https://github.com:ajb3ll/"
 [rebase]
     autosquash = true
 [push]

@@ -2,7 +2,7 @@
 # See the README for examples.
 [user]
     name = Andrew Bell
-    email = andrewbell8@gmail.com
+    email = andrew@fr1v.org
 [github]
     user = ajb3ll
     token = token
@@ -194,8 +194,8 @@
 [branch]
     autosetuprebase = always
     autosetupmerge = true
-[url "git@github.com:andrewbell8/"]
-    pushInsteadOf = "https://github.com:andrewbell8/"
+[url "git@github.com:ajb3ll/"]
+    pushInsteadOf = "https://github.com:ajb3ll/"
 [rebase]
     autosquash = true
 [push]
