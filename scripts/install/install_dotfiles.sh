@@ -4,6 +4,8 @@
 # Author: Andrew Bell andrewbell8@gmail.com
 # Website: https://fr1v.github.io
 #
+# 2017.06.21
+#
 # Link my config from dotfiles and to root user as well
 #======================================================================================
 
@@ -140,18 +142,22 @@ function link_user() {
     done
 
     if [[ $OSTYPE == *darwin* ]] ; then
+
         ln -sd "${ZDOTDIR:-$HOME}"/.dotfiles/macos/iterm/tools "${ZDOTDIR:-$HOME}"/.iterm2
         ln -sf "${ZDOTDIR:-$HOME}"/.dotfiles/macos/iterm/iterm2_shell_integration.zsh "${ZDOTDIR:-$HOME}"/.iterm2_shell_integration.zsh
         ln -sf "${ZDOTDIR:-$HOME}"/.dotfiles/macos/iterm/iterm2_shell_integration.bash "${ZDOTDIR:-$HOME}"/.iterm2_shell_integration.bash
 
-        brew install "${ZDOTDIR:-$HOME}/.dotfiles/macos/homebrew/macdown.rb"
+        brew tap caskroom/cask
+        brew cask install macdown
 
         for rcfile in "${ZDOTDIR:-$HOME}"/.git/macos/^README.md(.N); do
+            ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
             ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}_global"
         done
 
         for rcfile in "${ZDOTDIR:-$HOME}"/.hg/macos/^README.md(.N); do
             ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+            ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}_global"
         done
 
         ln -sf "${ZDOTDIR:-$HOME}"/.hg/macos/config/hgignore "${ZDOTDIR:-$HOME}"/.hgignore_global
@@ -161,31 +167,38 @@ function link_user() {
     elif [[ $OSTYPE == *linux* ]] ; then
 
         for rcfile in "${ZDOTDIR:-$HOME}"/.git/linux/^README.md(.N); do
+            ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
             ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}_global"
         done
 
         for rcfile in "${ZDOTDIR:-$HOME}"/.hg/linux/^README.md(.N); do
             ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+            ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}_global"
         done
 
-        ln -sf "${ZDOTDIR:-$HOME}"/.hg/linux/config/hgignore "${ZDOTDIR:-$HOME}"/.hgignore_global
+        for rcfile in "${ZDOTDIR:-$HOME}"/.misc/^README.md(.N); do
+            ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+        done
 
-        ln -sf "${ZDOTDIR:-$HOME}"/.dotfiles/misc/linux/dircolors "${ZDOTDIR:-$HOME}"/.dircolors
+        for rcfile in "${ZDOTDIR:-$HOME}"/.misc/linux/^README.md(.N); do
+            ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+        done
 
+        for rcfile in "${ZDOTDIR:-$HOME}"/.xorg/^README.md(.N); do
+            ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
+        done
     fi
+}
 
-    for rcfile in "${ZDOTDIR:-$HOME}"/.misc/^README.md(.N); do
-        ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
-    done
-
-    for rcfile in "${ZDOTDIR:-$HOME}"/.xorg/^README.md(.N); do
-        ln -sf "$rcfile" "${ZDOTDIR:-$HOME}/.${rcfile:t}"
-    done
+function install_homebrew() {
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 }
 
 # Symlink config files
 function install_dotfiles() {
     emulate -L zsh
+
+    $USER_HOME/.dotfiles/prezto/homebrew/functions/install_brew
 
     link_user
     root_link_inquire
