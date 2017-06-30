@@ -217,4 +217,9 @@
 [commit]
     template = ~/.git/templates/git_commit_template
 [credential]
-    canFallBackToInsecureStore = true
+	canFallBackToInsecureStore = true
+[merge "mergepbx"]
+        name = XCode project files merger
+        driver = mergepbx %O %A %B
+[mergetool]
+	keepBackup = true

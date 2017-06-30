@@ -4,3 +4,6 @@
     user = ajb3ll
     token = token
 	branch = master
+[submodule "zim"]
+	path = zim
+	url = https://github.com/ajb3ll/zim.git
