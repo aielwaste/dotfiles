@@ -181,6 +181,7 @@
     serve = !git daemon --reuseaddr --verbose  --base-path=. --export-all ./.git
     snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
     spull = !git pull && git submodule sync --recursive && git submodule update --init --recursive
+    pushup = "!gitbranchname() { git symbolic-ref --short HEAD; }; gitpushupstream() { git push --set-upstream origin `gitbranchname`; }; gitpushupstream"
 [format]
     pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
 [merge]

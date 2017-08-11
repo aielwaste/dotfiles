@@ -30,14 +30,13 @@ function link_root() {
     sudo rm -rf "$ROOT_HOME"/.scripts && sudo ln -sd "$USER_HOME"/.dotfiles/scripts "$ROOT_HOME"/.scripts
     sudo rm -rf "$ROOT_HOME"/.git && sudo ln -sd "$USER_HOME"/.dotfiles/vcs/git "$ROOT_HOME"/.git
     sudo rm -rf "$ROOT_HOME"/.hg && sudo ln -sd "$USER_HOME"/.dotfiles/vcs/hg "$ROOT_HOME"/.hg
-    sudo rm -rf "$ROOT_HOME"/.config/nvim && sudo ln -sd "$USER_HOME"/.dotfiles/nvim "$ROOT_HOME"/.config/nvim
 
     for rcfile in "$USER_HOME"/.zprezto/runcoms/^README.md(.N); do
         sudo ln -sf "$rcfile" "$ROOT_HOME/.${rcfile:t}"
     done
 
     if [[ $OSTYPE == *darwin* ]] ; then
-        sudo ln -sd "$USER_HOME/.dotfiles/macos/iterm/tools" "$ROOT_HOME/.iterm2"
+        sudo ln -sd "$USER_HOME/.dotfiles/macos/iterm" "$ROOT_HOME/.iterm2"
         sudo ln -sf "$USER_HOME/.dotfiles/macos/iterm/iterm2_shell_integration.zsh" "$ROOT_HOME/.iterm2_shell_integration.zsh"
         sudo ln -sf "$USER_HOME/.dotfiles/macos/iterm/iterm2_shell_integration.bash" "$ROOT_HOME/.iterm2_shell_integration.bash"
 

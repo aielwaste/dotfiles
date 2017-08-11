@@ -180,6 +180,7 @@
     human = name-rev --name-only --refs=refs/heads/*
     serve = !git daemon --reuseaddr --verbose    --base-path=. --export-all ./.git
     snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
+    pushup = "!gitbranchname() { git symbolic-ref --short HEAD; }; gitpushupstream() { git push --set-upstream origin `gitbranchname`; }; gitpushupstream"
 [format]
     pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
 [apply]

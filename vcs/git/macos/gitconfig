@@ -1,8 +1,8 @@
 # set your user tokens as environment variables, such as ~/.secrets
 # See the README for examples.
 [user]
-    name = Andrew Bell
-    email = andrew@fr1v.org
+	name = Andrew Bell
+	email = andrew@fr1v.org
 [github]
     user = ajb3ll
     token = token
@@ -180,13 +180,14 @@
     human = name-rev --name-only --refs=refs/heads/*
     serve = !git daemon --reuseaddr --verbose    --base-path=. --export-all ./.git
     snapshot = !git stash save "snapshot: $(date)" && git stash apply "stash@{0}"
+    pushup = "!gitbranchname() { git symbolic-ref --short HEAD; }; gitpushupstream() { git push --set-upstream origin `gitbranchname`; }; gitpushupstream"
 [format]
     pretty = format:%C(blue)%ad%Creset %C(yellow)%h%C(green)%d%Creset %C(blue)%s %C(magenta) [%an]%Creset
 [apply]
     whitespace = nowarn
 [branch]
     autosetuprebase = always
-    autosetupmerge = true
+	autosetupmerge = always
 [url "ssh@github.com:ajb3ll/"]
     pushInsteadOf = "https://github.com:ajb3ll/"
 [rebase]
@@ -194,7 +195,7 @@
 [push]
     # 'git push' will push the current branch to its tracking branch
     # the usual default is to push all branches
-    default = matching
+	default = current
 [help]
     autocorrect = 1
 [core]
@@ -218,3 +219,16 @@
     template = ~/.git/templates/git_commit_template
 [credential]
     canFallBackToInsecureStore = true
+[mergetool]
+	keepBackup = false
+# 	keepBackup = true
+[diff]
+	tool = deltawalker
+[difftool]
+	prompt = false
+[difftool  "deltawalker"]
+	cmd = '/Applications/DeltaWalker.app/Contents/Resources/git-diff' "$LOCAL" "$REMOTE"
+[merge]
+	tool = deltawalker
+[mergetool  "deltawalker"]
+	cmd = '/Applications/DeltaWalker.app/Contents/Resources/git-merge' "$LOCAL" "$REMOTE" "$BASE" "$MERGED"
